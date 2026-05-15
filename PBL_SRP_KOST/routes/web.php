@@ -91,7 +91,7 @@ Route::middleware('auth')->group(function () {
         return view('user_listkost');
     })->name('user_listkost');
 
-      Route::get('/user_fav', function () {
+    Route::get('/user_fav', function () {
         return view('user_fav');
     })->name('user_fav');
 
