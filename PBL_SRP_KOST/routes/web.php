@@ -87,9 +87,9 @@ Route::middleware('auth')->group(function () {
         return view('user_home');
     })->name('user_home');
 
-    Route::get('/user_list', function () {
-        return view('user_list');
-    })->name('user_list');
+    Route::get('/user_listkost', function () {
+        return view('user_listkost');
+    })->name('user_listkost');
 
       Route::get('/user_fav', function () {
         return view('user_fav');
