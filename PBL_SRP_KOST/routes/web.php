@@ -80,5 +80,21 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
-
 });
+
+// USER
+    Route::get('/user_home', function () {
+        return view('user_home');
+    })->name('user_home');
+
+    Route::get('/user_list', function () {
+        return view('user_list');
+    })->name('user_list');
+
+      Route::get('/user_fav', function () {
+        return view('user_fav');
+    })->name('user_fav');
+
+    Route::get('/user_history', function () {
+        return view('user_history');
+    })->name('user_history');
