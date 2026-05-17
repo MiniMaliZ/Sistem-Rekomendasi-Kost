@@ -24,11 +24,11 @@ Sistem Rekomendasi Pencarian Kost adalah platform web untuk membantu mahasiswa d
 ### Palet Warna (Tailwind CSS)
 | Nama | Hex | Penggunaan |
 | --- | --- | --- |
-| Off-White / Beige | #DBD3C6 | Background utama agar nyaman dibaca |
-| Light Sage / Soft Grey | #CDC6BA | Background section alternatif, footer, atau card |
-| Warm Taupe | #AD9C8A | Divider, border, dan elemen dekoratif |
-| Slate Blue | #7C929E | Warna utama / CTA seperti tombol Cari Kost dan Hitung Rekomendasi |
-| Dark Brown | #5D4D34 | Warna teks utama dan judul |
+| Off-White / Beige | #DBD3C6 | Background utama halaman, area konten, dan ruang kosong agar nuansanya terang dan hangat |
+| Light Sage / Soft Grey | #CDC6BA | Background sidebar, kartu, panel informasi, dan section pendukung |
+| Warm Taupe | #AD9C8A | Warna aksen utama untuk tombol aktif, CTA, elemen highlight, serta detail dekoratif |
+| Slate Blue | #7C929E | Aksen sekunder untuk ikon, indikator, badge, outline, dan elemen pendukung visual |
+| Dark Brown | #5D4D34 | Warna teks utama, judul, dan elemen kontras yang perlu tetap terbaca jelas |
 
 ## Tech Stack Utama
 ### Backend & Framework
