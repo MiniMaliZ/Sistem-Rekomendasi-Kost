@@ -4,6 +4,13 @@ use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
+use App\Livewire\Admin\Dashboard;
+use App\Livewire\Admin\KostIndex;
+use App\Livewire\Admin\KriteriaIndex;
+use App\Livewire\Admin\UserIndex;
+use App\Livewire\Admin\RekomendasiIndex;
+use App\Livewire\Admin\FeedbackIndex;
+use App\Livewire\Admin\RiwayatIndex;
 
 /*
 |--------------------------------------------------------------------------
