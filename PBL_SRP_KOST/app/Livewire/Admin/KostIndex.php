@@ -114,7 +114,7 @@ class KostIndex extends Component
                 ->orWhere('alamat', 'like', "%{$this->search}%"))
             ->when($this->filterTipe, fn($q) => $q->where('tipe_kos', $this->filterTipe))
             ->orderBy('id_kost', 'desc')
-            ->paginate(10);
+            ->paginate(5);
 
         return view('livewire.admin.kost-index', compact('kosts'))
             ->layout('components.layouts.admin', [

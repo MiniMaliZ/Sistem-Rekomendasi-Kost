@@ -7,10 +7,6 @@ use Illuminate\Support\Facades\Route;
 use App\Livewire\Admin\Dashboard;
 use App\Livewire\Admin\KostIndex;
 use App\Livewire\Admin\KriteriaIndex;
-use App\Livewire\Admin\UserIndex;
-use App\Livewire\Admin\RekomendasiIndex;
-use App\Livewire\Admin\FeedbackIndex;
-use App\Livewire\Admin\RiwayatIndex;
 
 /*
 |--------------------------------------------------------------------------
@@ -105,3 +101,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/user_history', function () {
         return view('user_history');
     })->name('user_history');
+
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', Dashboard::class)->name('dashboard');
+    Route::get('/kost', KostIndex::class)->name('kost');
+});
+

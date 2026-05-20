@@ -1,212 +1,383 @@
-<div style="display:flex; flex-direction:column; gap:1.5rem;">
+<div class="animate-fade-in" style="display:flex; flex-direction:column; gap:2rem;">
 
-    {{-- Header --}}
-    <div style="display:flex; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
-        <div>
-            <h1 style="margin:0; font-size:1.5rem; font-weight:800; color:#5D4D34;">Manajemen Kost</h1>
-            <p style="margin:0.25rem 0 0; font-size:0.875rem; color:#7C929E;">Kelola data kost dalam sistem</p>
+    {{-- Action & Filter Bar --}}
+    <div style="display:flex; gap:0.75rem; flex-wrap:wrap; align-items:center; background: #ffffff; padding: 0.75rem 1rem; border-radius: 0.75rem; border: 1px solid rgba(173,156,138,0.2); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+        
+        {{-- Search Input Group --}}
+        <div style="flex:1; min-width:240px; position:relative;">
+            <div style="position:absolute; left:0.875rem; top:50%; transform:translateY(-50%); color: #AD9C8A; display: flex; align-items: center;">
+                <x-solar-magnifer-linear class="w-4 h-4" />
+            </div>
+            <input wire:model.live.debounce.300ms="search" id="search-kost" type="text"
+                   placeholder="Cari berdasarkan nama, pemilik, atau lokasi..."
+                   style="width:100%; box-sizing:border-box; padding:0.5rem 1rem 0.5rem 2.25rem; background-color:#fcfaf8; border:1px solid #f0ebe1; border-radius:0.5rem; font-size:0.85rem; font-family:'Poppins',sans-serif; color:#3f2419; outline:none; transition: all 0.2s ease;"
+                   onfocus="this.style.borderColor='#3f2419'; this.style.backgroundColor='#ffffff'; this.style.boxShadow='0 0 0 3px rgba(63,36,25,0.05)'"
+                   onblur="this.style.borderColor='#f0ebe1'; this.style.backgroundColor='#fcfaf8'; this.style.boxShadow='none'">
         </div>
-        <button wire:click="openCreate" id="btn-tambah-kost" class="btn-primary-custom">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0;">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
-            </svg>
-            Tambah Kost
+
+        {{-- Filter Dropdown Group --}}
+        <div style="position:relative; min-width:160px;">
+            <div style="position:absolute; left:0.875rem; top:50%; transform:translateY(-50%); color: #AD9C8A; display: flex; align-items: center; pointer-events: none;">
+                <x-solar-filter-linear class="w-4 h-4" />
+            </div>
+            <select wire:model.live="filterTipe" id="filter-tipe-kost"
+                    style="width:100%; padding:0.5rem 1.75rem 0.5rem 2.25rem; background-color:#fcfaf8; border:1px solid #f0ebe1; border-radius:0.5rem; font-size:0.85rem; font-family:'Poppins',sans-serif; color:#3f2419; outline:none; cursor:pointer; appearance:none; transition: all 0.2s ease;"
+                    onfocus="this.style.borderColor='#3f2419'; this.style.backgroundColor='#ffffff'"
+                    onblur="this.style.borderColor='#f0ebe1'; this.style.backgroundColor='#fcfaf8'">
+                <option value="">Semua Tipe Kos</option>
+                <option value="putra">Khusus Putra</option>
+                <option value="putri">Khusus Putri</option>
+                <option value="campur">Campur / Umum</option>
+            </select>
+            <div style="position:absolute; right:0.875rem; top:50%; transform:translateY(-50%); color: #AD9C8A; pointer-events: none; display: flex; align-items: center;">
+                <x-solar-alt-arrow-down-linear class="w-3 h-3" />
+            </div>
+        </div>
+
+        {{-- Add Primary Button --}}
+        <button wire:click="openCreate" id="btn-tambah-kost" class="btn-primary-gradient">
+            <x-solar-add-circle-linear class="w-4 h-4" />
+            <span>Tambah Kost</span>
         </button>
     </div>
 
     {{-- Flash Message --}}
     @if(session('success'))
-        <div style="display:flex; align-items:center; gap:0.5rem; padding:0.75rem 1rem; border-radius:0.625rem; background-color:rgba(93,154,124,0.15); border:1px solid rgba(93,154,124,0.3); color:#3d7a5d; font-size:0.875rem; font-weight:500;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="flex-shrink:0;">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
+        <div class="animate-fade-in" style="display:flex; align-items:center; gap:0.75rem; padding:1rem 1.25rem; border-radius:1rem; background-color:#ecfdf5; border:1px solid #10b98133; color:#065f46; font-size:0.9rem; font-weight:500;">
+            <x-solar-check-circle-linear class="w-6 h-6 text-emerald-500" />
             {{ session('success') }}
         </div>
     @endif
 
-    {{-- Filters --}}
-    <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
-        <div style="flex:1; min-width:240px; position:relative;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#7C929E" stroke-width="2"
-                 style="position:absolute; left:0.75rem; top:50%; transform:translateY(-50%); pointer-events:none; flex-shrink:0;">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-            </svg>
-            <input wire:model.live.debounce.300ms="search" id="search-kost" type="text"
-                   placeholder="Cari nama kost, owner, alamat..."
-                   style="width:100%; box-sizing:border-box; padding:0.5rem 0.875rem 0.5rem 2.5rem; background-color:#CDC6BA; border:1px solid #AD9C8A; border-radius:0.625rem; font-size:0.875rem; font-family:'Poppins',sans-serif; color:#5D4D34; outline:none;">
-        </div>
-        <select wire:model.live="filterTipe" id="filter-tipe-kost"
-                style="padding:0.5rem 0.875rem; background-color:#CDC6BA; border:1px solid #AD9C8A; border-radius:0.625rem; font-size:0.875rem; font-family:'Poppins',sans-serif; color:#5D4D34; outline:none; cursor:pointer;">
-            <option value="">Semua Tipe</option>
-            <option value="putra">Putra</option>
-            <option value="putri">Putri</option>
-            <option value="campur">Campur</option>
-        </select>
-    </div>
-
-    {{-- Table --}}
-    <div class="admin-table" style="overflow-x:auto;">
-        <table style="width:100%; min-width:700px; border-collapse:collapse;">
-            <thead>
-                <tr style="background-color:#5D4D34;">
-                    <th style="padding:0.75rem 1rem; text-align:left; font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#DBD3C6;">#</th>
-                    <th style="padding:0.75rem 1rem; text-align:left; font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#DBD3C6;">Nama Kost</th>
-                    <th style="padding:0.75rem 1rem; text-align:left; font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#DBD3C6;">Owner</th>
-                    <th style="padding:0.75rem 1rem; text-align:left; font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#DBD3C6;">Harga/bln</th>
-                    <th style="padding:0.75rem 1rem; text-align:left; font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#DBD3C6;">Tipe</th>
-                    <th style="padding:0.75rem 1rem; text-align:left; font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#DBD3C6;">Ukuran</th>
-                    <th style="padding:0.75rem 1rem; text-align:center; font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#DBD3C6;">Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($kosts as $kost)
-                    <tr style="border-bottom:1px solid rgba(173,156,138,0.2);">
-                        <td style="padding:0.75rem 1rem; font-size:0.875rem; color:#7C929E;">{{ $kost->id_kost }}</td>
-                        <td style="padding:0.75rem 1rem;">
-                            <div style="display:flex; align-items:center; gap:0.75rem;">
-                                @if($kost->foto_url)
-                                    <img src="{{ $kost->foto_url }}" alt="{{ $kost->nama_kost }}"
-                                         style="width:40px; height:40px; border-radius:8px; object-fit:cover; flex-shrink:0;"
-                                         onerror="this.style.display='none'">
-                                @else
-                                    <div style="width:40px; height:40px; border-radius:8px; background-color:rgba(173,156,138,0.2); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#AD9C8A" stroke-width="1.5">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z"/>
-                                        </svg>
+    {{-- Table Container --}}
+    <div style="background: #ffffff; border-radius: 1rem; border: 1px solid rgba(173,156,138,0.2); box-shadow: 0 4px 6px -1px rgba(93,77,52,0.03); overflow: hidden;">
+        <div style="overflow-x:auto;">
+            <table style="width:100%; min-width:900px; border-collapse:collapse; table-layout: fixed;">
+                <thead>
+                    <tr style="background-color:#fcfaf8; border-bottom: 2px solid #f0ebe1;">
+                        <th style="width: 5%; padding:0.875rem 1.25rem; text-align:left; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#AD9C8A;">ID</th>
+                        <th style="width: 30%; padding:0.875rem 1.25rem; text-align:left; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#AD9C8A;">Informasi Kost</th>
+                        <th style="width: 20%; padding:0.875rem 1.25rem; text-align:left; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#AD9C8A;">Pemilik</th>
+                        <th style="width: 20%; padding:0.875rem 1.25rem; text-align:left; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#AD9C8A;">Harga Sewa</th>
+                        <th style="width: 15%; padding:0.875rem 1.25rem; text-align:left; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#AD9C8A;">Spesifikasi</th>
+                        <th style="width: 10%; padding:0.875rem 1.25rem; text-align:center; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#AD9C8A;">Kelola</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($kosts as $kost)
+                        <tr style="border-bottom:1px solid #fcfaf8; transition: background 0.2s;" onmouseover="this.style.background='#fdfcfb'" onmouseout="this.style.background='transparent'">
+                            <td style="padding:0.875rem 1.25rem; font-size:0.85rem; color:#AD9C8A; font-weight: 500;">#{{ $kost->id_kost }}</td>
+                            <td style="padding:0.875rem 1.25rem;">
+                                <div style="display:flex; align-items:center; gap:0.75rem;">
+                                    <div style="width:40px; height:40px; border-radius:0.5rem; overflow:hidden; background-color:#f0ebe1; flex-shrink:0; border: 1px solid #f0ebe1;">
+                                        @if($kost->foto_url)
+                                            <img src="{{ $kost->foto_url }}" alt="{{ $kost->nama_kost }}" style="width:100%; height:100%; object-fit:cover;" onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($kost->nama_kost) }}&background=f0ebe1&color=AD9C8A'">
+                                        @else
+                                            <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:#AD9C8A;">
+                                                <x-solar-buildings-linear class="w-6 h-6" />
+                                            </div>
+                                        @endif
                                     </div>
-                                @endif
-                                <div>
-                                    <p style="margin:0; font-size:0.875rem; font-weight:600; color:#5D4D34;">{{ $kost->nama_kost }}</p>
-                                    <p style="margin:0; font-size:0.75rem; color:#7C929E; max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ $kost->alamat }}</p>
+                                    <div style="display:flex; flex-direction:column; gap:0.125rem;">
+                                        <p style="margin:0; font-size:0.875rem; font-weight:700; color:#3f2419;">{{ $kost->nama_kost }}</p>
+                                        <div style="display:flex; align-items:center; gap:0.25rem; color:#7C929E; font-size:0.75rem;">
+                                            <x-solar-map-point-linear class="w-3.5 h-3.5" />
+                                            <span style="max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ $kost->alamat }}</span>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td style="padding:0.75rem 1rem; font-size:0.875rem; color:#5D4D34;">{{ $kost->owner }}</td>
-                        <td style="padding:0.75rem 1rem; font-size:0.875rem; font-weight:600; color:#5D4D34;">
-                            Rp {{ number_format($kost->harga, 0, ',', '.') }}
-                        </td>
-                        <td style="padding:0.75rem 1rem;">
-                            @php
-                                $tipeColor = match($kost->tipe_kos) { 'putra' => '#7C929E', 'putri' => '#AD9C8A', 'campur' => '#5D4D34', default => '#AD9C8A' };
-                            @endphp
-                            <span style="display:inline-block; padding:0.2rem 0.65rem; border-radius:9999px; font-size:0.7rem; font-weight:700; background-color:{{ $tipeColor }}20; color:{{ $tipeColor }}; text-transform:uppercase; letter-spacing:0.04em;">
-                                {{ ucfirst($kost->tipe_kos) }}
-                            </span>
-                        </td>
-                        <td style="padding:0.75rem 1rem; font-size:0.875rem; color:#7C929E;">{{ $kost->ukuran_kamar ?? '-' }}</td>
-                        <td style="padding:0.75rem 1rem;">
-                            <div style="display:flex; align-items:center; justify-content:center; gap:0.5rem;">
-                                <button wire:click="openEdit({{ $kost->id_kost }})"
-                                        style="display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; border-radius:8px; border:none; background:transparent; cursor:pointer; color:#7C929E;"
-                                        title="Edit">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z"/>
-                                    </svg>
-                                </button>
-                                <button wire:click="confirmDelete({{ $kost->id_kost }})"
-                                        style="display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; border-radius:8px; border:none; background:transparent; cursor:pointer; color:#C45A5A;"
-                                        title="Hapus">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/>
-                                    </svg>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="7" style="padding:3rem 1rem; text-align:center; font-size:0.875rem; color:#7C929E;">
-                            {{ $search || $filterTipe ? 'Tidak ada kost yang sesuai filter.' : 'Belum ada data kost. Klik "Tambah Kost" untuk menambahkan.' }}
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
+                            </td>
+                            <td style="padding:0.875rem 1.25rem;">
+                                <div style="display:flex; align-items:center; gap:0.375rem; color:#5D4D34; font-size:0.85rem; font-weight:500;">
+                                    <x-solar-user-linear class="w-3.5 h-3.5" />
+                                    {{ $kost->owner }}
+                                </div>
+                            </td>
+                            <td style="padding:0.875rem 1.25rem;">
+                                <div style="display:flex; flex-direction:column;">
+                                    <span style="font-size:0.95rem; font-weight:800; color:#3f2419;">Rp {{ number_format($kost->harga, 0, ',', '.') }}</span>
+                                    <span style="font-size:0.7rem; color:#AD9C8A;">per bulan</span>
+                                </div>
+                            </td>
+                            <td style="padding:0.875rem 1.25rem;">
+                                <div style="display:flex; flex-direction:column; gap:0.375rem;">
+                                    @php
+                                        $tipeConfig = match($kost->tipe_kos) { 
+                                            'putra' => ['bg' => '#eff6ff', 'text' => '#1e40af', 'icon' => 'solar-men-linear'], 
+                                            'putri' => ['bg' => '#fdf2f8', 'text' => '#9d174d', 'icon' => 'solar-women-linear'], 
+                                            'campur' => ['bg' => '#f0fdf4', 'text' => '#166534', 'icon' => 'solar-users-group-two-rounded-linear'],
+                                            default => ['bg' => '#f8fafc', 'text' => '#475569', 'icon' => 'solar-home-linear']
+                                        };
+                                    @endphp
+                                    <div style="display:inline-flex; align-items:center; gap:0.25rem; padding:0.125rem 0.5rem; border-radius:0.25rem; font-size:0.65rem; font-weight:700; background-color:{{ $tipeConfig['bg'] }}; color:{{ $tipeConfig['text'] }}; text-transform:uppercase; align-self: flex-start;">
+                                        @if($kost->tipe_kos == 'putra') <x-solar-men-linear class="w-3 h-3" />
+                                        @elseif($kost->tipe_kos == 'putri') <x-solar-women-linear class="w-3 h-3" />
+                                        @else <x-solar-users-group-two-rounded-linear class="w-3 h-3" /> @endif
+                                        {{ ucfirst($kost->tipe_kos) }}
+                                    </div>
+                                    <div style="display:flex; align-items:center; gap:0.25rem; color:#7C929E; font-size:0.75rem;">
+                                        <x-solar-ruler-linear class="w-3.5 h-3.5" />
+                                        <span>{{ $kost->ukuran_kamar ?? '-' }}</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="padding:0.875rem 1.25rem;">
+                                <div style="display:flex; align-items:center; justify-content:center; gap:0.5rem;">
+                                    <button wire:click="openEdit({{ $kost->id_kost }})" class="action-btn action-edit" title="Edit Data">
+                                        <x-solar-pen-new-square-linear class="w-4 h-4" />
+                                    </button>
+                                    <button wire:click="confirmDelete({{ $kost->id_kost }})" class="action-btn action-delete" title="Hapus Data">
+                                        <x-solar-trash-bin-trash-linear class="w-4 h-4" />
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="6" style="padding:3rem 1.5rem; text-align:center;">
+                                <div style="display:flex; flex-direction:column; align-items:center; gap:0.75rem; color:#AD9C8A;">
+                                    <x-solar-case-minimalistic-linear class="w-12 h-12 opacity-20" />
+                                    <p style="font-size:0.875rem; font-weight:500;">
+                                        {{ $search || $filterTipe ? 'Pencarian tidak menemukan hasil yang cocok.' : 'Belum ada data kost yang terdaftar.' }}
+                                    </p>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+
+        {{-- Pagination Container --}}
+        <div style="padding: 1rem 1.25rem; background-color: #fcfaf8; border-top: 1.5px solid #f0ebe1;">
+            <div class="custom-pagination">
+                {{ $kosts->links() }}
+            </div>
+        </div>
     </div>
 
-    {{-- Pagination --}}
-    <div>{{ $kosts->links() }}</div>
+    {{-- CSS Styles --}}
+    <style>
+        .btn-primary-gradient {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, #3f2419 0%, #5D4D34 100%);
+            color: #ffffff;
+            border: none;
+            padding: 0.6rem 1.25rem;
+            border-radius: 0.5rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 10px rgba(63,36,25,0.15);
+        }
+        .btn-primary-gradient:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 15px rgba(63,36,25,0.25);
+            background: linear-gradient(135deg, #2a1811 0%, #3f2419 100%);
+        }
+        .btn-primary-gradient:active { transform: translateY(0); }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 0.5rem;
+            border: 1px solid #f0ebe1;
+            background: #ffffff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .action-edit { color: #AD9C8A; }
+        .action-edit:hover { border-color: #3f2419; color: #3f2419; background: #fdfcfb; transform: scale(1.05); }
+        .action-delete { color: #f87171; }
+        .action-delete:hover { border-color: #ef4444; color: #ef4444; background: #fef2f2; transform: scale(1.05); }
+
+        /* Pagination Refinement */
+        .custom-pagination nav { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+        .custom-pagination nav p { margin: 0; font-size: 0.8rem; color: #7C929E; }
+
+        /* Outer wrapper for desktop buttons */
+        .custom-pagination nav .shadow-sm { box-shadow: none; display: flex; gap: 0.375rem; align-items: center; }
+
+        /* Individual button targets (ignoring the z-0 wrapper) */
+        .custom-pagination nav span.relative:not(.z-0),
+        .custom-pagination nav a.relative {
+            padding: 0;
+            border-radius: 0.5rem !important; /* Override Laravel's left/right only rounding */
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #5D4D34;
+            background: #ffffff;
+            border: 1px solid #f0ebe1;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.25rem;
+            height: 2.25rem;
+            text-decoration: none;
+            margin-left: 0 !important; /* Remove Tailwind's negative margin (-ml-px) */
+            box-sizing: border-box;
+        }
+
+        .custom-pagination nav a.relative:hover { 
+            border-color: #3f2419; 
+            color: #3f2419; 
+            background: #fdfcfb; 
+            transform: scale(1.05); /* Slight enlargement on hover only */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        /* Active State - Force it back to normal size so it doesn't stay enlarged */
+        .custom-pagination span[aria-current="page"] .relative { 
+            background: #3f2419 !important; 
+            color: #ffffff !important; 
+            border-color: #3f2419 !important; 
+            transform: scale(1) !important;
+            box-shadow: none !important;
+        }
+
+        .custom-pagination span[aria-disabled="true"] .relative { 
+            color: #AD9C8A; 
+            background: #fcfaf8; 
+            cursor: not-allowed; 
+            border-color: #f0ebe1; 
+            transform: none !important;
+        }        
+        /* Tailwind utility classes fallback for Laravel Pagination */
+        .hidden { display: none; }
+        @media (min-width: 640px) {
+            .sm\:hidden { display: none; }
+            .sm\:flex { display: flex; }
+            .sm\:flex-1 { flex: 1 1 0%; }
+            .sm\:items-center { align-items: center; }
+            .sm\:justify-between { justify-content: space-between; }
+        }
+    </style>
 
     {{-- ===== CREATE / EDIT MODAL ===== --}}
     @if($showModal)
-        <div style="position:fixed; inset:0; z-index:100; display:flex; align-items:center; justify-content:center; padding:1rem; background-color:rgba(0,0,0,0.5);">
-            <div style="width:100%; max-width:640px; background-color:#DBD3C6; border:1px solid #AD9C8A; border-radius:1rem; box-shadow:0 25px 50px rgba(93,77,52,0.25); max-height:90vh; overflow-y:auto;">
-                <div style="display:flex; align-items:center; justify-content:space-between; padding:1.25rem 1.5rem; border-bottom:1px solid rgba(173,156,138,0.3);">
-                    <h3 style="margin:0; font-size:1.1rem; font-weight:700; color:#5D4D34;">{{ $editingId ? 'Edit Data Kost' : 'Tambah Kost Baru' }}</h3>
-                    <button wire:click="$set('showModal', false)"
-                            style="display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; border-radius:8px; border:none; background:transparent; cursor:pointer;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#7C929E" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-                        </svg>
+        <div style="position:fixed; inset:0; z-index:100; display:flex; align-items:center; justify-content:center; padding:1rem; backdrop-filter: blur(4px); background-color:rgba(63,36,25,0.4);">
+            <div class="animate-fade-in" style="width:100%; max-width:640px; background-color:#ffffff; border-radius:1rem; box-shadow:0 20px 40px rgba(0,0,0,0.15); max-height:92vh; overflow:hidden; display:flex; flex-direction:column;">
+                
+                {{-- Modal Header --}}
+                <div style="display:flex; align-items:center; justify-content:space-between; padding:1.25rem 1.5rem; border-bottom:1px solid #f0ebe1; background:#fcfaf8;">
+                    <div style="display:flex; align-items:center; gap:0.75rem;">
+                        <div style="width:36px; height:36px; border-radius:0.75rem; background:#3f2419; display:flex; align-items:center; justify-content:center; color:#ffffff;">
+                            @if($editingId) <x-solar-pen-new-square-linear class="w-5 h-5" /> @else <x-solar-add-circle-linear class="w-5 h-5" /> @endif
+                        </div>
+                        <div>
+                            <h3 style="margin:0; font-size:1.1rem; font-weight:700; color:#3f2419;">{{ $editingId ? 'Edit Data Kost' : 'Tambah Kost Baru' }}</h3>
+                            <p style="margin:0.125rem 0 0; font-size:0.75rem; color:#AD9C8A;">Lengkapi formulir di bawah ini dengan benar.</p>
+                        </div>
+                    </div>
+                    <button wire:click="$set('showModal', false)" style="width:32px; height:32px; border-radius:0.5rem; border:none; background:#f0ebe1; color:#3f2419; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:0.2s;" onmouseover="this.style.background='#e2d9cc'" onmouseout="this.style.background='#f0ebe1'">
+                        <x-solar-close-circle-linear class="w-5 h-5" />
                     </button>
                 </div>
 
-                <form wire:submit="save" style="padding:1.25rem 1.5rem; display:flex; flex-direction:column; gap:1rem;">
-                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                <form wire:submit="save" style="display:flex; flex-direction:column; overflow:hidden;">
+                    <div style="padding:1.5rem; overflow-y:auto; flex:1; display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                        
                         <div style="grid-column:1/-1;">
-                            <label style="display:block; font-size:0.8rem; font-weight:600; color:#5D4D34; margin-bottom:0.375rem;">Nama Kost *</label>
-                            <input wire:model="nama_kost" id="input-nama-kost" type="text" placeholder="Kost Sejahtera..."
-                                   style="width:100%; box-sizing:border-box; padding:0.5rem 0.875rem; background-color:#CDC6BA; border:1px solid #AD9C8A; border-radius:0.625rem; font-size:0.875rem; font-family:'Poppins',sans-serif; color:#5D4D34; outline:none;">
-                            @error('nama_kost') <p style="font-size:0.75rem; color:#C45A5A; margin:0.25rem 0 0;">{{ $message }}</p> @enderror
+                            <label style="display:flex; align-items:center; gap:0.375rem; font-size:0.8rem; font-weight:600; color:#3f2419; margin-bottom:0.375rem;">
+                                <x-solar-buildings-linear class="w-3.5 h-3.5 text-amber-700" /> Nama Kost *
+                            </label>
+                            <input wire:model="nama_kost" type="text" placeholder="Contoh: Kost Eksklusif Dago..."
+                                   style="width:100%; box-sizing:border-box; padding:0.6rem 0.875rem; background-color:#fcfaf8; border:1px solid #f0ebe1; border-radius:0.5rem; font-size:0.875rem; font-family:'Poppins',sans-serif; color:#3f2419; outline:none; transition:0.2s;"
+                                   onfocus="this.style.borderColor='#3f2419'; this.style.backgroundColor='#ffffff'">
+                            @error('nama_kost') <p style="font-size:0.7rem; color:#ef4444; margin:0.25rem 0 0;">{{ $message }}</p> @enderror
                         </div>
 
                         <div>
-                            <label style="display:block; font-size:0.8rem; font-weight:600; color:#5D4D34; margin-bottom:0.375rem;">Owner / Pemilik *</label>
-                            <input wire:model="owner" id="input-owner" type="text" placeholder="Nama pemilik"
-                                   style="width:100%; box-sizing:border-box; padding:0.5rem 0.875rem; background-color:#CDC6BA; border:1px solid #AD9C8A; border-radius:0.625rem; font-size:0.875rem; font-family:'Poppins',sans-serif; color:#5D4D34; outline:none;">
-                            @error('owner') <p style="font-size:0.75rem; color:#C45A5A; margin:0.25rem 0 0;">{{ $message }}</p> @enderror
+                            <label style="display:flex; align-items:center; gap:0.375rem; font-size:0.8rem; font-weight:600; color:#3f2419; margin-bottom:0.375rem;">
+                                <x-solar-user-linear class="w-3.5 h-3.5 text-amber-700" /> Nama Pemilik *
+                            </label>
+                            <input wire:model="owner" type="text" placeholder="Nama pemilik"
+                                   style="width:100%; box-sizing:border-box; padding:0.6rem 0.875rem; background-color:#fcfaf8; border:1px solid #f0ebe1; border-radius:0.5rem; font-size:0.875rem; font-family:'Poppins',sans-serif; color:#3f2419; outline:none; transition:0.2s;"
+                                   onfocus="this.style.borderColor='#3f2419'">
+                            @error('owner') <p style="font-size:0.7rem; color:#ef4444; margin:0.25rem 0 0;">{{ $message }}</p> @enderror
                         </div>
 
                         <div>
-                            <label style="display:block; font-size:0.8rem; font-weight:600; color:#5D4D34; margin-bottom:0.375rem;">Harga / Bulan (Rp) *</label>
-                            <input wire:model="harga" id="input-harga" type="number" placeholder="500000"
-                                   style="width:100%; box-sizing:border-box; padding:0.5rem 0.875rem; background-color:#CDC6BA; border:1px solid #AD9C8A; border-radius:0.625rem; font-size:0.875rem; font-family:'Poppins',sans-serif; color:#5D4D34; outline:none;">
-                            @error('harga') <p style="font-size:0.75rem; color:#C45A5A; margin:0.25rem 0 0;">{{ $message }}</p> @enderror
+                            <label style="display:flex; align-items:center; gap:0.375rem; font-size:0.8rem; font-weight:600; color:#3f2419; margin-bottom:0.375rem;">
+                                <x-solar-wad-of-money-linear class="w-3.5 h-3.5 text-amber-700" /> Harga / Bulan *
+                            </label>
+                            <div style="position:relative;">
+                                <span style="position:absolute; left:0.875rem; top:50%; transform:translateY(-50%); font-weight:600; font-size:0.875rem; color:#AD9C8A;">Rp</span>
+                                <input wire:model="harga" type="number" placeholder="0"
+                                       style="width:100%; box-sizing:border-box; padding:0.6rem 0.875rem 0.6rem 2.25rem; background-color:#fcfaf8; border:1px solid #f0ebe1; border-radius:0.5rem; font-size:0.875rem; font-weight:600; font-family:'Poppins',sans-serif; color:#3f2419; outline:none; transition:0.2s;"
+                                       onfocus="this.style.borderColor='#3f2419'">
+                            </div>
+                            @error('harga') <p style="font-size:0.7rem; color:#ef4444; margin:0.25rem 0 0;">{{ $message }}</p> @enderror
                         </div>
 
                         <div style="grid-column:1/-1;">
-                            <label style="display:block; font-size:0.8rem; font-weight:600; color:#5D4D34; margin-bottom:0.375rem;">Alamat *</label>
-                            <input wire:model="alamat" id="input-alamat" type="text" placeholder="Jl. Contoh No.1, Kota..."
-                                   style="width:100%; box-sizing:border-box; padding:0.5rem 0.875rem; background-color:#CDC6BA; border:1px solid #AD9C8A; border-radius:0.625rem; font-size:0.875rem; font-family:'Poppins',sans-serif; color:#5D4D34; outline:none;">
-                            @error('alamat') <p style="font-size:0.75rem; color:#C45A5A; margin:0.25rem 0 0;">{{ $message }}</p> @enderror
+                            <label style="display:flex; align-items:center; gap:0.375rem; font-size:0.8rem; font-weight:600; color:#3f2419; margin-bottom:0.375rem;">
+                                <x-solar-map-point-linear class="w-3.5 h-3.5 text-amber-700" /> Alamat Lengkap *
+                            </label>
+                            <input wire:model="alamat" type="text" placeholder="Masukkan alamat lengkap lokasi kost..."
+                                   style="width:100%; box-sizing:border-box; padding:0.6rem 0.875rem; background-color:#fcfaf8; border:1px solid #f0ebe1; border-radius:0.5rem; font-size:0.875rem; font-family:'Poppins',sans-serif; color:#3f2419; outline:none; transition:0.2s;"
+                                   onfocus="this.style.borderColor='#3f2419'">
+                            @error('alamat') <p style="font-size:0.7rem; color:#ef4444; margin:0.25rem 0 0;">{{ $message }}</p> @enderror
                         </div>
 
                         <div>
-                            <label style="display:block; font-size:0.8rem; font-weight:600; color:#5D4D34; margin-bottom:0.375rem;">Tipe Kos *</label>
-                            <select wire:model="tipe_kos" id="input-tipe-kos"
-                                    style="width:100%; box-sizing:border-box; padding:0.5rem 0.875rem; background-color:#CDC6BA; border:1px solid #AD9C8A; border-radius:0.625rem; font-size:0.875rem; font-family:'Poppins',sans-serif; color:#5D4D34; outline:none;">
-                                <option value="putra">Putra</option>
-                                <option value="putri">Putri</option>
-                                <option value="campur">Campur</option>
+                            <label style="display:flex; align-items:center; gap:0.375rem; font-size:0.8rem; font-weight:600; color:#3f2419; margin-bottom:0.375rem;">
+                                <x-solar-users-group-two-rounded-linear class="w-3.5 h-3.5 text-amber-700" /> Kategori Hunian *
+                            </label>
+                            <select wire:model="tipe_kos" style="width:100%; box-sizing:border-box; padding:0.6rem 0.875rem; background-color:#fcfaf8; border:1px solid #f0ebe1; border-radius:0.5rem; font-size:0.875rem; font-family:'Poppins',sans-serif; color:#3f2419; outline:none; cursor:pointer;">
+                                <option value="putra">Khusus Putra</option>
+                                <option value="putri">Khusus Putri</option>
+                                <option value="campur">Campur / Umum</option>
                             </select>
                         </div>
 
                         <div>
-                            <label style="display:block; font-size:0.8rem; font-weight:600; color:#5D4D34; margin-bottom:0.375rem;">Ukuran Kamar</label>
-                            <input wire:model="ukuran_kamar" id="input-ukuran" type="text" placeholder="3x4 meter"
-                                   style="width:100%; box-sizing:border-box; padding:0.5rem 0.875rem; background-color:#CDC6BA; border:1px solid #AD9C8A; border-radius:0.625rem; font-size:0.875rem; font-family:'Poppins',sans-serif; color:#5D4D34; outline:none;">
+                            <label style="display:flex; align-items:center; gap:0.375rem; font-size:0.8rem; font-weight:600; color:#3f2419; margin-bottom:0.375rem;">
+                                <x-solar-ruler-linear class="w-3.5 h-3.5 text-amber-700" /> Luas Kamar
+                            </label>
+                            <input wire:model="ukuran_kamar" type="text" placeholder="Contoh: 3x4 meter"
+                                   style="width:100%; box-sizing:border-box; padding:0.6rem 0.875rem; background-color:#fcfaf8; border:1px solid #f0ebe1; border-radius:0.5rem; font-size:0.875rem; font-family:'Poppins',sans-serif; color:#3f2419; outline:none;"
+                                   onfocus="this.style.borderColor='#3f2419'">
                         </div>
 
                         <div style="grid-column:1/-1;">
-                            <label style="display:block; font-size:0.8rem; font-weight:600; color:#5D4D34; margin-bottom:0.375rem;">Fasilitas</label>
-                            <textarea wire:model="fasilitas" id="input-fasilitas" rows="3" placeholder="WiFi, AC, Kamar Mandi Dalam, ..."
-                                      style="width:100%; box-sizing:border-box; padding:0.5rem 0.875rem; background-color:#CDC6BA; border:1px solid #AD9C8A; border-radius:0.625rem; font-size:0.875rem; font-family:'Poppins',sans-serif; color:#5D4D34; outline:none; resize:none;"></textarea>
+                            <label style="display:flex; align-items:center; gap:0.375rem; font-size:0.8rem; font-weight:600; color:#3f2419; margin-bottom:0.375rem;">
+                                <x-solar-star-linear class="w-3.5 h-3.5 text-amber-700" /> Deskripsi Fasilitas
+                            </label>
+                            <textarea wire:model="fasilitas" rows="3" placeholder="Sebutkan fasilitas utama..."
+                                      style="width:100%; box-sizing:border-box; padding:0.6rem 0.875rem; background-color:#fcfaf8; border:1px solid #f0ebe1; border-radius:0.5rem; font-size:0.875rem; font-family:'Poppins',sans-serif; color:#3f2419; outline:none; resize:none; transition:0.2s;"
+                                      onfocus="this.style.borderColor='#3f2419'"></textarea>
                         </div>
 
                         <div style="grid-column:1/-1;">
-                            <label style="display:block; font-size:0.8rem; font-weight:600; color:#5D4D34; margin-bottom:0.375rem;">URL Foto</label>
-                            <input wire:model="foto_url" id="input-foto-url" type="url" placeholder="https://..."
-                                   style="width:100%; box-sizing:border-box; padding:0.5rem 0.875rem; background-color:#CDC6BA; border:1px solid #AD9C8A; border-radius:0.625rem; font-size:0.875rem; font-family:'Poppins',sans-serif; color:#5D4D34; outline:none;">
+                            <label style="display:flex; align-items:center; gap:0.375rem; font-size:0.8rem; font-weight:600; color:#3f2419; margin-bottom:0.375rem;">
+                                <x-solar-gallery-linear class="w-3.5 h-3.5 text-amber-700" /> URL Foto Kost
+                            </label>
+                            <input wire:model="foto_url" type="url" placeholder="Paste URL foto kost di sini..."
+                                   style="width:100%; box-sizing:border-box; padding:0.6rem 0.875rem; background-color:#fcfaf8; border:1px solid #f0ebe1; border-radius:0.5rem; font-size:0.875rem; font-family:'Poppins',sans-serif; color:#3f2419; outline:none;"
+                                   onfocus="this.style.borderColor='#3f2419'">
                         </div>
                     </div>
 
-                    <div style="display:flex; justify-content:flex-end; gap:0.75rem; padding-top:0.75rem; border-top:1px solid rgba(173,156,138,0.3);">
+                    {{-- Modal Footer --}}
+                    <div style="padding:1rem 1.5rem; background:#fcfaf8; border-top:1px solid #f0ebe1; display:flex; justify-content:flex-end; gap:0.75rem;">
                         <button type="button" wire:click="$set('showModal', false)"
-                                style="padding:0.5rem 1.25rem; border-radius:0.625rem; font-size:0.875rem; font-weight:600; font-family:'Poppins',sans-serif; border:1px solid #AD9C8A; background:transparent; color:#5D4D34; cursor:pointer;">
+                                style="padding:0.6rem 1.25rem; border-radius:0.5rem; font-size:0.85rem; font-weight:600; font-family:'Poppins',sans-serif; border:1px solid #f0ebe1; background:#ffffff; color:#3f2419; cursor:pointer; transition:0.2s;"
+                                onmouseover="this.style.borderColor='#3f2419'" onmouseout="this.style.borderColor='#f0ebe1'">
                             Batal
                         </button>
-                        <button type="submit" id="btn-save-kost" class="btn-primary-custom">
-                            {{ $editingId ? 'Simpan Perubahan' : 'Tambah Kost' }}
+                        <button type="submit" class="btn-primary-gradient">
+                            <x-solar-diskette-linear class="w-4 h-4" />
+                            <span>{{ $editingId ? 'Simpan' : 'Tambah Kost' }}</span>
                         </button>
                     </div>
                 </form>
@@ -216,21 +387,19 @@
 
     {{-- ===== DELETE CONFIRM MODAL ===== --}}
     @if($showDeleteModal)
-        <div style="position:fixed; inset:0; z-index:100; display:flex; align-items:center; justify-content:center; padding:1rem; background-color:rgba(0,0,0,0.5);">
-            <div style="width:100%; max-width:380px; background-color:#DBD3C6; border:1px solid #AD9C8A; border-radius:1rem; padding:2rem; text-align:center; box-shadow:0 25px 50px rgba(93,77,52,0.25);">
-                <div style="width:56px; height:56px; border-radius:50%; background-color:rgba(196,90,90,0.15); display:flex; align-items:center; justify-content:center; margin:0 auto 1rem;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#C45A5A" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/>
-                    </svg>
+        <div style="position:fixed; inset:0; z-index:110; display:flex; align-items:center; justify-content:center; padding:1rem; backdrop-filter: blur(4px); background-color:rgba(63,36,25,0.4);">
+            <div class="animate-fade-in" style="width:100%; max-width:400px; background-color:#ffffff; border-radius:1rem; padding:2rem; text-align:center; box-shadow:0 20px 40px rgba(0,0,0,0.15);">
+                <div style="width:64px; height:64px; border-radius:1rem; background-color:#fef2f2; display:flex; align-items:center; justify-content:center; margin:0 auto 1.25rem; color:#ef4444;">
+                    <x-solar-danger-triangle-linear class="w-8 h-8" />
                 </div>
-                <h3 style="margin:0 0 0.5rem; font-size:1.1rem; font-weight:700; color:#5D4D34;">Konfirmasi Hapus</h3>
-                <p style="margin:0 0 1.5rem; font-size:0.875rem; color:#7C929E;">Data kost ini akan dihapus permanen. Tindakan ini tidak dapat dibatalkan.</p>
+                <h3 style="margin:0 0 0.5rem; font-size:1.25rem; font-weight:800; color:#3f2419;">Konfirmasi Hapus</h3>
+                <p style="margin:0 0 1.5rem; font-size:0.9rem; line-height:1.5; color:#7C929E;">Data properti ini akan dihapus secara permanen dari sistem. Lanjutkan?</p>
                 <div style="display:flex; gap:0.75rem; justify-content:center;">
                     <button wire:click="$set('showDeleteModal', false)"
-                            style="padding:0.5rem 1.25rem; border-radius:0.625rem; font-size:0.875rem; font-weight:600; font-family:'Poppins',sans-serif; border:1px solid #AD9C8A; background:transparent; color:#5D4D34; cursor:pointer;">
+                            style="flex:1; padding:0.75rem; border-radius:0.5rem; font-size:0.875rem; font-weight:600; font-family:'Poppins',sans-serif; border:1px solid #f0ebe1; background:#ffffff; color:#3f2419; cursor:pointer;">
                         Batal
                     </button>
-                    <button wire:click="delete" id="btn-confirm-delete" class="btn-danger-custom">
+                    <button wire:click="delete" style="flex:1; padding:0.75rem; border-radius:0.5rem; font-size:0.875rem; font-weight:600; font-family:'Poppins',sans-serif; border:none; background:#ef4444; color:#ffffff; cursor:pointer; box-shadow: 0 4px 10px rgba(239,68,68,0.2);">
                         Ya, Hapus
                     </button>
                 </div>
