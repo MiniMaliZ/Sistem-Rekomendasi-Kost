@@ -32,9 +32,9 @@
             <button class="notif-button">
                 <img src="./images/notif.svg" alt="Notifications" class="notif-icon">
             </button>
-            <div class="user-avatar">
-                <img src="./images/profile_user.png" alt="User Profile">
-            </div>
+            <a href="{{ url('/profile') }}" class="user-avatar" aria-label="Profil saya">
+                <img src="{{ asset('images/profile_user.png') }}" alt="User Profile">
+            </a>
         </div>
 
     </section>
@@ -47,30 +47,33 @@
             <nav class="nav-pill">
                 <ul class="nav-list">
                     <li>
-                        <a href="#" class="nav-item nav-item--active" aria-label="Category">
+                        <a href="{{ route('user_home') }}" class="nav-item nav-item--active" aria-label="Dashboard">
                             <x-tabler-layout-dashboard-filled class="nav-blade-icon nav-blade-icon--active" />
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="nav-item" aria-label="Building">
+                        <a href="{{ route('user_listkost') }}" class="nav-item" aria-label="Daftar Kost">
                             <x-iconsax-lin-buliding class="nav-blade-icon" />
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="nav-item" aria-label="Favorites">
+                        <a href="{{ route('user_fav') }}" class="nav-item" aria-label="Favorit">
                             <x-solar-heart-linear class="nav-blade-icon" />
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="nav-item" aria-label="History">
+                        <a href="{{ route('user_history') }}" class="nav-item" aria-label="Riwayat">
                             <x-clarity-history-line class="nav-blade-icon" />
                         </a>
                     </li>
                 </ul>
             </nav>
-            <button class="logout-button" aria-label="Logout">
-                <x-iconsax-out-logout class="nav-blade-icon" />
-            </button>
+            <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button type="submit" class="logout-button" aria-label="Keluar">
+                    <x-iconsax-out-logout class="nav-blade-icon" />
+                </button>
+            </form>
         </section>
 
         <!-- Main Content -->

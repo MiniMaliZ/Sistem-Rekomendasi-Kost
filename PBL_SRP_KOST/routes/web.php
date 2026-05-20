@@ -11,6 +11,7 @@ use App\Livewire\Admin\UserIndex;
 use App\Livewire\Admin\RekomendasiIndex;
 use App\Livewire\Admin\FeedbackIndex;
 use App\Livewire\Admin\RiwayatIndex;
+use App\Http\Controllers\Profile\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -87,9 +88,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
-});
 
-// USER
+    // Halaman user
     Route::get('/user_home', function () {
         return view('user_home');
     })->name('user_home');
@@ -105,3 +105,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/user_history', function () {
         return view('user_history');
     })->name('user_history');
+
+    // Profil
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile/photo', [ProfileController::class, 'upload'])->name('profile.upload');
+});

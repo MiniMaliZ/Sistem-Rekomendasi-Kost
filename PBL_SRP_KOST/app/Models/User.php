@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -30,6 +31,38 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         return $this->role === 'admin';
+    }
+
+    /**
+     * URL foto profil — path relatif agar tetap benar di Laragon (bukan localhost dari APP_URL).
+     */
+    protected function avatarUrl(): Attribute
+    {
+        return Attribute::get(function () {
+            $default = '/images/profile_user.png';
+
+            if (empty($this->foto_url)) {
+                return $default;
+            }
+
+            if (filter_var($this->foto_url, FILTER_VALIDATE_URL)) {
+                return $this->foto_url;
+            }
+
+            $filename = basename($this->foto_url);
+
+            $publicPath = public_path('uploads/profile/' . $filename);
+            if (is_file($publicPath)) {
+                return '/uploads/profile/' . $filename . '?v=' . filemtime($publicPath);
+            }
+
+            $storagePath = storage_path('app/public/profile/' . $filename);
+            if (is_file($storagePath)) {
+                return '/storage/profile/' . $filename . '?v=' . filemtime($storagePath);
+            }
+
+            return $default;
+        });
     }
 
     public function kriteria(): HasMany
