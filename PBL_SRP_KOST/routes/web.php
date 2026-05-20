@@ -8,10 +8,6 @@ use Illuminate\Support\Facades\Route;
 use App\Livewire\Admin\Dashboard;
 use App\Livewire\Admin\KostIndex;
 use App\Livewire\Admin\KriteriaIndex;
-use App\Livewire\Admin\UserIndex;
-use App\Livewire\Admin\RekomendasiIndex;
-use App\Livewire\Admin\FeedbackIndex;
-use App\Livewire\Admin\RiwayatIndex;
 
 /*
 |--------------------------------------------------------------------------
@@ -105,3 +101,9 @@ Route::post('/favorit/toggle', [UserHomeController::class, 'toggleFavorit'])
 Route::get('/kost',    fn() => view('user.coming_soon', ['halaman' => 'Daftar Kost']))->name('user.kost');
 Route::get('/favorit', fn() => view('user.coming_soon', ['halaman' => 'Favorit']))->name('user.favorit');
 Route::get('/riwayat', fn() => view('user.coming_soon', ['halaman' => 'Riwayat']))->name('user.riwayat');
+
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', Dashboard::class)->name('dashboard');
+    Route::get('/kost', KostIndex::class)->name('kost');
+});
+
