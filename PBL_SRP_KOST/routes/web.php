@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\User\UserHomeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
@@ -85,22 +86,21 @@ Route::middleware('auth')->group(function () {
     })->name('dashboard');
 });
 
-// USER
-    Route::get('/user_home', function () {
-        return view('user_home');
-    })->name('user_home');
+// Root redirect ke home
+Route::get('/', fn() => redirect()->route('user.home'));
 
-    Route::get('/user_listkost', function () {
-        return view('user_listkost');
-    })->name('user_listkost');
+// ── HALAMAN UTAMA ─────────────────────────────────────────────────────────
+Route::get('/home',        [UserHomeController::class, 'index'])->name('user.home');
+Route::get('/home/search', [UserHomeController::class, 'search'])->name('user.search');
 
-    Route::get('/user_fav', function () {
-        return view('user_fav');
-    })->name('user_fav');
+// ── TOGGLE FAVORIT (AJAX, disimpan ke Session) ───────────────────────────
+Route::post('/favorit/toggle', [UserHomeController::class, 'toggleFavorit'])
+    ->name('favorit.toggle');
 
-    Route::get('/user_history', function () {
-        return view('user_history');
-    })->name('user_history');
+// ── PLACEHOLDER (dikembangkan setelah database siap) ─────────────────────
+Route::get('/kost',    fn() => view('user.coming_soon', ['halaman' => 'Daftar Kost']))->name('user.kost');
+Route::get('/favorit', fn() => view('user.coming_soon', ['halaman' => 'Favorit']))->name('user.favorit');
+Route::get('/riwayat', fn() => view('user.coming_soon', ['halaman' => 'Riwayat']))->name('user.riwayat');
 
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
