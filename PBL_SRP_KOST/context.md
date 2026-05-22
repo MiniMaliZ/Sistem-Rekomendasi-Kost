@@ -35,7 +35,7 @@ Sistem Rekomendasi Pencarian Kost adalah platform web untuk membantu mahasiswa d
 Laravel digunakan sebagai core framework karena arsitektur MVC yang rapi, dukungan Service/Action class untuk logika algoritma, serta Eloquent ORM untuk relasi data kost, kriteria, dan bobot.
 
 ### Frontend UI
-Mary UI dipakai bersama Livewire dan Tailwind CSS untuk membangun antarmuka interaktif tanpa banyak JavaScript. Palet warna di atas diintegrasikan ke Tailwind agar konsisten di seluruh komponen.
+Blade Icons dipakai bersama Livewire untuk membangun antarmuka interaktif tanpa banyak JavaScript. Palet warna di atas diintegrasikan ke Tailwind agar konsisten di seluruh komponen.
 
 ### Database
 MySQL digunakan untuk menyimpan data kost, kriteria cost/benefit, bobot, dan histori simulasi perhitungan rekomendasi.
