@@ -50,22 +50,22 @@
             <nav class="nav-pill">
                 <ul class="nav-list">
                     <li>
-                        <a href="{{ route('user_home') }}" class="nav-item nav-item--active" aria-label="Dashboard">
+                        <a href="{{ route('user.home') }}" class="nav-item nav-item--active" aria-label="Dashboard">
                             <x-tabler-layout-dashboard-filled class="nav-blade-icon nav-blade-icon--active" />
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('user_listkost') }}" class="nav-item" aria-label="Daftar Kost">
+                        <a href="{{ route('user.kost') }}" class="nav-item" aria-label="Daftar Kost">
                             <x-iconsax-lin-buliding class="nav-blade-icon" />
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('user_fav') }}" class="nav-item" aria-label="Favorit">
+                        <a href="{{ route('user.favorit') }}" class="nav-item" aria-label="Favorit">
                             <x-solar-heart-linear class="nav-blade-icon" />
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('user_history') }}" class="nav-item" aria-label="Riwayat">
+                        <a href="{{ route('user.riwayat') }}" class="nav-item" aria-label="Riwayat">
                             <x-clarity-history-line class="nav-blade-icon" />
                         </a>
                     </li>

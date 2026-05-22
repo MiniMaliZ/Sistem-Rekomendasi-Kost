@@ -20,7 +20,7 @@ class ProfileController extends Controller
             ->where('id_user', $user->id_user)
             ->firstOrFail();
 
-        return view('pages.profile.profile', compact('user'));
+        return view('user.profile', compact('user'));
     }
 
     public function update(Request $request)
