@@ -87,9 +87,6 @@ Route::middleware('auth')->group(function () {
     })->name('dashboard');
 });
 
-// Root redirect ke home
-Route::get('/', fn() => redirect()->route('user.home'));
-
 // ── HALAMAN UTAMA ─────────────────────────────────────────────────────────
 Route::get('/home',        [UserHomeController::class, 'index'])->name('user.home');
 Route::get('/home/search', [UserHomeController::class, 'search'])->name('user.search');
