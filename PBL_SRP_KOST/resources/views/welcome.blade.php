@@ -38,11 +38,6 @@
         @if (Route::has('login'))
             @auth
                 <a href="{{ url('/home') }}" class="btn-admin">Dashboard</a>
-            @else
-                <div class="navbar-actions">
-                    <a href="{{ route('login') }}" class="btn-outline-nav">Login</a>
-                    <a href="{{ route('register') }}" class="btn-filled-nav">Daftar Sekarang</a>
-                </div>
             @endauth
         @endif
     </nav>
