@@ -56,7 +56,7 @@
                     Nggak perlu pusing cari kos. roomor punya ribuan pilihan kos di seluruh Indonesia — dari putra, putri, sampai campur. Tinggal pilih, langsung cocok.
                 </p>
                 <div class="hero-actions">
-                    <a href="#cara-kerja" class="btn-hero-primary">
+                    <a href="{{ route('user.home') }}" class="btn-hero-primary">
                         Cari kos with roomor
                         <i class="fas fa-arrow-right"></i>
                     </a>
@@ -98,7 +98,7 @@
                     cocok sama vibe dan gaya hidupmu. Mau yang cozy, <em>aesthetic</em>,
                     atau yang simpel buat recharge — semuanya ada di sini.
                 </p>
-                <a href="#cara-kerja" class="btn-intro-cta">Cek kos Sekarang</a>
+                <a href="{{ route('user.kost') }}" class="btn-intro-cta">Cek kos Sekarang</a>
             </div>
 
             <div class="intro-accent-wrap">
