@@ -7,7 +7,6 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>KostApp - Home</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" />
-    {{-- ✏️ CSS sekarang sepenuhnya terpisah di file user_home.css --}}
     <link rel="stylesheet" href="{{ asset('css/user_home.css') }}">
 </head>
 
@@ -40,10 +39,16 @@
                 <img src="{{ asset('images/notif.svg') }}" alt="Notifications" class="notif-icon">
             </button>
 
-            <div class="user-avatar">
-                <img src="{{ $user['avatar'] ? asset('images/' . $user['avatar']) : asset('images/profile_user.png') }}"
-                    alt="Foto Profil {{ $user['nama'] }}">
-            </div>
+            @auth
+                <div class="user-avatar">
+                    <img src="{{ $user['avatar'] ? asset('images/' . $user['avatar']) : asset('images/profile_user.png') }}"
+                        alt="Foto Profil {{ $user['nama'] }}">
+                </div>
+            @else
+                <a href="{{ route('login') }}" class="signin-btn">
+                    <span>Sign In</span>
+                </a>
+            @endauth
         </div>
 
     </section>
@@ -293,11 +298,49 @@
     </div><!-- end .page-body -->
 
     <!-- ============================================================
+         MODAL SIGN IN — Tampil saat guest klik icon hati
+         ============================================================ -->
+    <div id="modal-signin-overlay" class="modal-signin-overlay" aria-hidden="true" role="dialog" aria-modal="true"
+        aria-labelledby="modal-signin-title">
+        <div class="modal-signin-card">
+
+            {{-- Icon hati besar --}}
+            <div class="modal-signin-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M12 21C12 21 3 14.5 3 8.5C3 5.42 5.42 3 8.5 3C10.24 3 11.91 3.81 13 5.08C14.09 3.81 15.76 3 17.5 3C20.58 3 23 5.42 23 8.5C23 14.5 12 21 12 21Z"
+                        stroke="#ac0000" stroke-width="1.8" stroke-linejoin="round" />
+                </svg>
+            </div>
+
+            {{-- Teks --}}
+            <div class="modal-signin-text">
+                <h3 id="modal-signin-title">Simpan Kost Favoritmu</h3>
+                <p>Kamu perlu sign in terlebih dahulu untuk menyimpan kost ke daftar favorit.</p>
+            </div>
+
+            {{-- Tombol aksi --}}
+            <div class="modal-signin-actions">
+                <a href="{{ route('login') }}" class="modal-btn modal-btn--primary">
+                    Sign In Sekarang
+                </a>
+                <button type="button" class="modal-btn modal-btn--secondary" id="modal-signin-close">
+                    Nanti Saja
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ============================================================
          DATA BRIDGE: semua data kost dari server → JS
          ============================================================ -->
     <script>
         const SEMUA_KOST = {!! $semuaKostJson !!};
         const ASSET_BASE = '{{ asset('') }}';
+
+        {{-- ✏️ TAMBAHAN: flag autentikasi dari server ke JS --}}
+        const IS_AUTH = {{ auth()->check() ? 'true' : 'false' }};
     </script>
 
     <!-- ============================================================
@@ -346,6 +389,35 @@
             const favoritEmpty = document.getElementById('favorit-empty');
             const favoritWrapper = document.getElementById('favorit-list-wrapper');
             const favoritList = document.getElementById('favorit-list');
+
+            // ✏️ TAMBAHAN: referensi elemen modal sign in
+            const modalOverlay = document.getElementById('modal-signin-overlay');
+            const modalCloseBtn = document.getElementById('modal-signin-close');
+
+            // ✏️ TAMBAHAN: buka modal sign in
+            function openSignInModal() {
+                modalOverlay.classList.add('modal-signin-overlay--visible');
+                modalOverlay.setAttribute('aria-hidden', 'false');
+            }
+
+            // ✏️ TAMBAHAN: tutup modal sign in
+            function closeSignInModal() {
+                modalOverlay.classList.remove('modal-signin-overlay--visible');
+                modalOverlay.setAttribute('aria-hidden', 'true');
+            }
+
+            // ✏️ TAMBAHAN: tutup modal saat klik tombol "Nanti Saja"
+            modalCloseBtn.addEventListener('click', closeSignInModal);
+
+            // ✏️ TAMBAHAN: tutup modal saat klik area luar kartu
+            modalOverlay.addEventListener('click', function(e) {
+                if (e.target === modalOverlay) closeSignInModal();
+            });
+
+            // ✏️ TAMBAHAN: tutup modal dengan tombol Escape
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') closeSignInModal();
+            });
 
             let favoritIds = @json($favoritIds);
 
@@ -407,6 +479,12 @@
 
                 e.preventDefault();
                 e.stopPropagation();
+
+                // ✏️ TAMBAHAN: cek autentikasi — tampilkan modal jika belum login
+                if (!IS_AUTH) {
+                    openSignInModal();
+                    return;
+                }
 
                 const kostId = parseInt(btn.dataset.kostId);
                 const imgEl = btn.querySelector('img');
