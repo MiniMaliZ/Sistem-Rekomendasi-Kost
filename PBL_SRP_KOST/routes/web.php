@@ -110,3 +110,10 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/profile/photo', [ProfileController::class, 'upload'])->name('profile.upload');
 ;
+
+// Preferensi
+Route::get('/preferensi', function () {
+    return view('user.preferensi_1', [
+        'title' => 'Preferensi Kost - roomor',
+    ]);
+})->name('preferensi');
