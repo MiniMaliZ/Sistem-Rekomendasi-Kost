@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Admin\Dashboard;
+use App\Livewire\Admin\HybridRecommendation;
 use App\Livewire\Admin\KostIndex;
 use App\Livewire\Admin\KriteriaIndex;
 
@@ -103,6 +104,7 @@ Route::get('/riwayat', fn() => view('user.coming_soon', ['halaman' => 'Riwayat']
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
     Route::get('/kost', KostIndex::class)->name('kost');
+    Route::get('/rekomendasi-hybrid', HybridRecommendation::class)->name('rekomendasi-hybrid');
 });
 
 // Profil
