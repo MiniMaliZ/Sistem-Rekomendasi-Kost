@@ -10,14 +10,18 @@ return new class extends Migration
     {
         Schema::create('kost', function (Blueprint $table) {
             $table->id('id_kost');
-            $table->string('nama_kost', 150);
-            $table->string('owner', 100);
-            $table->string('alamat', 255);
-            $table->decimal('harga', 15, 2);
-            $table->string('ukuran_kamar', 50)->nullable();
-            $table->enum('tipe_kos', ['putra', 'putri', 'campur']);
-            $table->text('fasilitas')->nullable();
-            $table->string('foto_url', 255)->nullable();
+            $table->string('nama_kost', 255);
+            $table->decimal('harga', 12, 2);
+            $table->string('tipe_kos', 255);
+            $table->timestamps();
+            $table->string('sepesifikasi_tipe_kamar', 255)->nullable();
+            $table->string('fasilitas_kamar', 255)->nullable();
+            $table->string('fasilitas_kamar_mandi', 255)->nullable();
+            $table->string('fasilitas_umum', 255)->nullable();
+            $table->string('fasilitas_parkir', 255)->nullable();
+            $table->string('tempat_terdekat', 255)->nullable();
+            $table->text('peraturan_kos')->nullable();
+            $table->string('link_original', 500)->nullable();
         });
     }
 

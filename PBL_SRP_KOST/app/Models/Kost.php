@@ -10,17 +10,20 @@ class Kost extends Model
 {
     protected $table = 'kost';
     protected $primaryKey = 'id_kost';
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = [
         'nama_kost',
-        'owner',
-        'alamat',
         'harga',
-        'ukuran_kamar',
         'tipe_kos',
-        'fasilitas',
-        'foto_url',
+        'sepesifikasi_tipe_kamar',
+        'fasilitas_kamar',
+        'fasilitas_kamar_mandi',
+        'fasilitas_umum',
+        'fasilitas_parkir',
+        'tempat_terdekat',
+        'peraturan_kos',
+        'link_original',
     ];
 
     protected $casts = [
