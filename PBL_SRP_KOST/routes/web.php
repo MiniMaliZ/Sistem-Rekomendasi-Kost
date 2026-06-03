@@ -100,7 +100,7 @@ Route::post('/favorit/toggle', [UserHomeController::class, 'toggleFavorit'])
 // ── PLACEHOLDER (dikembangkan setelah database siap) ─────────────────────
 Route::get('/kost', [UserListkostController::class, 'index'])->name('user.kost');
 Route::get('/kost/{kost}', [UserListkostController::class, 'show'])->name('user.kost.show');
-Route::get('/favorit', fn() => view('user.coming_soon', ['halaman' => 'Favorit']))->name('user.favorit');
+Route::get('/favorit', fn() => view('user_fav', ['halaman' => 'Favorit']))->name('user.favorit');
 Route::get('/riwayat', fn() => view('user.coming_soon', ['halaman' => 'Riwayat']))->name('user.riwayat');
 
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {

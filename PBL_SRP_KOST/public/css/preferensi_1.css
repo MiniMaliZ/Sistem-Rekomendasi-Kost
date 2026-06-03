@@ -1,0 +1,553 @@
+/* ==========================================
+   BASE RESET & GLOBAL
+   ========================================== */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #ffffff;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ==========================================
+   SECTION HERO
+   ========================================== */
+#section-hero {
+    display: flex;
+    justify-content: center;
+    padding: 50px 20px;
+    width: 100%;
+}
+
+.hero-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 727px;
+    width: 100%;
+    gap: 0px;
+}
+
+.hero-title {
+    color: #1e1e1e;
+    font-size: 40px;
+    font-weight: 600;
+    line-height: 60px;
+    margin: 0;
+    letter-spacing: -0.02em;
+}
+
+.hero-subtitle {
+    color: #757575;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    margin: 0;
+}
+
+/* ==========================================
+   SECTION STEPPER
+   ========================================== */
+#section-stepper {
+    width: 100%;
+    padding: 20px 20px;
+    display: flex;
+    justify-content: center;
+    background-color: #ffffff;
+}
+
+/* Container to handle horizontal scrolling on small screens */
+.stepper-scroll-container {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    display: flex;
+    justify-content: center;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.stepper-scroll-container::-webkit-scrollbar {
+    display: none;
+}
+
+/* Main wrapper with exact Figma dimensions */
+.stepper-wrapper {
+    position: relative;
+    width: 718px;
+    min-width: 718px;
+    padding: 25px 0;
+}
+
+/* Absolute positioned lines container */
+.stepper-lines {
+    position: absolute;
+    top: 49px; /* 25px wrapper padding + 24px (center of 50px circle) */
+    left: 79px;
+    display: flex;
+    gap: 130px;
+    z-index: 0;
+}
+
+.line {
+    width: 100px;
+    height: 2px;
+    background-color: #dadada;
+}
+
+/* Steps container */
+.stepper-steps {
+    position: relative;
+    display: flex;
+    gap: 127px;
+    z-index: 1;
+    align-items: flex-start;
+}
+
+/* Individual step containers with specific widths to match design */
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+}
+
+.step-1 {
+    width: 72px;
+}
+.step-2 {
+    width: 135px;
+}
+.step-3 {
+    width: 65px;
+}
+.step-4 {
+    width: 65px;
+}
+
+/* Circle styles */
+.step-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    font-weight: 500;
+}
+
+.step-circle.active {
+    background-color: #84644d;
+    color: #ffffff;
+}
+
+.step-circle.inactive-2 {
+    background-color: #d9d9d9;
+    color: #1e1e1e;
+}
+
+.step-circle.inactive-3,
+.step-circle.inactive-4 {
+    background-color: #dadada;
+    color: #1e1e1e;
+}
+
+/* Label styles */
+.step-label {
+    font-size: 16px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.step-label.active-label {
+    color: #1e1e1e;
+    font-weight: 400;
+}
+
+.step-label.inactive-label {
+    color: #757575;
+    font-weight: 400;
+}
+
+/* ==========================================
+   SECTION FORM CARD
+   ========================================== */
+#section-form-card {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 20px 20px;
+}
+
+.card-container {
+    background-color: #ffffff;
+    border: 1px solid #dadada;
+    display: flex;
+    flex-direction: column;
+    padding: 25px 30px;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 683px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+}
+
+.card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    width: 100%;
+}
+
+.header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+}
+
+.header-icon-bg {
+    background-color: #fbf0da;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.header-text {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.title {
+    color: #1e1e1e;
+    font-size: 20px;
+    font-weight: 500;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.subtitle {
+    color: #757575;
+    font-size: 14px;
+    font-weight: 400;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.location-field {
+    gap: 15px;
+}
+
+.label {
+    color: #1e1e1e;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0;
+}
+
+.input-box {
+    border: 1px solid #eaeaea;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 50px;
+    padding: 10px 15px;
+    border-radius: 10px;
+    background-color: #ffffff;
+    transition: border-color 0.2s ease;
+}
+
+.input-box:focus-within,
+.input-box-with-icon:focus-within {
+    border-color: #d9d9d9;
+}
+
+.input-element {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-family: inherit;
+    font-size: 14px;
+    color: #1e1e1e;
+    background: transparent;
+    padding: 0;
+}
+
+.input-element::placeholder {
+    color: #696969;
+}
+
+/* Status Field */
+.status-field {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.status-options {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+}
+
+.status-option {
+    border: 1px solid #d9d9d9;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 130px;
+    flex: 1;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    background-color: #ffffff;
+    user-select: none;
+    transform: translateY(0);
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+}
+
+.status-option:hover {
+    background-color: #fff9f5;
+    border-color: #84644d;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(63, 36, 25, 0.12);
+}
+
+.status-option:hover .status-text {
+    color: #84644d;
+    font-weight: 500;
+}
+
+.status-option.selected {
+    background-color: #fff9f5;
+    border: 1.4px solid #3f2419;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(63, 36, 25, 0.15);
+}
+
+.status-option.selected:hover {
+    background-color: #fff4eb;
+}
+
+.status-option-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.status-text {
+    color: #757575;
+    font-size: 14px;
+    font-weight: 400;
+    transition:
+        color 0.25s ease,
+        font-weight 0.25s ease;
+}
+
+.status-text.selected-text {
+    color: #3f2419;
+    font-weight: 500;
+}
+
+.status-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s ease;
+}
+
+/* Icon color: default = abu-abu, ikut warna teks */
+.status-option .icon-svg {
+    color: #757575;
+    transition: color 0.25s ease;
+}
+
+/* Icon color saat hover = coklat muda */
+.status-option:hover .icon-svg {
+    color: #84644d;
+}
+
+/* Icon color saat active/selected = coklat gelap */
+.status-option.selected .icon-svg {
+    color: #3f2419;
+}
+
+/* Location Field */
+.field-header {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.input-box-with-icon {
+    border: 1px solid #eaeaea;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    height: 50px;
+    padding: 10px 15px;
+    border-radius: 10px;
+    background-color: #ffffff;
+    transition: border-color 0.2s ease;
+}
+
+.icon-svg {
+    width: 30px;
+    height: 30px;
+    display: block;
+}
+
+.icon-svg-small {
+    width: 18px;
+    height: 18px;
+    display: block;
+    flex-shrink: 0;
+}
+
+/* ==========================================
+   SECTION ACTION
+   ========================================== */
+#section-action {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.action-container {
+    width: 100%;
+    max-width: 623px;
+}
+
+.btn-primary {
+    width: 100%;
+    height: 54px;
+    background-color: #3f2419;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 20px;
+    border-radius: 50px;
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.btn-primary:hover {
+    opacity: 0.9;
+}
+
+.btn-text {
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 21px;
+}
+
+.btn-icon {
+    width: 24px;
+    height: 24px;
+    max-width: 100%;
+    display: block;
+}
+
+/* ==========================================
+   RESPONSIVE
+   ========================================== */
+@media (max-width: 768px) {
+    #section-hero {
+        padding: 60px 20px;
+    }
+
+    .hero-title {
+        font-size: 36px;
+        line-height: 44px;
+    }
+
+    .hero-subtitle {
+        font-size: 15px;
+        line-height: 22px;
+    }
+
+    #section-stepper {
+        padding: 40px 0;
+    }
+
+    .stepper-scroll-container {
+        justify-content: flex-start;
+        padding: 0 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    #section-hero {
+        padding: 40px 16px;
+    }
+
+    .hero-title {
+        font-size: 28px;
+        line-height: 36px;
+    }
+
+    .hero-subtitle {
+        font-size: 14px;
+        line-height: 20px;
+    }
+}
+
+@media (max-width: 640px) {
+    .card-container {
+        padding: 20px 15px;
+        border-radius: 16px;
+    }
+
+    .card-content {
+        gap: 30px;
+    }
+
+    .status-options {
+        flex-direction: column;
+    }
+
+    .status-option {
+        width: 100%;
+        height: 80px;
+        flex-direction: row;
+        justify-content: flex-start;
+        padding: 0 20px;
+    }
+
+    .status-option-content {
+        flex-direction: row;
+        gap: 15px;
+    }
+}
