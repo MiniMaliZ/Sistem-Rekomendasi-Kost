@@ -3,6 +3,8 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\User\UserHomeController;
 use App\Http\Controllers\Profile\ProfileController;
+use App\Http\Controllers\User\UserListkostController;
+use App\Http\Controllers\User\FavoritController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
@@ -96,7 +98,8 @@ Route::post('/favorit/toggle', [UserHomeController::class, 'toggleFavorit'])
     ->name('favorit.toggle');
 
 // ── PLACEHOLDER (dikembangkan setelah database siap) ─────────────────────
-Route::get('/kost',    fn() => view('user.coming_soon', ['halaman' => 'Daftar Kost']))->name('user.kost');
+Route::get('/kost', [UserListkostController::class, 'index'])->name('user.kost');
+Route::get('/kost/{kost}', [UserListkostController::class, 'show'])->name('user.kost.show');
 Route::get('/favorit', fn() => view('user.coming_soon', ['halaman' => 'Favorit']))->name('user.favorit');
 Route::get('/riwayat', fn() => view('user.coming_soon', ['halaman' => 'Riwayat']))->name('user.riwayat');
 
@@ -110,3 +113,10 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/profile/photo', [ProfileController::class, 'upload'])->name('profile.upload');
 ;
+
+// Preferensi
+Route::get('/preferensi', function () {
+    return view('user.preferensi_1', [
+        'title' => 'Preferensi Kost - roomor',
+    ]);
+})->name('preferensi');

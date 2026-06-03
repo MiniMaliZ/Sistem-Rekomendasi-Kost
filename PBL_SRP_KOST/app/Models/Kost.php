@@ -14,13 +14,15 @@ class Kost extends Model
 
     protected $fillable = [
         'nama_kost',
-        'owner',
-        'alamat',
         'harga',
-        'ukuran_kamar',
         'tipe_kos',
-        'fasilitas',
-        'foto_url',
+        'spesifikasi_tipe_kamar',
+        'fasilitas_kamar',
+        'fasilitas_kamar_mandi',
+        'fasilitas_umum',
+        'fasilitas_parkir',
+        'tempat_terdekat',
+        'link_original',
     ];
 
     protected $casts = [
