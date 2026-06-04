@@ -9,7 +9,7 @@ class Favorit extends Model
 {
     protected $table = 'favorit';
     protected $primaryKey = 'id_favorit';
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = [
         'id_user',

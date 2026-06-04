@@ -5,10 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>KostApp - Home</title>
+    <title>KostApp - Dashboard</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" />
-    {{-- ✏️ CSS sekarang sepenuhnya terpisah di file user_home.css --}}
-    <link rel="stylesheet" href="{{ asset('css/user_home.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/user/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/user/sidebar.css') }}">
 </head>
 
 <body>
@@ -21,7 +21,11 @@
         <div class="header-left">
             <img src="{{ asset('images/logo.svg') }}" alt="Logo" class="logo-icon">
             <div class="greeting">
-                <h1 class="greeting-title">Halo {{ $user['nama_depan'] }}!</h1>
+                @auth
+                    <h1 class="greeting-title">Halo {{ $user['nama_depan'] }}!</h1>
+                @else
+                    <h1 class="greeting-title">Halo, Selamat Datang!</h1>
+                @endauth
                 <p class="greeting-subtitle">Yuk cari kost yang sesuai dengan dirimu sekarang.</p>
             </div>
         </div>
@@ -36,14 +40,17 @@
                 </button>
             </form>
 
-            <button class="notif-button" aria-label="Notifikasi">
-                <img src="{{ asset('images/notif.svg') }}" alt="Notifications" class="notif-icon">
-            </button>
-
-            <div class="user-avatar">
-                <img src="{{ $user['avatar'] ? asset('images/' . $user['avatar']) : asset('images/profile_user.png') }}"
-                    alt="Foto Profil {{ $user['nama'] }}">
-            </div>
+            {{-- User Avatar (sudah login) atau tombol Login + Daftar (guest) --}}
+            @auth
+                <a href="{{ route('profile') }}" class="user-avatar" aria-label="Lihat profil saya">
+                    <img src="{{ $user['avatar'] ? asset('images/' . $user['avatar']) : asset('images/profile_user.png') }}"
+                        alt="Foto Profil {{ $user['nama'] }}">
+                </a>
+            @else
+                <a href="{{ route('login') }}" class="signin-btn">
+                    <span>Masuk</span>
+                </a>
+            @endauth
         </div>
 
     </section>
@@ -54,49 +61,7 @@
         <!-- ============================================================
              SIDEBAR
              ============================================================ -->
-        <section id="section-sidebar">
-            <nav class="nav-pill">
-                <ul class="nav-list">
-                    <li>
-                        <a href="{{ route('user.home') }}"
-                            class="nav-item {{ request()->routeIs('user.home') ? 'nav-item--active' : '' }}"
-                            aria-label="Dashboard">
-                            <x-tabler-layout-dashboard-filled
-                                class="nav-blade-icon {{ request()->routeIs('user.home') ? 'nav-blade-icon--active' : '' }}" />
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('user.kost') }}"
-                            class="nav-item {{ request()->routeIs('user.kost') ? 'nav-item--active' : '' }}"
-                            aria-label="Daftar Kost">
-                            <x-iconsax-lin-buliding
-                                class="nav-blade-icon {{ request()->routeIs('user.kost') ? 'nav-blade-icon--active' : '' }}" />
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('user.favorit') }}"
-                            class="nav-item {{ request()->routeIs('user.favorit') ? 'nav-item--active' : '' }}"
-                            aria-label="Favorit">
-                            <x-solar-heart-linear
-                                class="nav-blade-icon {{ request()->routeIs('user.favorit') ? 'nav-blade-icon--active' : '' }}" />
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('user.riwayat') }}"
-                            class="nav-item {{ request()->routeIs('user.riwayat') ? 'nav-item--active' : '' }}"
-                            aria-label="Riwayat">
-                            <x-clarity-history-line
-                                class="nav-blade-icon {{ request()->routeIs('user.riwayat') ? 'nav-blade-icon--active' : '' }}" />
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-
-            <button class="logout-button" aria-label="Logout"
-                onclick="alert('Login/Logout aktif setelah database siap.')">
-                <x-iconsax-out-logout class="nav-blade-icon" />
-            </button>
-        </section>
+        @include('user.partials.sidebar')
 
         <!-- ============================================================
              MAIN CONTENT
@@ -135,11 +100,6 @@
                                 </a>
                             </div>
 
-                            {{--
-                                Slider: 5 kartu dalam baris horizontal.
-                                overflow:visible pada wrapper + padding pada track
-                                memastikan shadow kartu tidak terpotong.
-                            --}}
                             <div class="cards-slider-wrapper">
 
                                 {{-- Tombol Sebelumnya --}}
@@ -214,74 +174,84 @@
                         </div>
                     </section>
 
-                    <!-- ============================================================
-                         FAVORIT SECTION
-                         ✏️ PERBAIKAN: Struktur mengikuti referensi widget-container
-                              dengan class baru (.favorit-widget, .fav-sidebar-item, dll.)
-                         ============================================================ -->
+                    <!-- Favorit Section -->
                     <section id="section-empty-state">
 
-                        {{-- Empty state: belum ada favorit --}}
-                        <div id="favorit-empty" class="empty-state-card"
-                            style="{{ !empty($favoritKosts) ? 'display:none;' : '' }}">
-                            <div class="empty-state-content">
-                                <div class="illustration-wrap">
-                                    <img src="{{ asset('images/illus.svg') }}" alt="Ilustrasi kosong"
-                                        class="illus-bg">
+                        @auth
+                            {{-- Empty state: belum ada favorit --}}
+                            <div id="favorit-empty" class="empty-state-card"
+                                style="{{ !empty($favoritKosts) ? 'display:none;' : '' }}">
+                                <div class="empty-state-content">
+                                    <div class="illustration-wrap">
+                                        <img src="{{ asset('images/illus.svg') }}" alt="Ilustrasi kosong"
+                                            class="illus-bg">
+                                    </div>
+                                    <div class="empty-state-text">
+                                        <h3>Belum ada kost favorit</h3>
+                                        <p>Simpan kost yang kamu suka untuk<br>akses lebih cepat nanti.</p>
+                                    </div>
                                 </div>
-                                <div class="empty-state-text">
-                                    <h3>Belum ada kost favorit</h3>
-                                    <p>Simpan kost yang kamu suka untuk<br>akses lebih cepat nanti.</p>
-                                </div>
-                            </div>
-                            <a href="{{ route('user.kost') }}" class="explore-btn">
-                                <span>Jelajahi Kost</span>
-                            </a>
-                        </div>
-
-                        {{--
-                            ✏️ Widget favorit — mengikuti struktur .widget-container dari referensi.
-                            JS akan mengelola isi #favorit-list secara dinamis.
-                        --}}
-                        <div id="favorit-list-wrapper" class="favorit-widget"
-                            style="{{ empty($favoritKosts) ? 'display:none;' : '' }}">
-
-                            {{-- Header widget: judul + link "Lihat Semua" --}}
-                            <div class="favorit-widget-header">
-                                <h3 class="favorit-widget-title">Kost Disimpan</h3>
-                                <a href="{{ route('user.favorit') }}" class="favorit-widget-link">
-                                    <span>Lihat Semua</span>
-                                    <img src="{{ asset('images/red_arrow.svg') }}" alt="Arrow Right">
+                                <a href="{{ route('user.kost') }}" class="explore-btn">
+                                    <span>Jelajahi Kost</span>
                                 </a>
                             </div>
 
-                            {{-- List kartu favorit — diisi & diperbarui oleh JS --}}
-                            <div class="favorit-property-list" id="favorit-list">
-                                @foreach (array_slice(array_values($favoritKosts), 0, 3) as $fav)
-                                    <div class="fav-sidebar-item fav-item-enter" data-kost-id="{{ $fav['id'] }}">
-                                        {{-- Gambar --}}
-                                        <div class="fav-sidebar-img-wrap">
-                                            <img src="{{ asset('images/' . $fav['foto']) }}"
-                                                alt="{{ $fav['nama'] }}" class="fav-sidebar-img">
-                                        </div>
-                                        {{-- Body: info + tombol hati --}}
-                                        <div class="fav-sidebar-body">
-                                            <div class="fav-sidebar-info">
-                                                <h4 class="fav-sidebar-name">{{ $fav['nama'] }}</h4>
-                                                <div class="fav-sidebar-location">
-                                                    <img src="{{ asset('images/loc.svg') }}" alt="Lokasi">
-                                                    <span>{{ $fav['lokasi'] }}</span>
+                            {{-- Widget favorit --}}
+                            <div id="favorit-list-wrapper" class="favorit-widget"
+                                style="{{ empty($favoritKosts) ? 'display:none;' : '' }}">
+
+                                {{-- Header widget --}}
+                                <div class="favorit-widget-header">
+                                    <h3 class="favorit-widget-title">Kost Disimpan</h3>
+                                    <a href="{{ route('user.favorit') }}" class="favorit-widget-link">
+                                        <span>Lihat Semua</span>
+                                        <img src="{{ asset('images/red_arrow.svg') }}" alt="Arrow Right">
+                                    </a>
+                                </div>
+
+                                {{-- List kartu favorit --}}
+                                <div class="favorit-property-list" id="favorit-list">
+                                    @foreach (array_slice(array_values($favoritKosts), 0, 3) as $fav)
+                                        <div class="fav-sidebar-item fav-item-enter" data-kost-id="{{ $fav['id'] }}">
+                                            <div class="fav-sidebar-img-wrap">
+                                                <img src="{{ asset('images/' . $fav['foto']) }}"
+                                                    alt="{{ $fav['nama'] }}" class="fav-sidebar-img">
+                                            </div>
+                                            <div class="fav-sidebar-body">
+                                                <div class="fav-sidebar-info">
+                                                    <h4 class="fav-sidebar-name">{{ $fav['nama'] }}</h4>
+                                                    <div class="fav-sidebar-location">
+                                                        <img src="{{ asset('images/loc.svg') }}" alt="Lokasi">
+                                                        <span>{{ $fav['lokasi'] }}</span>
+                                                    </div>
+                                                    <p class="fav-sidebar-price">
+                                                        {{ $fav['harga_format'] }} <span>/bulan</span>
+                                                    </p>
                                                 </div>
-                                                <p class="fav-sidebar-price">
-                                                    {{ $fav['harga_format'] }} <span>/bulan</span>
-                                                </p>
                                             </div>
                                         </div>
-                                    </div>
-                                @endforeach
-                            </div>
+                                    @endforeach
+                                </div>
 
-                        </div>
+                            </div>
+                        @else
+                            {{-- Guest: tampilkan ajakan login untuk akses favorit --}}
+                            <div class="empty-state-card">
+                                <div class="empty-state-content">
+                                    <div class="illustration-wrap">
+                                        <img src="{{ asset('images/illus.svg') }}" alt="Ilustrasi kosong"
+                                            class="illus-bg">
+                                    </div>
+                                    <div class="empty-state-text">
+                                        <h3>Simpan kost favoritmu</h3>
+                                        <p>Masuk atau daftar untuk menyimpan<br>kost yang kamu suka.</p>
+                                    </div>
+                                </div>
+                                <a href="{{ route('login') }}" class="explore-btn">
+                                    <span>Masuk Sekarang</span>
+                                </a>
+                            </div>
+                        @endauth
 
                     </section>
 
@@ -293,11 +263,47 @@
     </div><!-- end .page-body -->
 
     <!-- ============================================================
+    MODAL SIGN IN — Tampil saat guest klik icon hati
+    ============================================================ -->
+    <div id="modal-signin-overlay" class="modal-signin-overlay" aria-hidden="true" role="dialog" aria-modal="true"
+        aria-labelledby="modal-signin-title">
+        <div class="modal-signin-card">
+
+            {{-- Icon hati besar --}}
+            <div class="modal-signin-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M12 21C12 21 3 14.5 3 8.5C3 5.42 5.42 3 8.5 3C10.24 3 11.91 3.81 13 5.08C14.09 3.81 15.76 3 17.5 3C20.58 3 23 5.42 23 8.5C23 14.5 12 21 12 21Z"
+                        stroke="#ac0000" stroke-width="1.8" stroke-linejoin="round" />
+                </svg>
+            </div>
+
+            {{-- Teks --}}
+            <div class="modal-signin-text">
+                <h3 id="modal-signin-title">Simpan Kost Favoritmu</h3>
+                <p>Kamu perlu sign in terlebih dahulu untuk menyimpan kost ke daftar favorit.</p>
+            </div>
+
+            {{-- Tombol aksi --}}
+            <div class="modal-signin-actions">
+                <a href="{{ route('login') }}" class="modal-btn modal-btn--primary">
+                    Sign In Sekarang
+                </a>
+                <button type="button" class="modal-btn modal-btn--secondary" id="modal-signin-close">
+                    Nanti Saja
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ============================================================
          DATA BRIDGE: semua data kost dari server → JS
          ============================================================ -->
     <script>
         const SEMUA_KOST = {!! $semuaKostJson !!};
         const ASSET_BASE = '{{ asset('') }}';
+        const IS_AUTH = {{ auth()->check() ? 'true' : 'false' }};
     </script>
 
     <!-- ============================================================
@@ -347,26 +353,52 @@
             const favoritWrapper = document.getElementById('favorit-list-wrapper');
             const favoritList = document.getElementById('favorit-list');
 
-            let favoritIds = @json($favoritIds);
+            // referensi elemen modal sign in
+            const modalOverlay = document.getElementById('modal-signin-overlay');
+            const modalCloseBtn = document.getElementById('modal-signin-close');
 
-            /**
-             * ✏️ Render ulang sidebar favorit dengan struktur widget baru.
-             * Mengikuti .property-card dari referensi HTML/CSS yang diberikan.
-             */
+            // buka modal sign in
+            function openSignInModal() {
+                modalOverlay.classList.add('modal-signin-overlay--visible');
+                modalOverlay.setAttribute('aria-hidden', 'false');
+            }
+
+            // tutup modal sign in
+            function closeSignInModal() {
+                modalOverlay.classList.remove('modal-signin-overlay--visible');
+                modalOverlay.setAttribute('aria-hidden', 'true');
+            }
+
+            // tutup modal saat klik tombol "Nanti Saja"
+            modalCloseBtn.addEventListener('click', closeSignInModal);
+
+            // tutup modal saat klik area luar kartu
+            modalOverlay.addEventListener('click', function(e) {
+                if (e.target === modalOverlay) closeSignInModal();
+            });
+
+            // tutup modal dengan tombol Escape
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') closeSignInModal();
+            });
+
+            let favoritIds = @json($favoritIds ?? []);
+
             function renderSidebarFavorit() {
+                if (!favoritList) return; // guest tidak punya elemen ini
                 const favItems = favoritIds
                     .map(id => SEMUA_KOST.find(k => k.id === id))
                     .filter(Boolean)
                     .slice(0, 3);
 
                 if (favItems.length === 0) {
-                    favoritEmpty.style.display = '';
-                    favoritWrapper.style.display = 'none';
+                    if (favoritEmpty) favoritEmpty.style.display = '';
+                    if (favoritWrapper) favoritWrapper.style.display = 'none';
                     return;
                 }
 
-                favoritEmpty.style.display = 'none';
-                favoritWrapper.style.display = '';
+                if (favoritEmpty) favoritEmpty.style.display = 'none';
+                if (favoritWrapper) favoritWrapper.style.display = '';
 
                 favoritList.innerHTML = '';
                 favItems.forEach(kost => {
@@ -398,15 +430,18 @@
                 });
             }
 
-            /**
-             * Kirim toggle ke server, perbarui UI tanpa reload.
-             */
             document.body.addEventListener('click', function(e) {
                 const btn = e.target.closest('.fav-btn');
                 if (!btn) return;
 
                 e.preventDefault();
                 e.stopPropagation();
+
+                // Jika guest, tampilkan modal login
+                if (!IS_AUTH) {
+                    openSignInModal();
+                    return;
+                }
 
                 const kostId = parseInt(btn.dataset.kostId);
                 const imgEl = btn.querySelector('img');

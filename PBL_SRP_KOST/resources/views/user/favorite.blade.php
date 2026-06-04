@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KostApp - Favorit</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" />
-    <link rel="stylesheet" href="css/user_fav.css">
+    <link rel="stylesheet" href="css/user/favorite.css">
 </head>
 
 <body>
@@ -54,39 +54,7 @@
     <div class="page-body">
 
         <!-- Sidebar -->
-        <section id="section-sidebar">
-            <nav class="nav-pill">
-                <ul class="nav-list">
-                    <li>
-                        <a href="{{ route('user_home') }}" class="nav-item" aria-label="Dashboard">
-                            <x-tabler-layout-dashboard-filled class="nav-blade-icon" />
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('user_listkost') }}" class="nav-item" aria-label="Daftar Kost">
-                            <x-iconsax-lin-buliding class="nav-blade-icon" />
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('user_fav') }}" class="nav-item nav-item--active" aria-label="Favorit">
-                            <x-solar-heart-linear class="nav-blade-icon nav-blade-icon--active" />
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('user_history') }}" class="nav-item" aria-label="Riwayat">
-                            <x-clarity-history-line class="nav-blade-icon" />
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-            <form action="{{ route('logout') }}" method="POST">
-                @csrf
-                <button type="submit" class="logout-button" aria-label="Keluar">
-                    <x-iconsax-out-logout class="nav-blade-icon" />
-                </button>
-            </form>
-        </section>
-
+        @include('user.partials.sidebar')
 
         <!-- Main Content: Filter Bar + Listings + Pagination -->
         <main class="main-content">

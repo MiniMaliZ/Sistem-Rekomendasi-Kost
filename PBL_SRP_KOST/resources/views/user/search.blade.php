@@ -7,54 +7,9 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Hasil Pencarian "{{ $keyword }}" - KostApp</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
-    <link rel="stylesheet" href="{{ asset('css/user_home.css') }}">
-    <style>
-        .search-results-wrapper {
-            padding: 2rem;
-        }
-
-        .results-header {
-            margin-bottom: 1.5rem;
-        }
-
-        .results-header h2 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: #1e1e1e;
-        }
-
-        .results-header p {
-            color: #696969;
-            font-size: 0.875rem;
-            margin-top: 0.25rem;
-        }
-
-        .results-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 1.25rem;
-        }
-
-        .no-result {
-            text-align: center;
-            padding: 3rem 1rem;
-            color: #696969;
-        }
-
-        .no-result h3 {
-            font-size: 1.125rem;
-            margin-bottom: 0.5rem;
-            color: #1e1e1e;
-        }
-
-        .back-link {
-            display: inline-block;
-            margin-top: 1rem;
-            color: #3f2419;
-            text-decoration: none;
-            font-weight: 500;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('css/user/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/user/search.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/user/sidebar.css') }}">
 </head>
 
 <body>
@@ -85,7 +40,7 @@
         <section id="section-sidebar">
             <nav class="nav-pill">
                 <ul class="nav-list">
-                    <li><a href="{{ route('user.home') }}" class="nav-item" aria-label="Home">
+                    <li><a href="{{ route('user.dashboard') }}" class="nav-item" aria-label="Home">
                             <x-tabler-layout-dashboard-filled class="nav-blade-icon" />
                         </a></li>
                     <li><a href="{{ route('user.kost') }}" class="nav-item nav-item--active" aria-label="Kost">
@@ -121,7 +76,7 @@
                     <div class="no-result">
                         <h3>Kost tidak ditemukan</h3>
                         <p>Coba kata kunci lain, misalnya nama kost atau nama kota.</p>
-                        <a href="{{ route('user.home') }}" class="back-link">← Kembali ke Home</a>
+                        <a href="{{ route('user.dashboard') }}" class="back-link">← Kembali ke Home</a>
                     </div>
                 @endif
             </div>

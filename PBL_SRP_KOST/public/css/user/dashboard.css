@@ -178,34 +178,6 @@ img {
 }
 
 /* ============================================================
-   NOTIFICATION BUTTON
-   ============================================================ */
-
-.notif-button {
-    background-color: var(--color-white);
-    border: none;
-    cursor: pointer;
-    border-radius: 9999px;
-    box-shadow: var(--shadow-soft);
-    width: 60px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    transition: background-color 0.2s ease;
-}
-
-.notif-button:hover {
-    background-color: #f9fafb;
-}
-
-.notif-icon {
-    width: 32px;
-    height: 32px;
-}
-
-/* ============================================================
    USER AVATAR
    ============================================================ */
 
@@ -231,22 +203,28 @@ img {
 }
 
 /* ============================================================
-   SIDEBAR SECTION
+   SIGN IN BUTTON (header — tampil saat belum login)
    ============================================================ */
 
-#section-sidebar {
-    grid-area: sidebar;
-    width: 143px;
-    min-width: 143px;
-    background-color: #fefcf8;
-    display: flex;
-    flex-direction: column;
+.signin-btn {
+    display: inline-flex;
     align-items: center;
-    justify-content: space-between;
-    padding-top: 24px;
-    padding-bottom: 24px;
-    height: 100%;
-    overflow-y: auto;
+    justify-content: center;
+    background-color: var(--color-brand-brown);
+    color: #ffffff;
+    font-family: "Poppins", sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 15px 20px;
+    border-radius: 50px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: opacity 0.2s ease;
+}
+
+.signin-btn:hover {
+    opacity: 0.88;
 }
 
 /* ============================================================
@@ -259,110 +237,6 @@ img {
     background-color: #fefcf8;
     overflow-y: auto;
     height: 100%;
-}
-
-/* ============================================================
-   NAV PILL
-   ============================================================ */
-
-.nav-pill {
-    background-color: var(--color-white);
-    border-radius: 9999px;
-    box-shadow: var(--shadow-nav);
-    padding: 8px;
-}
-
-.nav-list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
-}
-
-.nav-item {
-    background-color: var(--color-white);
-    width: 50px;
-    height: 50px;
-    border-radius: 9999px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    transition: background-color 0.2s ease;
-}
-
-.nav-item:hover {
-    background-color: var(--color-gray-100);
-}
-
-.nav-item--active {
-    background-color: var(--color-brand-dark);
-    width: 54px;
-    height: 54px;
-    transition: transform 0.2s ease;
-}
-
-.nav-item--active:hover {
-    background-color: var(--color-brand-dark);
-    transform: scale(1.05);
-}
-
-.nav-icon {
-    width: 32px;
-    height: 32px;
-}
-
-.nav-icon--sm {
-    width: 28px;
-    height: 28px;
-}
-
-.nav-blade-icon {
-    width: 28px;
-    height: 28px;
-    display: block;
-    color: #696969;
-    flex-shrink: 0;
-}
-
-.nav-blade-icon--active {
-    width: 32px;
-    height: 32px;
-    color: #ffffff;
-}
-
-.nav-blade-icon svg,
-.nav-blade-icon--active svg {
-    width: 100%;
-    height: 100%;
-    fill: currentColor;
-    stroke: currentColor;
-}
-
-/* ============================================================
-   LOGOUT BUTTON
-   ============================================================ */
-
-.logout-button {
-    background-color: var(--color-white);
-    border: none;
-    cursor: pointer;
-    border-radius: 9999px;
-    box-shadow: var(--shadow-nav);
-    width: 65px;
-    height: 65px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition:
-        transform 0.2s ease,
-        background-color 0.2s ease;
-}
-
-.logout-button:hover {
-    transform: scale(1.05);
-    background-color: var(--color-gray-100);
 }
 
 /* ============================================================
@@ -541,9 +415,7 @@ img {
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    /* Padding atas/bawah memberi ruang shadow vertikal */
     padding: 8px 4px 12px 4px;
-    /* Margin negatif agar padding tidak menggeser konten secara visual */
     margin: -8px -4px -12px -4px;
 }
 
@@ -555,7 +427,6 @@ img {
     scroll-snap-align: start;
 }
 
-/* Tombol navigasi panah */
 .slider-btn {
     position: absolute;
     top: 50%;
@@ -684,7 +555,7 @@ img {
     padding: 1rem 1.25rem 1.25rem;
     display: flex;
     flex-direction: column;
-    gap: 5px
+    gap: 5px;
 }
 
 .card-name-row {
@@ -944,14 +815,12 @@ img {
 
 /* ============================================================
    FAVORIT SECTION (right column)
-   ✏️ PERBAIKAN: Mengikuti struktur & style dari referensi widget-container
    ============================================================ */
 
 #section-empty-state {
     width: 100%;
 }
 
-/* ── Empty state (belum ada favorit) ── */
 .empty-state-card {
     width: 100%;
     background-color: #ffffff;
@@ -1033,8 +902,6 @@ img {
     color: #3f2419;
 }
 
-/* ── Favorit widget (ada favorit) ── */
-/* ✏️ Container utama mengikuti .widget-container dari referensi */
 .favorit-widget {
     width: 100%;
     background-color: #ffffff;
@@ -1045,7 +912,6 @@ img {
     flex-direction: column;
 }
 
-/* ✏️ Header widget favorit mengikuti .widget-header */
 .favorit-widget-header {
     display: flex;
     justify-content: space-between;
@@ -1079,7 +945,6 @@ img {
     height: 16px;
 }
 
-/* ✏️ List kartu favorit mengikuti .property-list */
 .favorit-property-list {
     display: flex;
     flex-direction: column;
@@ -1087,7 +952,6 @@ img {
     padding: 15px 12px;
 }
 
-/* ✏️ Kartu favorit mengikuti .property-card */
 .fav-sidebar-item {
     display: flex;
     flex-direction: row;
@@ -1108,7 +972,6 @@ img {
     box-shadow: 0px 4px 15px 0px rgba(0, 0, 0, 0.1);
 }
 
-/* ✏️ Gambar kartu favorit mengikuti .card-image-wrapper */
 .fav-sidebar-img-wrap {
     width: 80px;
     height: 80px;
@@ -1124,7 +987,6 @@ img {
     object-fit: cover;
 }
 
-/* Body kartu favorit mengikuti .card-body */
 .fav-sidebar-body {
     display: flex;
     flex-direction: row;
@@ -1134,7 +996,6 @@ img {
     gap: 10px;
 }
 
-/* Info teks kartu favorit mengikuti .card-info */
 .fav-sidebar-info {
     display: flex;
     flex-direction: column;
@@ -1142,7 +1003,6 @@ img {
     justify-content: center;
 }
 
-/* Judul kartu favorit mengikuti .card-title */
 .fav-sidebar-name {
     font-size: 14px;
     font-weight: 500;
@@ -1150,7 +1010,6 @@ img {
     line-height: 1.3;
 }
 
-/* Lokasi kartu favorit mengikuti .card-location */
 .fav-sidebar-location {
     display: flex;
     align-items: center;
@@ -1168,7 +1027,6 @@ img {
     color: #8f8f8f;
 }
 
-/* ✏️ Harga kartu favorit mengikuti .card-price */
 .fav-sidebar-price {
     font-size: 14px;
     font-weight: 500;
@@ -1217,6 +1075,146 @@ img {
 }
 
 /* ============================================================
+   MODAL SIGN IN
+   ✏️ TAMBAHAN: Popup peringatan sign in saat guest klik icon hati
+   ============================================================ */
+
+/* Backdrop / overlay */
+.modal-signin-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background-color: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+
+    /* Tersembunyi secara default */
+    opacity: 0;
+    visibility: hidden;
+    transition:
+        opacity 0.25s ease,
+        visibility 0.25s ease;
+}
+
+/* Saat modal aktif */
+.modal-signin-overlay--visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Kartu modal */
+.modal-signin-card {
+    background-color: #ffffff;
+    border-radius: 24px;
+    padding: 2.5rem 2rem;
+    width: 100%;
+    max-width: 360px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+
+    /* Animasi masuk */
+    transform: translateY(12px) scale(0.97);
+    transition: transform 0.25s ease;
+}
+
+.modal-signin-overlay--visible .modal-signin-card {
+    transform: translateY(0) scale(1);
+}
+
+/* Lingkaran icon hati */
+.modal-signin-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 9999px;
+    background-color: #fff0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.modal-signin-icon svg {
+    width: 34px;
+    height: 34px;
+}
+
+/* Blok teks judul + deskripsi */
+.modal-signin-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    text-align: center;
+}
+
+.modal-signin-text h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1e1e1e;
+}
+
+.modal-signin-text p {
+    font-size: 0.875rem;
+    color: #696969;
+    line-height: 1.6;
+}
+
+/* Grup tombol aksi */
+.modal-signin-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+    margin-top: 0.25rem;
+}
+
+/* Base tombol modal */
+.modal-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    font-family: "Poppins", sans-serif;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition:
+        opacity 0.2s ease,
+        background-color 0.2s ease;
+    text-align: center;
+}
+
+/* Tombol utama: Sign In Sekarang */
+.modal-btn--primary {
+    background-color: #3f2419;
+    color: #ffffff;
+    border: none;
+    box-shadow: 0 2px 6px rgba(63, 36, 25, 0.3);
+}
+
+.modal-btn--primary:hover {
+    opacity: 0.88;
+}
+
+/* Tombol sekunder: Nanti Saja */
+.modal-btn--secondary {
+    background-color: transparent;
+    color: #3f2419;
+    border: 1px solid #3f2419;
+}
+
+.modal-btn--secondary:hover {
+    background-color: #f9fafb;
+}
+
+/* ============================================================
    RESPONSIVE
    ============================================================ */
 
@@ -1258,10 +1256,6 @@ img {
     .search-bar {
         width: 100%;
         flex: 1;
-    }
-
-    #section-sidebar {
-        display: none;
     }
 
     .home-col-left,
