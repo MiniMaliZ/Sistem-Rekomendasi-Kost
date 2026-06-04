@@ -231,31 +231,6 @@ img {
 }
 
 /* ============================================================
-   SIGN IN BUTTON (header — tampil saat belum login)
-   ============================================================ */
-
-.signin-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--color-brand-brown);
-    color: #ffffff;
-    font-family: "Poppins", sans-serif;
-    font-size: 16px;
-    font-weight: 500;
-    padding: 15px 20px;
-    border-radius: 50px;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-    white-space: nowrap;
-    flex-shrink: 0;
-    transition: opacity 0.2s ease;
-}
-
-.signin-btn:hover {
-    opacity: 0.88;
-}
-
-/* ============================================================
    SIDEBAR SECTION
    ============================================================ */
 
@@ -709,7 +684,7 @@ img {
     padding: 1rem 1.25rem 1.25rem;
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 5px
 }
 
 .card-name-row {
@@ -1242,146 +1217,6 @@ img {
 }
 
 /* ============================================================
-   MODAL SIGN IN
-   ✏️ TAMBAHAN: Popup peringatan sign in saat guest klik icon hati
-   ============================================================ */
-
-/* Backdrop / overlay */
-.modal-signin-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-    background-color: rgba(0, 0, 0, 0.45);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-
-    /* Tersembunyi secara default */
-    opacity: 0;
-    visibility: hidden;
-    transition:
-        opacity 0.25s ease,
-        visibility 0.25s ease;
-}
-
-/* Saat modal aktif */
-.modal-signin-overlay--visible {
-    opacity: 1;
-    visibility: visible;
-}
-
-/* Kartu modal */
-.modal-signin-card {
-    background-color: #ffffff;
-    border-radius: 24px;
-    padding: 2.5rem 2rem;
-    width: 100%;
-    max-width: 360px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.25rem;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
-
-    /* Animasi masuk */
-    transform: translateY(12px) scale(0.97);
-    transition: transform 0.25s ease;
-}
-
-.modal-signin-overlay--visible .modal-signin-card {
-    transform: translateY(0) scale(1);
-}
-
-/* Lingkaran icon hati */
-.modal-signin-icon {
-    width: 72px;
-    height: 72px;
-    border-radius: 9999px;
-    background-color: #fff0f0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.modal-signin-icon svg {
-    width: 34px;
-    height: 34px;
-}
-
-/* Blok teks judul + deskripsi */
-.modal-signin-text {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    text-align: center;
-}
-
-.modal-signin-text h3 {
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: #1e1e1e;
-}
-
-.modal-signin-text p {
-    font-size: 0.875rem;
-    color: #696969;
-    line-height: 1.6;
-}
-
-/* Grup tombol aksi */
-.modal-signin-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    width: 100%;
-    margin-top: 0.25rem;
-}
-
-/* Base tombol modal */
-.modal-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    padding: 0.75rem 1.5rem;
-    border-radius: 50px;
-    font-family: "Poppins", sans-serif;
-    font-size: 0.9375rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition:
-        opacity 0.2s ease,
-        background-color 0.2s ease;
-    text-align: center;
-}
-
-/* Tombol utama: Sign In Sekarang */
-.modal-btn--primary {
-    background-color: #3f2419;
-    color: #ffffff;
-    border: none;
-    box-shadow: 0 2px 6px rgba(63, 36, 25, 0.3);
-}
-
-.modal-btn--primary:hover {
-    opacity: 0.88;
-}
-
-/* Tombol sekunder: Nanti Saja */
-.modal-btn--secondary {
-    background-color: transparent;
-    color: #3f2419;
-    border: 1px solid #3f2419;
-}
-
-.modal-btn--secondary:hover {
-    background-color: #f9fafb;
-}
-
-/* ============================================================
    RESPONSIVE
    ============================================================ */
 
@@ -1440,10 +1275,5 @@ img {
 
     .small-cards-grid {
         grid-template-columns: 1fr;
-    }
-
-    /* Modal menyesuaikan layar kecil */
-    .modal-signin-card {
-        padding: 2rem 1.5rem;
     }
 }

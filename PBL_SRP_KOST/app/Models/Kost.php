@@ -16,13 +16,12 @@ class Kost extends Model
         'nama_kost',
         'harga',
         'tipe_kos',
-        'sepesifikasi_tipe_kamar',
+        'spesifikasi_tipe_kamar',
         'fasilitas_kamar',
         'fasilitas_kamar_mandi',
         'fasilitas_umum',
         'fasilitas_parkir',
         'tempat_terdekat',
-        'peraturan_kos',
         'link_original',
     ];
 
