@@ -19,7 +19,7 @@ class AuthController extends Controller
     public function showLogin()
     {
         if (Auth::check()) {
-            return redirect()->intended(route('dashboard'));
+            return redirect()->intended(route('user.dashboard'));
         }
 
         return view('auth.login');
@@ -42,7 +42,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
 
-            return redirect()->intended(route('dashboard'))
+            return redirect()->intended(route('user.dashboard'))
                 ->with('status', 'Selamat datang kembali!');
         }
 
@@ -61,7 +61,7 @@ class AuthController extends Controller
     public function showRegister()
     {
         if (Auth::check()) {
-            return redirect()->intended(route('dashboard'));
+            return redirect()->intended(route('user.dashboard'));
         }
 
         return view('auth.register');
@@ -93,7 +93,7 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return redirect(route('dashboard'))
+        return redirect(route('user.dashboard'))
             ->with('status', 'Akun berhasil dibuat. Selamat datang di Roomor!');
     }
 
@@ -105,7 +105,7 @@ class AuthController extends Controller
     public function showForgotPassword()
     {
         if (Auth::check()) {
-            return redirect()->intended(route('dashboard'));
+            return redirect()->intended(route('user.dashboard'));
         }
 
         return view('auth.forgot-password');

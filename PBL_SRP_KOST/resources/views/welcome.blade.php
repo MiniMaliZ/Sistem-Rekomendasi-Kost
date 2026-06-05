@@ -56,7 +56,7 @@
                     Nggak perlu pusing cari kos. roomor punya ribuan pilihan kos di seluruh Indonesia — dari putra, putri, sampai campur. Tinggal pilih, langsung cocok.
                 </p>
                 <div class="hero-actions">
-                    <a href="{{ route('user.home') }}" class="btn-hero-primary">
+                    <a href="{{ route('user.dashboard') }}" class="btn-hero-primary">
                         Cari kos with roomor
                         <i class="fas fa-arrow-right"></i>
                     </a>

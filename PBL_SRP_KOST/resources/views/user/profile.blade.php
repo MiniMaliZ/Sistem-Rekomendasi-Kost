@@ -2,7 +2,7 @@
     $firstName = strtok($user->nama, ' ') ?: $user->nama;
     $roleLabel = $user->role === 'admin' ? 'Admin' : 'Pencari Kost';
     $avatarUrl = $user->avatar_url;
-    if (session('avatar_refresh') && $user->foto_url && ! str_starts_with($avatarUrl, 'http')) {
+    if (session('avatar_refresh') && $user->foto_url && !str_starts_with($avatarUrl, 'http')) {
         $avatarUrl .= (str_contains($avatarUrl, '?') ? '&' : '?') . 't=' . session('avatar_refresh');
     }
 @endphp
@@ -14,7 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KostApp - Profil Saya</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" />
-    <link rel="stylesheet" href="{{ asset('css/user_profile.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/user/profile.css') }}">
 </head>
 
 <body>
@@ -50,7 +50,7 @@
             <nav class="nav-pill">
                 <ul class="nav-list">
                     <li>
-                        <a href="{{ route('user.home') }}" class="nav-item nav-item--active" aria-label="Dashboard">
+                        <a href="{{ route('user.dashboard') }}" class="nav-item nav-item--active" aria-label="Dashboard">
                             <x-tabler-layout-dashboard-filled class="nav-blade-icon nav-blade-icon--active" />
                         </a>
                     </li>
@@ -103,13 +103,29 @@
 
                 {{-- Kartu ringkasan profil --}}
                 <article class="profile-summary-card">
-                    <button type="button" class="btn-edit-profile" id="open-edit-modal">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-                        </svg>
-                        Edit Profil
-                    </button>
+                    <div class="profile-card-actions">
+                        <button type="button" class="btn-edit-profile" id="open-edit-modal">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" aria-hidden="true">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                            </svg>
+                            Edit Profil
+                        </button>
+
+                        <form action="{{ route('logout') }}" method="POST" style="margin:0;">
+                            @csrf
+                            <button type="submit" class="btn-logout-profile">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                                    <polyline points="16 17 21 12 16 7" />
+                                    <line x1="21" y1="12" x2="9" y2="12" />
+                                </svg>
+                                Keluar
+                            </button>
+                        </form>
+                    </div>
 
                     <div class="profile-summary-inner">
                         <div class="profile-avatar-col">
@@ -119,15 +135,21 @@
                                 <span class="profile-deco-blob profile-deco-blob--3"></span>
                             </div>
                             <div class="profile-avatar-frame">
-                                <img src="{{ $avatarUrl }}" alt="{{ $user->nama }}" class="profile-avatar-img" id="profile-avatar-preview">
-                                <form action="{{ route('profile.upload') }}" method="POST" enctype="multipart/form-data" id="profile-photo-form">
+                                <img src="{{ $avatarUrl }}" alt="{{ $user->nama }}" class="profile-avatar-img"
+                                    id="profile-avatar-preview">
+                                <form action="{{ route('profile.upload') }}" method="POST"
+                                    enctype="multipart/form-data" id="profile-photo-form">
                                     @csrf
-                                    <input type="file" name="profile_photo" id="profile-photo-input" class="profile-photo-input"
+                                    <input type="file" name="profile_photo" id="profile-photo-input"
+                                        class="profile-photo-input"
                                         accept="image/jpeg,image/png,image/jpg,image/gif,image/webp">
-                                    <label for="profile-photo-input" class="profile-camera-btn" aria-label="Ubah foto profil">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                                            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-                                            <circle cx="12" cy="13" r="4"/>
+                                    <label for="profile-photo-input" class="profile-camera-btn"
+                                        aria-label="Ubah foto profil">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                            <path
+                                                d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                                            <circle cx="12" cy="13" r="4" />
                                         </svg>
                                     </label>
                                 </form>
@@ -137,23 +159,27 @@
                         <div class="profile-summary-content">
                             <h3 class="profile-display-name">{{ $user->nama }}</h3>
                             <span class="profile-role-pill">{{ $roleLabel }}</span>
-                            <p class="profile-tagline">Mencari kost nyaman dan strategis untuk mendukung aktivitas sehari-hari.</p>
+                            <p class="profile-tagline">Mencari kost nyaman dan strategis untuk mendukung aktivitas
+                                sehari-hari.</p>
 
                             <ul class="profile-meta-list">
                                 <li class="profile-meta-item">
                                     <span class="profile-meta-icon" aria-hidden="true">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                                            <polyline points="22,6 12,13 2,6"/>
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-width="2">
+                                            <path
+                                                d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                                            <polyline points="22,6 12,13 2,6" />
                                         </svg>
                                     </span>
                                     {{ $user->email }}
                                 </li>
                                 <li class="profile-meta-item">
                                     <span class="profile-meta-icon" aria-hidden="true">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                                            <circle cx="12" cy="7" r="4"/>
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-width="2">
+                                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                            <circle cx="12" cy="7" r="4" />
                                         </svg>
                                     </span>
                                     {{ $roleLabel }}
@@ -168,8 +194,8 @@
                     <h3 class="account-info-heading">
                         <span class="account-info-heading-icon" aria-hidden="true">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="2" y="5" width="20" height="14" rx="2"/>
-                                <line x1="2" y1="10" x2="22" y2="10"/>
+                                <rect x="2" y="5" width="20" height="14" rx="2" />
+                                <line x1="2" y1="10" x2="22" y2="10" />
                             </svg>
                         </span>
                         Informasi Akun
@@ -180,9 +206,10 @@
                             <li class="account-info-row">
                                 <span class="account-info-row-left">
                                     <span class="account-row-icon" aria-hidden="true">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                                            <circle cx="12" cy="7" r="4"/>
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-width="2">
+                                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                            <circle cx="12" cy="7" r="4" />
                                         </svg>
                                     </span>
                                     <span class="account-row-label">Nama Lengkap</span>
@@ -192,17 +219,19 @@
                             <li class="account-info-row">
                                 <span class="account-info-row-left">
                                     <span class="account-row-icon" aria-hidden="true">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <rect x="2" y="7" width="20" height="14" rx="2"/>
-                                            <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-width="2">
+                                            <rect x="2" y="7" width="20" height="14" rx="2" />
+                                            <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
                                         </svg>
                                     </span>
                                     <span class="account-row-label">Role</span>
                                 </span>
                                 <span class="account-row-value account-row-value--role">
-                                    <svg class="account-row-value-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                                        <circle cx="12" cy="7" r="4"/>
+                                    <svg class="account-row-value-icon" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                        <circle cx="12" cy="7" r="4" />
                                     </svg>
                                     {{ $roleLabel }}
                                 </span>
@@ -210,9 +239,11 @@
                             <li class="account-info-row">
                                 <span class="account-info-row-left">
                                     <span class="account-row-icon" aria-hidden="true">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                                            <polyline points="22,6 12,13 2,6"/>
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-width="2">
+                                            <path
+                                                d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                                            <polyline points="22,6 12,13 2,6" />
                                         </svg>
                                     </span>
                                     <span class="account-row-label">Email</span>
@@ -222,17 +253,19 @@
                             <li class="account-info-row">
                                 <span class="account-info-row-left">
                                     <span class="account-row-icon" aria-hidden="true">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <rect x="3" y="3" width="18" height="18" rx="2"/>
-                                            <circle cx="8.5" cy="8.5" r="1.5"/>
-                                            <polyline points="21 15 16 10 5 21"/>
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-width="2">
+                                            <rect x="3" y="3" width="18" height="18" rx="2" />
+                                            <circle cx="8.5" cy="8.5" r="1.5" />
+                                            <polyline points="21 15 16 10 5 21" />
                                         </svg>
                                     </span>
                                     <span class="account-row-label">Foto Profil</span>
                                 </span>
                                 <span class="account-row-value">
                                     @if ($user->foto_url)
-                                        <img src="{{ $avatarUrl }}" alt="Foto profil" class="account-foto-preview">
+                                        <img src="{{ $avatarUrl }}" alt="Foto profil"
+                                            class="account-foto-preview">
                                     @else
                                         <span class="text-muted">Belum diunggah</span>
                                     @endif
@@ -256,7 +289,8 @@
         <div class="profile-modal-dialog" role="dialog" aria-labelledby="edit-modal-title" aria-modal="true">
             <div class="profile-modal-header">
                 <h3 id="edit-modal-title">Edit Profil</h3>
-                <button type="button" class="profile-modal-close" id="close-edit-modal" aria-label="Tutup">&times;</button>
+                <button type="button" class="profile-modal-close" id="close-edit-modal"
+                    aria-label="Tutup">&times;</button>
             </div>
 
             <form action="{{ route('profile.update') }}" method="POST" class="profile-modal-form">
@@ -265,12 +299,14 @@
 
                 <div class="form-group">
                     <label for="edit-nama">Nama Lengkap</label>
-                    <input type="text" id="edit-nama" name="nama" value="{{ old('nama', $user->nama) }}" required maxlength="100">
+                    <input type="text" id="edit-nama" name="nama" value="{{ old('nama', $user->nama) }}"
+                        required maxlength="100">
                 </div>
 
                 <div class="form-group">
                     <label for="edit-email">Email</label>
-                    <input type="email" id="edit-email" name="email" value="{{ old('email', $user->email) }}" required maxlength="150">
+                    <input type="email" id="edit-email" name="email" value="{{ old('email', $user->email) }}"
+                        required maxlength="150">
                 </div>
 
                 <p class="form-hint">Ubah foto lewat ikon kamera pada foto profil. Role ditetapkan oleh sistem.</p>
@@ -284,13 +320,13 @@
     </div>
 
     <script>
-        (function () {
+        (function() {
             var input = document.getElementById('profile-photo-input');
             var form = document.getElementById('profile-photo-form');
             var preview = document.getElementById('profile-avatar-preview');
 
             if (input && form) {
-                input.addEventListener('change', function () {
+                input.addEventListener('change', function() {
                     if (!input.files || !input.files[0]) return;
                     if (preview) preview.src = URL.createObjectURL(input.files[0]);
                     form.submit();
@@ -322,7 +358,7 @@
             if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
             if (backdrop) backdrop.addEventListener('click', closeModal);
 
-            document.addEventListener('keydown', function (e) {
+            document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape') closeModal();
             });
 

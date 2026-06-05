@@ -123,7 +123,6 @@ img {
     width: 412px;
 }
 
-
 .search-input {
     background: transparent;
     border: none;
@@ -377,7 +376,9 @@ img {
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
-    transition: opacity 0.2s ease, transform 0.2s ease;
+    transition:
+        opacity 0.2s ease,
+        transform 0.2s ease;
     z-index: 2;
 }
 
@@ -765,8 +766,12 @@ img {
 }
 
 .user-avatar--ring {
-    box-shadow: 0 0 0 3px #fefcf8, 0 0 0 5px var(--color-brand-brown);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow:
+        0 0 0 3px #fefcf8,
+        0 0 0 5px var(--color-brand-brown);
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 .user-avatar--ring:hover {
@@ -785,7 +790,9 @@ img {
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
-    transition: opacity 0.2s ease, visibility 0.2s ease;
+    transition:
+        opacity 0.2s ease,
+        visibility 0.2s ease;
 }
 
 .profile-modal--open {
@@ -1043,7 +1050,9 @@ img {
     cursor: pointer;
     border: 3px solid var(--color-white);
     box-shadow: 0 4px 14px rgba(63, 36, 25, 0.3);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
     white-space: nowrap;
 }
 
@@ -1093,7 +1102,9 @@ img {
     border-radius: 16px;
     border: 1px solid #f0ebe6;
     text-align: left;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 .profile-chip:hover {
@@ -1155,7 +1166,9 @@ img {
     font-weight: 600;
     cursor: pointer;
     box-shadow: 0 4px 16px rgba(63, 36, 25, 0.25);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 .profile-edit-btn:hover {
@@ -1210,7 +1223,9 @@ img {
     padding: 22px 24px;
     border: 1px solid #f0ebe6;
     box-shadow: var(--shadow-card);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
 }
 
 .info-card--animate {
@@ -1406,5 +1421,49 @@ img {
 
     .profile-hero-body {
         padding: 0 20px 28px;
+    }
+
+    /* ── Profile card action buttons (edit + logout) ── */
+    .profile-card-actions {
+        position: absolute;
+        top: 28px;
+        right: 32px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        z-index: 2;
+    }
+
+    .btn-edit-profile {
+        position: static; /* override posisi absolute sebelumnya */
+    }
+
+    .btn-logout-profile {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 20px;
+        border-radius: 12px;
+        border: 1.5px solid #e8dfd8;
+        background: var(--color-white);
+        color: #ac3a2a;
+        font-family: "Poppins", sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition:
+            background-color 0.2s ease,
+            border-color 0.2s ease,
+            transform 0.2s ease;
+    }
+
+    .btn-logout-profile:hover {
+        background-color: #fef2f2;
+        border-color: #fecaca;
+        transform: translateY(-1px);
+    }
+
+    .btn-logout-profile svg {
+        flex-shrink: 0;
     }
 }

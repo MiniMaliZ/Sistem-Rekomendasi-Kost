@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use illuminate\support\Facades\DB;
 use Illuminate\support\Colection;
 
-class UserListkostController extends Controller
+class ListkostController extends Controller
 {
     /**
      * Route model binding customization
@@ -128,7 +128,7 @@ class UserListkostController extends Controller
         ];
 
         // Return view with data
-        return view('user_listkost', [
+        return view('user.listkost', [
             'kosts' => $kosts,
             'filterOptions' => $filterOptions,
             'currentSort' => $sortBy,
