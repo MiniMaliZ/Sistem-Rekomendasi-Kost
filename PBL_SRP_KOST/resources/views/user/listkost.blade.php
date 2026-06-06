@@ -236,8 +236,8 @@
                             @foreach ($kosts as $kost)
                                 <div class="card" data-kost-id="{{ $kost->id_kost }}">
                                     <div class="card-image-wrapper">
-                                        <img src="{{ $kost->link_original }}" alt="{{ $kost->nama_kost }}"
-                                            class="card-image" />
+                                        <img src="{{ $kost->fotoKost?->foto_bangunan_url ?? asset('images/no-image.jpg') }}" alt="{{ $kost->nama_kost }} "class="card-image" />
+                                            
                                         <div class="badge badge-{{ $kost->tipe_kos }}">
                                             {{ strtoupper($kost->tipe_kos) }}
                                         </div>
@@ -258,7 +258,7 @@
                                         </div>
                                         <div class="card-location">
                                             <img src="{{ asset('images/loc.svg') }}" alt="Location" />
-                                            <span>{{ $kost->tempat_terdekat ?? 'Malang, Jawa Timur' }}</span>
+                                            <span>{{ $kost->lokasi ?? 'Malang, Jawa Timur' }}</span>
                                         </div>
                                         <div class="card-price">
                                             <strong>{{ $kost->harga_formatted }}</strong>

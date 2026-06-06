@@ -9,7 +9,7 @@
 
 <div class="kost-card">
     <div class="kost-card-img-wrap">
-        <img src="{{ asset('images/' . $kost['foto']) }}" alt="{{ $kost['nama'] }}" class="card-photo" loading="lazy">
+        <img src="{{ $kost['foto'] }}" alt="{{ $kost['nama'] }}" class="card-photo" loading="lazy">
         <span class="badge">{{ $kost['tipe'] }}</span>
 
         <button class="fav-btn" data-kost-id="{{ $kost['id'] }}"

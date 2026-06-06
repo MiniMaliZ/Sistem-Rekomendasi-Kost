@@ -28,7 +28,7 @@ class ListkostController extends Controller
         $user = Auth::user();
         
         // Initialize query
-        $query = Kost::query();
+        $query = Kost::with('fotoKost');;
 
         // SEARCH - Filter by name, location, or other searchable fields
         if ($request->filled('search')) {
@@ -101,6 +101,14 @@ class ListkostController extends Controller
         $perPage = $request->input('per_page', 6); // Default 6 items per page
         $kosts = $query->paginate($perPage);
 
+        $kosts->getCollection()->transform(function ($kost) {
+        $kost->lokasi = $this->getKecamatan($kost->nama_kost) . ', Malang';
+
+        $kost->harga_format = 'Rp. ' . number_format($kost->harga, 0, ',', '.');
+
+        return $kost;
+        });
+
         // Get user's favorite kost IDs
         $favoriteKostIds = collect();
         if ($user) {
@@ -141,7 +149,26 @@ class ListkostController extends Controller
             ],
         ]);
     }
+    private function getKecamatan(string $namaKost): string
+    {
+    $kecamatanList = [
+        'Lowokwaru',
+        'Blimbing',
+        'Klojen',
+        'Sukun',
+        'Kedungkandang',
+        'Karang Ploso',
+        'Dau',
+    ];
 
+    foreach ($kecamatanList as $kec) {
+        if (stripos($namaKost, $kec) !== false) {
+            return $kec;
+        }
+    }
+
+    return 'Malang';
+    }            
     /**
      * Filter helper to validate and handle harga_range parameter
      */
@@ -180,7 +207,7 @@ class ListkostController extends Controller
     public function show(Kost $kost)
     {
         // Load kost with its relationships
-        $kost->load(['kostKriteria', 'favorit', 'riwayat', 'feedback']);
+        $kost->load(['kostKriteria', 'favorit', 'riwayat', 'feedback','fotoKost']);
 
         // Get authenticated user
         $user = Auth::user();
