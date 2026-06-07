@@ -9,7 +9,7 @@
                 <x-solar-magnifer-linear class="w-4 h-4" />
             </div>
             <input wire:model.live.debounce.300ms="search" id="search-kost" type="text"
-                   placeholder="Cari berdasarkan nama, pemilik, atau lokasi..."
+                   placeholder="Cari nama, tipe, fasilitas, atau tempat terdekat..."
                    style="width:100%; box-sizing:border-box; padding:0.5rem 1rem 0.5rem 2.25rem; background-color:#fcfaf8; border:1px solid #f0ebe1; border-radius:0.5rem; font-size:0.85rem; font-family:'Poppins',sans-serif; color:#3f2419; outline:none; transition: all 0.2s ease;"
                    onfocus="this.style.borderColor='#3f2419'; this.style.backgroundColor='#ffffff'; this.style.boxShadow='0 0 0 3px rgba(63,36,25,0.05)'"
                    onblur="this.style.borderColor='#f0ebe1'; this.style.backgroundColor='#fcfaf8'; this.style.boxShadow='none'">
@@ -425,6 +425,26 @@
                                    onfocus="this.style.borderColor='#3f2419'">
                         </div>
 
+                        <div>
+                            <label style="display:flex; align-items:center; gap:0.375rem; font-size:0.8rem; font-weight:600; color:#3f2419; margin-bottom:0.375rem;">
+                                <x-solar-map-point-linear class="w-3.5 h-3.5 text-amber-700" /> Latitude
+                            </label>
+                            <input wire:model="latitude" type="number" min="-90" max="90" step="0.00000001" placeholder="-7.96662000"
+                                   style="width:100%; box-sizing:border-box; padding:0.6rem 0.875rem; background-color:#fcfaf8; border:1px solid #f0ebe1; border-radius:0.5rem; font-size:0.875rem; font-family:'Poppins',sans-serif; color:#3f2419; outline:none;"
+                                   onfocus="this.style.borderColor='#3f2419'">
+                            @error('latitude') <p style="font-size:0.7rem; color:#ef4444; margin:0.25rem 0 0;">{{ $message }}</p> @enderror
+                        </div>
+
+                        <div>
+                            <label style="display:flex; align-items:center; gap:0.375rem; font-size:0.8rem; font-weight:600; color:#3f2419; margin-bottom:0.375rem;">
+                                <x-solar-map-point-linear class="w-3.5 h-3.5 text-amber-700" /> Longitude
+                            </label>
+                            <input wire:model="longitude" type="number" min="-180" max="180" step="0.00000001" placeholder="112.63263000"
+                                   style="width:100%; box-sizing:border-box; padding:0.6rem 0.875rem; background-color:#fcfaf8; border:1px solid #f0ebe1; border-radius:0.5rem; font-size:0.875rem; font-family:'Poppins',sans-serif; color:#3f2419; outline:none;"
+                                   onfocus="this.style.borderColor='#3f2419'">
+                            @error('longitude') <p style="font-size:0.7rem; color:#ef4444; margin:0.25rem 0 0;">{{ $message }}</p> @enderror
+                        </div>
+
                         <div style="grid-column:1/-1;">
                             <label style="display:flex; align-items:center; gap:0.375rem; font-size:0.8rem; font-weight:600; color:#3f2419; margin-bottom:0.375rem;">
                                 <x-solar-document-text-linear class="w-3.5 h-3.5 text-amber-700" /> Peraturan Kos
@@ -532,6 +552,16 @@
                                 <th style="padding:0.75rem; font-size:0.85rem; color:#3f2419; background:#fcfaf8;">Tempat Terdekat</th>
                                 <td style="padding:0.75rem; font-size:0.85rem; color:#5D4D34;">{{ $selectedKostFasilitas->tempat_terdekat ?? '-' }}</td>
                             </tr>
+                            <tr style="border-bottom:1px solid #f0ebe1;">
+                                <th style="padding:0.75rem; font-size:0.85rem; color:#3f2419; background:#fcfaf8;">Koordinat</th>
+                                <td style="padding:0.75rem; font-size:0.85rem; color:#5D4D34;">
+                                    @if($selectedKostFasilitas->latitude && $selectedKostFasilitas->longitude)
+                                        {{ $selectedKostFasilitas->latitude }}, {{ $selectedKostFasilitas->longitude }}
+                                    @else
+                                        -
+                                    @endif
+                                </td>
+                            </tr>
                             <tr>
                                 <th style="padding:0.75rem; font-size:0.85rem; color:#3f2419; background:#fcfaf8;">Peraturan Kos</th>
                                 <td style="padding:0.75rem; font-size:0.85rem; color:#5D4D34; white-space:pre-wrap;">{{ $selectedKostFasilitas->peraturan_kos ?? '-' }}</td>
@@ -587,7 +617,7 @@
                                 Pastikan urutan kolom sesuai format berikut:
                             </p>
                             <p style="font-size:0.7rem; color:#92400e; margin:0.25rem 0 0; line-height:1.4;">
-                                ID_Kost, Nama Kost, Harga, Tipe Kost, Spesifikasi Tipe Kamar, Fasilitas Kamar, Fasilitas Kamar Mandi, Fasilitas Umum, Fasilitas Parkir, Tempat Terdekat, Peraturan Kos, Link Original.
+                                ID_Kost, Nama Kost, Harga, Tipe Kost, Spesifikasi Tipe Kamar, Fasilitas Kamar, Fasilitas Kamar Mandi, Fasilitas Umum, Fasilitas Parkir, Tempat Terdekat, Peraturan Kos, Link Original, Latitude, Longitude.
                             </p>
                         </div>
                     </div>

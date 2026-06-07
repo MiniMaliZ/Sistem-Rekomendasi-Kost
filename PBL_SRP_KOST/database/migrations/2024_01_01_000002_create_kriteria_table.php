@@ -11,8 +11,8 @@ return new class extends Migration
         Schema::create('kriteria', function (Blueprint $table) {
             $table->id('id_kriteria');
             $table->unsignedBigInteger('id_user');
-            $table->string('nama_kriteria', 100);
-            // tipe enum tidak digunakan sesuai permintaan
+            $table->string('nama_kriteria', 255);
+            $table->timestamps();
 
             $table->foreign('id_user')->references('id_user')->on('user')->onDelete('cascade');
         });

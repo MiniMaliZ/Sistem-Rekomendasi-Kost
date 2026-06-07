@@ -9,7 +9,7 @@ class Feedback extends Model
 {
     protected $table = 'feedback';
     protected $primaryKey = 'id_ulasan';
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = [
         'id_user',
@@ -20,6 +20,7 @@ class Feedback extends Model
 
     protected $casts = [
         'created_at' => 'datetime',
+        'updated_at' => 'datetime',
         'rating' => 'integer',
     ];
 

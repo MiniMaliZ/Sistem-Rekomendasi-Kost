@@ -9,7 +9,7 @@ class Favorit extends Model
 {
     protected $table = 'favorit';
     protected $primaryKey = 'id_favorit';
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = [
         'id_user',
@@ -18,6 +18,7 @@ class Favorit extends Model
 
     protected $casts = [
         'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     public function user(): BelongsTo

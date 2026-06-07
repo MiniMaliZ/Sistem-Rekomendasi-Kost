@@ -9,12 +9,16 @@ class KostKriteria extends Model
 {
     protected $table = 'kost_kriteria';
     protected $primaryKey = 'id_kost_kriteria';
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = [
         'id_kost',
         'id_kriteria',
         'nilai',
+    ];
+
+    protected $casts = [
+        'nilai' => 'decimal:2',
     ];
 
     public function kost(): BelongsTo

@@ -10,7 +10,7 @@ class Kriteria extends Model
 {
     protected $table = 'kriteria';
     protected $primaryKey = 'id_kriteria';
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = [
         'id_user',

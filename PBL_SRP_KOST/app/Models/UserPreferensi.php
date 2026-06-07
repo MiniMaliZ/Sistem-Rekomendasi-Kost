@@ -9,11 +9,15 @@ class UserPreferensi extends Model
 {
     protected $table = 'user_preferensi';
     protected $primaryKey = 'id_preferensi';
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = [
         'id_kriteria',
         'bobot',
+    ];
+
+    protected $casts = [
+        'bobot' => 'decimal:2',
     ];
 
     public function kriteria(): BelongsTo

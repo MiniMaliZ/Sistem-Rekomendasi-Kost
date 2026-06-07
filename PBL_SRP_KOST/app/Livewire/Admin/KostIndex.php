@@ -16,6 +16,10 @@ class KostIndex extends Component
         'tipe_kos',
         'sepesifikasi_tipe_kamar',
         'fasilitas_kamar',
+        'fasilitas_kamar_mandi',
+        'fasilitas_umum',
+        'fasilitas_parkir',
+        'tempat_terdekat',
     ];
 
     use WithPagination, WithFileUploads;
@@ -46,6 +50,8 @@ class KostIndex extends Component
     public string $tempat_terdekat = '';
     public string $peraturan_kos = '';
     public string $link_original = '';
+    public string $latitude = '';
+    public string $longitude = '';
 
     protected function rules(): array
     {
@@ -61,6 +67,8 @@ class KostIndex extends Component
             'tempat_terdekat' => 'nullable|string|max:255',
             'peraturan_kos' => 'nullable|string',
             'link_original' => 'nullable|string|max:500',
+            'latitude' => 'nullable|numeric|between:-90,90',
+            'longitude' => 'nullable|numeric|between:-180,180',
         ];
     }
 
@@ -95,9 +103,10 @@ class KostIndex extends Component
         $this->reset([
             'nama_kost', 'harga', 'tipe_kos', 'sepesifikasi_tipe_kamar', 
             'fasilitas_kamar', 'fasilitas_kamar_mandi', 'fasilitas_umum', 
-            'fasilitas_parkir', 'tempat_terdekat', 'peraturan_kos', 'link_original'
+            'fasilitas_parkir', 'tempat_terdekat', 'peraturan_kos', 'link_original',
+            'latitude', 'longitude'
         ]);
-        $this->tipe_kos = 'Putri';
+        $this->tipe_kos = 'Kos Putri';
         $this->editingId = null;
         $this->showModal = true;
     }
@@ -117,6 +126,8 @@ class KostIndex extends Component
         $this->tempat_terdekat = $kost->tempat_terdekat ?? '';
         $this->peraturan_kos = $kost->peraturan_kos ?? '';
         $this->link_original = $kost->link_original ?? '';
+        $this->latitude = $kost->latitude !== null ? (string) $kost->latitude : '';
+        $this->longitude = $kost->longitude !== null ? (string) $kost->longitude : '';
         $this->showModal = true;
     }
 
@@ -159,7 +170,7 @@ class KostIndex extends Component
             // Map row according to CSV headers provided:
             // 0: ID_Kost, 1: Nama Kost, 2: Harga, 3: Tipe Kost, 4: Spesifikasi Tipe Kamar
             // 5: Fasilitas Kamar, 6: Fasilitas Kamar Mandi, 7: Fasilitas Umum, 8: Fasilitas Parkir
-            // 9: Tempat Terdekat, 10: Peraturan Kos, 11: Link Original
+            // 9: Tempat Terdekat, 10: Peraturan Kos, 11: Link Original, 12-13: Latitude/Longitude opsional
             
             if (count($row) < 12) continue; // Skip incomplete rows
             
@@ -177,6 +188,8 @@ class KostIndex extends Component
                     'tempat_terdekat' => $row[9],
                     'peraturan_kos' => $row[10],
                     'link_original' => $row[11],
+                    'latitude' => isset($row[12]) && is_numeric($row[12]) ? $row[12] : null,
+                    'longitude' => isset($row[13]) && is_numeric($row[13]) ? $row[13] : null,
                 ]
             );
             $count++;
@@ -192,6 +205,8 @@ class KostIndex extends Component
     public function save(): void
     {
         $data = $this->validate();
+        $data['latitude'] = $data['latitude'] === '' ? null : $data['latitude'];
+        $data['longitude'] = $data['longitude'] === '' ? null : $data['longitude'];
 
         if ($this->editingId) {
             Kost::findOrFail($this->editingId)->update($data);
@@ -234,7 +249,9 @@ class KostIndex extends Component
                     $query->where('nama_kost', 'like', "%{$this->search}%")
                         ->orWhere('tipe_kos', 'like', "%{$this->search}%")
                         ->orWhere('sepesifikasi_tipe_kamar', 'like', "%{$this->search}%")
-                        ->orWhere('fasilitas_kamar', 'like', "%{$this->search}%");
+                        ->orWhere('fasilitas_kamar', 'like', "%{$this->search}%")
+                        ->orWhere('fasilitas_umum', 'like', "%{$this->search}%")
+                        ->orWhere('tempat_terdekat', 'like', "%{$this->search}%");
                 });
             })
             ->when($this->filterTipe, fn($q) => $q->where('tipe_kos', $this->filterTipe))

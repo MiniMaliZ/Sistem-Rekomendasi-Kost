@@ -22,6 +22,8 @@ return new class extends Migration
             $table->string('tempat_terdekat', 255)->nullable();
             $table->text('peraturan_kos')->nullable();
             $table->string('link_original', 500)->nullable();
+            $table->decimal('latitude', 10, 8)->nullable();
+            $table->decimal('longitude', 11, 8)->nullable();
         });
     }
 

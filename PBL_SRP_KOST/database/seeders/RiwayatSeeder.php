@@ -18,30 +18,35 @@ class RiwayatSeeder extends Seeder
                 'id_kost' => 1,
                 'aksi' => 'lihat',
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'id_user' => 2,
                 'id_kost' => 2,
                 'aksi' => 'rekomendasikan',
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'id_user' => 2,
                 'id_kost' => 3,
                 'aksi' => 'lihat',
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'id_user' => 2,
                 'id_kost' => 4,
                 'aksi' => 'cari',
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'id_user' => 2,
                 'id_kost' => 5,
                 'aksi' => 'rekomendasikan',
                 'created_at' => now(),
+                'updated_at' => now(),
             ]
         ];
 

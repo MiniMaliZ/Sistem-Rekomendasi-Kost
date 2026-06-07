@@ -10,7 +10,7 @@ class User extends Authenticatable
 {
     protected $table = 'user';
     protected $primaryKey = 'id_user';
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = [
         'nama',
@@ -26,6 +26,7 @@ class User extends Authenticatable
 
     protected $casts = [
         'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     public function isAdmin(): bool
