@@ -90,7 +90,7 @@ class DashboardController extends Controller
             'harga_format'   => $this->formatHarga((float) $kost->harga),
             'rating'         => $this->getRating($kost),
             'ulasan'         => $kost->feedback->count(),
-            'foto'           => 'kost_placeholder.png', // ganti setelah kolom foto ditambah ke DB
+            'foto'           => $kost->fotoKost?->foto_bangunan_url ?? asset('images/no-image.jpg'), // ganti setelah kolom foto ditambah ke DB
             'lokasi'         => $this->getKecamatan($kost->nama_kost) . ', Malang',
             'fasilitas'      => $fasilitas,
             'fasilitas_tags' => $this->fasilitasTags($fasilitas),
@@ -184,7 +184,7 @@ class DashboardController extends Controller
         $favoritIds = $this->getFavoritIds();
 
         // Eager-load feedback sekali saja untuk menghindari N+1
-        $semuaKostModels = Kost::with('feedback')->get();
+        $semuaKostModels = Kost::with(['feedback', 'fotoKost'])->get();
 
         // Rekomendasi: rating >= 4.0, maks 4
         $rekomendasi = $semuaKostModels
@@ -252,7 +252,7 @@ class DashboardController extends Controller
         $user       = $this->getUserData();
         $favoritIds = $this->getFavoritIds();
 
-        $hasil = Kost::with('feedback')
+        $hasil = Kost::with(['feedback', 'fotoKost'])
             ->where('nama_kost', 'like', "%{$keyword}%")
             ->get()
             ->map(fn(Kost $k) => $this->prepareKost($k, $favoritIds))

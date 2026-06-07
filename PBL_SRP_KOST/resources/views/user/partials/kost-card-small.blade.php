@@ -7,7 +7,7 @@
 --}}
 
 <div class="kost-card-small">
-    <img src="{{ asset('images/' . $kost['foto']) }}" alt="{{ $kost['nama'] }}" class="kost-card-small-img" loading="lazy">
+    <img src="{{ $kost['foto'] }}"  alt="{{ $kost['nama'] }}" class="kost-card-small-img" loading="lazy">
     <div class="kost-card-small-body">
         <h4 class="small-card-name">{{ $kost['nama'] }}</h4>
 
