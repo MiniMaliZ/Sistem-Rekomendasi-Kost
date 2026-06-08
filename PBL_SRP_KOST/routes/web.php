@@ -5,6 +5,7 @@ use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\Profile\ProfileController;
 use App\Http\Controllers\User\ListkostController;
 use App\Http\Controllers\User\FavoritController;
+use App\Http\Controllers\User\HistoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
@@ -86,15 +87,13 @@ Route::middleware('auth')->group(function () {
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/profile/photo', [ProfileController::class, 'upload'])->name('profile.upload');
 
-    // Favorit toggle (AJAX) — hanya user yang sudah login
-    Route::post('/favorit/toggle', [DashboardController::class, 'toggleFavorit'])
+    // PERBAIKAN: favorit.toggle diarahkan ke FavoritController@toggle
+    Route::post('/favorit/toggle', [FavoritController::class, 'toggle'])
         ->name('favorit.toggle');
 
-    // Halaman favorit — hanya user yang sudah login
-    Route::get('/favorit', fn() => view('user.favorite', ['halaman' => 'Favorit']))->name('user.favorit');
-
-    // Riwayat — hanya user yang sudah login
-    Route::get('/riwayat', fn() => view('user.coming_soon', ['halaman' => 'Riwayat']))->name('user.riwayat');
+    // Hapus satu kost dari favorit (non-AJAX)
+    Route::delete('/favorit/{kostId}', [FavoritController::class, 'destroy'])
+        ->name('favorit.destroy');
 
     // Admin routes
     Route::prefix('admin')->name('admin.')->group(function () {
@@ -115,6 +114,13 @@ Route::middleware('auth')->group(function () {
 // Dashboard utama
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('user.dashboard');
 Route::get('/dashboard/search', [DashboardController::class, 'search'])->name('user.search');
+
+// Halaman favorit — dapat diakses guest (controller yang menangani state guest vs auth)
+Route::get('/favorite', [FavoritController::class, 'index'])->name('user.favorit');
+
+// History — dapat diakses guest (controller menangani state guest dengan warning banner,
+// tanpa redirect ke login)
+Route::get('/history', [HistoryController::class, 'index'])->name('user.history');
 
 // Daftar & detail kost — dapat diakses siapa saja
 Route::get('/kost', [ListkostController::class, 'index'])->name('user.kost');

@@ -45,40 +45,7 @@
     </section>
 
     <div class="page-body">
-
-        <section id="section-sidebar">
-            <nav class="nav-pill">
-                <ul class="nav-list">
-                    <li>
-                        <a href="{{ route('user.dashboard') }}" class="nav-item nav-item--active" aria-label="Dashboard">
-                            <x-tabler-layout-dashboard-filled class="nav-blade-icon nav-blade-icon--active" />
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('user.kost') }}" class="nav-item" aria-label="Daftar Kost">
-                            <x-iconsax-lin-buliding class="nav-blade-icon" />
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('user.favorit') }}" class="nav-item" aria-label="Favorit">
-                            <x-solar-heart-linear class="nav-blade-icon" />
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('user.riwayat') }}" class="nav-item" aria-label="Riwayat">
-                            <x-clarity-history-line class="nav-blade-icon" />
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-            <form action="{{ route('logout') }}" method="POST">
-                @csrf
-                <button type="submit" class="logout-button" aria-label="Keluar">
-                    <x-iconsax-out-logout class="nav-blade-icon" />
-                </button>
-            </form>
-        </section>
-
+        @include('user.partials.sidebar')
         <main class="main-content">
             <div class="profile-page">
 

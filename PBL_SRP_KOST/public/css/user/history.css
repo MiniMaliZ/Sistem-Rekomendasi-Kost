@@ -182,34 +182,6 @@ img {
 }
 
 /* ============================================================
-   NOTIFICATION BUTTON
-   ============================================================ */
-
-.notif-button {
-    background-color: var(--color-white);
-    border: none;
-    cursor: pointer;
-    border-radius: 9999px;
-    box-shadow: var(--shadow-soft);
-    width: 60px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    transition: background-color 0.2s ease;
-}
-
-.notif-button:hover {
-    background-color: #f9fafb;
-}
-
-.notif-icon {
-    width: 32px;
-    height: 32px;
-}
-
-/* ============================================================
    USER AVATAR
    ============================================================ */
 
@@ -232,6 +204,30 @@ img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+}
+
+/* ============================================================
+   SIGN-IN BUTTON — header, untuk guest
+   ============================================================ */
+
+.signin-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #3f2419;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 12px 24px;
+    border-radius: 9999px;
+    white-space: nowrap;
+    transition: opacity 0.2s ease;
+    flex-shrink: 0;
+}
+
+.signin-btn:hover {
+    opacity: 0.85;
 }
 
 /* ============================================================
@@ -260,7 +256,7 @@ img {
 .main-content {
     grid-area: main;
     min-width: 0;
-    background-color: #FEFCF8;
+    background-color: #fefcf8;
     overflow-y: auto;
     height: 100%;
 }
@@ -344,7 +340,6 @@ img {
     color: #696969;
 }
 
-/* Pastikan SVG mengikuti warna via currentColor */
 .nav-blade-icon svg,
 .nav-blade-icon--active svg {
     width: 100%;
@@ -547,7 +542,7 @@ img {
     margin: 0;
     font-size: 18px;
     font-weight: 500;
-    color: #1E1E1E;
+    color: #1e1e1e;
     line-height: 1.2;
 }
 
@@ -597,7 +592,7 @@ img {
 .property-card__price {
     font-size: 18px;
     font-weight: 500;
-    color: #1E1E1E;
+    color: #1e1e1e;
 }
 
 .property-card__price-period {
@@ -649,7 +644,7 @@ img {
 
 .property-card__rating-text {
     font-size: 14px;
-    color: #1E1E1E;
+    color: #1e1e1e;
     font-weight: 400;
 }
 
@@ -683,6 +678,109 @@ img {
     max-width: 22px;
     max-height: 22px;
     object-fit: contain;
+}
+
+/* ============================================================
+   EMPTY STATES
+   ============================================================ */
+
+.section-empty-state {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 420px;
+    padding: 40px 45px;
+}
+
+/* Untuk guest: geser empty state lebih ke atas agar tidak mengambang
+   di tengah area yang luas (tidak ada filter bar di atasnya) */
+.section-empty-state--guest {
+    align-items: flex-start;
+    padding-top: 60px;
+}
+
+.empty-state-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    max-width: 380px;
+    text-align: center;
+}
+
+.empty-state-illustration {
+    width: 120px;
+    height: 120px;
+}
+
+.empty-heart-svg {
+    width: 100%;
+    height: 100%;
+}
+
+.empty-state-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: #1e1e1e;
+    margin: 0;
+}
+
+.empty-state-desc {
+    font-size: 15px;
+    color: #696969;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* CTA Utama — tombol solid */
+.empty-cta-btn {
+    display: inline-block;
+    margin-top: 8px;
+    background-color: #3f2419;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 12px 32px;
+    border-radius: 9999px;
+    transition: opacity 0.2s ease;
+}
+
+.empty-cta-btn:hover {
+    opacity: 0.85;
+}
+
+/* Secondary Action — tombol outline */
+.empty-browse-btn {
+    display: inline-block;
+    background-color: transparent;
+    color: #3f2419;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 11px 32px;
+    border-radius: 9999px;
+    border: 1.5px solid #3f2419;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.empty-browse-btn:hover {
+    background-color: #3f2419;
+    color: #ffffff;
+}
+
+/* ── NO RESULTS MSG ─────────────────────────────────────── */
+.no-results-msg {
+    text-align: center;
+    padding: 40px 20px;
+    color: #696969;
+    font-size: 15px;
+}
+
+.no-results-msg.hidden {
+    display: none;
 }
 
 /* ============================================================

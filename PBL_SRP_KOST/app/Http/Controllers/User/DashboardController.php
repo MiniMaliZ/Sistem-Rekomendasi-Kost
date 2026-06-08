@@ -90,11 +90,11 @@ class DashboardController extends Controller
             'harga_format'   => $this->formatHarga((float) $kost->harga),
             'rating'         => $this->getRating($kost),
             'ulasan'         => $kost->feedback->count(),
-            'foto'           => $kost->fotoKost?->foto_bangunan_url ?? asset('images/no-image.jpg'), // ganti setelah kolom foto ditambah ke DB
-            'lokasi'         => $this->getKecamatan($kost->nama_kost) . ', Malang',
+            'foto'           => $kost->fotoKost?->foto_bangunan_url ?? asset('images/no-image.jpg'),
+            'lokasi'         => $this->getLokasi($kost->nama_kost),
             'fasilitas'      => $fasilitas,
             'fasilitas_tags' => $this->fasilitasTags($fasilitas),
-            'is_baru'        => false, // tidak ada kolom is_baru di DB; bisa pakai created_at jika perlu
+            'is_baru'        => false,
             'is_favorit'     => in_array($kost->id_kost, $favoritIds),
         ];
     }
@@ -126,32 +126,52 @@ class DashboardController extends Controller
     }
 
     /**
-     * Ekstrak nama kecamatan dari nama_kost.
-     * Format nama kost selalu diakhiri "... {Kecamatan} Malang"
+     * Daftar kecamatan beserta jenis wilayahnya.
+     * 'kota' → Kota Malang, 'kab' → Kab. Malang
      */
-    private function getKecamatan(string $namaKost): string
+    private function kecamatanMap(): array
     {
-        // Daftar kecamatan Kota Malang
-        $kecamatanList = [
+        return [
             // Kota Malang
-            'Lowokwaru',
-            'Blimbing',
-            'Klojen',
-            'Sukun',
-            'Kedungkandang',
+            'Lowokwaru'     => 'kota',
+            'Blimbing'      => 'kota',
+            'Klojen'        => 'kota',
+            'Sukun'         => 'kota',
+            'Kedungkandang' => 'kota',
             // Kabupaten Malang
-            'Karang Ploso',
-            'Dau',
+            'Karang Ploso'  => 'kab',
+            'Dau'           => 'kab',
         ];
+    }
 
-        foreach ($kecamatanList as $kec) {
-            // Cari kecamatan di nama kost (case-insensitive)
-            if (stripos($namaKost, $kec) !== false) {
-                return $kec;
+    /**
+     * Ekstrak nama kecamatan dari nama_kost dan kembalikan string lokasi
+     * dalam format "Kecamatan, Kota Malang" atau "Kecamatan, Kab. Malang".
+     */
+    private function getLokasi(string $namaKost): string
+    {
+        foreach ($this->kecamatanMap() as $kecamatan => $jenis) {
+            if (stripos($namaKost, $kecamatan) !== false) {
+                $wilayah = $jenis === 'kota' ? 'Kota Malang' : 'Kab. Malang';
+                return "{$kecamatan}, {$wilayah}";
             }
         }
 
         // Fallback jika tidak ditemukan
+        return 'Malang';
+    }
+
+    /**
+     * Ekstrak nama kecamatan saja dari nama_kost (dipakai jika dibutuhkan).
+     */
+    private function getKecamatan(string $namaKost): string
+    {
+        foreach ($this->kecamatanMap() as $kecamatan => $jenis) {
+            if (stripos($namaKost, $kecamatan) !== false) {
+                return $kecamatan;
+            }
+        }
+
         return 'Malang';
     }
 

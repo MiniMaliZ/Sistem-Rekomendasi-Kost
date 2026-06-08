@@ -19,38 +19,31 @@
                 </a>
             </li>
             <li>
-                @auth
-                    <a href="{{ route('user.favorit') }}"
-                        class="nav-item {{ request()->routeIs('user.favorit') ? 'nav-item--active' : '' }}"
-                        aria-label="Favorit">
-                        <x-solar-heart-linear
-                            class="nav-blade-icon {{ request()->routeIs('user.favorit') ? 'nav-blade-icon--active' : '' }}" />
-                    </a>
-                @else
-                    {{-- Guest: arahkan ke halaman login saat klik favorit --}}
-                    <a href="{{ route('login') }}" class="nav-item" aria-label="Favorit — Login untuk mengakses">
-                        <x-solar-heart-linear class="nav-blade-icon" />
-                    </a>
-                @endauth
+                {{--
+                    Guest maupun auth sama-sama diarahkan ke route('user.favorit').
+                    Controller FavoritController@index sudah menangani state guest.
+                --}}
+                <a href="{{ route('user.favorit') }}"
+                    class="nav-item {{ request()->routeIs('user.favorit') ? 'nav-item--active' : '' }}"
+                    aria-label="Favorit">
+                    <x-solar-heart-linear
+                        class="nav-blade-icon {{ request()->routeIs('user.favorit') ? 'nav-blade-icon--active' : '' }}" />
+                </a>
             </li>
             <li>
-                @auth
-                    <a href="{{ route('user.riwayat') }}"
-                        class="nav-item {{ request()->routeIs('user.riwayat') ? 'nav-item--active' : '' }}"
-                        aria-label="Riwayat">
-                        <x-clarity-history-line
-                            class="nav-blade-icon {{ request()->routeIs('user.riwayat') ? 'nav-blade-icon--active' : '' }}" />
-                    </a>
-                @else
-                    {{-- Guest: arahkan ke halaman login saat klik riwayat --}}
-                    <a href="{{ route('login') }}" class="nav-item" aria-label="Riwayat — Login untuk mengakses">
-                        <x-clarity-history-line class="nav-blade-icon" />
-                    </a>
-                @endauth
+                {{--
+                    History tetap bisa diakses guest — controller yang menangani warning banner
+                    tanpa redirect ke login, sama polanya dengan favorit.
+                --}}
+                <a href="{{ route('user.history') }}"
+                    class="nav-item {{ request()->routeIs('user.history') ? 'nav-item--active' : '' }}"
+                    aria-label="History">
+                    <x-clarity-history-line
+                        class="nav-blade-icon {{ request()->routeIs('user.history') ? 'nav-blade-icon--active' : '' }}" />
+                </a>
             </li>
         </ul>
     </nav>
-
     <a href="{{ route('landing') }}" class="logout-button" aria-label="Kembali ke Beranda">
         <x-iconsax-lin-logout class="nav-blade-icon" />
     </a>
