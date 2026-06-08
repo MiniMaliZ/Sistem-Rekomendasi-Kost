@@ -12,7 +12,8 @@ return new class extends Migration
             $table->id('id_kost_kriteria');
             $table->unsignedBigInteger('id_kost');
             $table->unsignedBigInteger('id_kriteria');
-            $table->decimal('nilai', 10, 4);
+            $table->decimal('nilai', 8, 2);
+            $table->timestamps();
 
             $table->foreign('id_kost')->references('id_kost')->on('kost')->onDelete('cascade');
             $table->foreign('id_kriteria')->references('id_kriteria')->on('kriteria')->onDelete('cascade');

@@ -19,6 +19,7 @@ class FeedbackSeeder extends Seeder
                 'rating' => 5,
                 'komentar' => 'Kost nyaman dan bersih',
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'id_user' => 2,
@@ -26,6 +27,7 @@ class FeedbackSeeder extends Seeder
                 'rating' => 4,
                 'komentar' => 'Fasilitas lengkap',
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'id_user' => 2,
@@ -33,6 +35,7 @@ class FeedbackSeeder extends Seeder
                 'rating' => 5,
                 'komentar' => 'Lokasi strategis dan aman',
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'id_user' => 2,
@@ -40,6 +43,7 @@ class FeedbackSeeder extends Seeder
                 'rating' => 3,
                 'komentar' => 'Harga cukup terjangkau',
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'id_user' => 2,
@@ -47,6 +51,7 @@ class FeedbackSeeder extends Seeder
                 'rating' => 4,
                 'komentar' => 'Keamanan bagus dan nyaman',
                 'created_at' => now(),
+                'updated_at' => now(),
             ]
         ];
 

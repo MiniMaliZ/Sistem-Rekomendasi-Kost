@@ -10,23 +10,28 @@ class Kost extends Model
 {
     protected $table = 'kost';
     protected $primaryKey = 'id_kost';
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = [
         'nama_kost',
         'harga',
         'tipe_kos',
-        'spesifikasi_tipe_kamar',
+        'sepesifikasi_tipe_kamar',
         'fasilitas_kamar',
         'fasilitas_kamar_mandi',
         'fasilitas_umum',
         'fasilitas_parkir',
         'tempat_terdekat',
+        'peraturan_kos',
         'link_original',
+        'latitude',
+        'longitude',
     ];
 
     protected $casts = [
         'harga' => 'decimal:2',
+        'latitude' => 'decimal:8',
+        'longitude' => 'decimal:8',
     ];
 
     public function kostKriteria(): HasMany
@@ -61,11 +66,13 @@ class Kost extends Model
 
     public function getTipeKosLabelAttribute(): string
     {
-        return match($this->tipe_kos) {
-            'putra' => 'Putra',
-            'putri' => 'Putri',
-            'campur' => 'Campur',
-            default => '-',
+        $tipeKos = strtolower((string) $this->tipe_kos);
+
+        return match (true) {
+            str_contains($tipeKos, 'putra') => 'Putra',
+            str_contains($tipeKos, 'putri') => 'Putri',
+            str_contains($tipeKos, 'campur') => 'Campur',
+            default => (string) $this->tipe_kos ?: '-',
         };
     }
 

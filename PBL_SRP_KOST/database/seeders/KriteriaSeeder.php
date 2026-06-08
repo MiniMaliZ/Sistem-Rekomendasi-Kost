@@ -12,6 +12,7 @@ class KriteriaSeeder extends Seeder
      */
     public function run(): void
     {
+        $now = now();
         $data = [
             [
                 'id_user' => 1,
@@ -38,6 +39,11 @@ class KriteriaSeeder extends Seeder
                 'nama_kriteria' => 'Listrik (termasuk/tidak)',
             ]
         ];
+
+        $data = array_map(fn (array $row): array => $row + [
+            'created_at' => $now,
+            'updated_at' => $now,
+        ], $data);
 
         DB::table('kriteria')->insert($data);
     }

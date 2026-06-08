@@ -9,7 +9,7 @@ class Riwayat extends Model
 {
     protected $table = 'riwayat';
     protected $primaryKey = 'id_riwayat';
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = [
         'id_user',
@@ -19,6 +19,7 @@ class Riwayat extends Model
 
     protected $casts = [
         'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     public function user(): BelongsTo

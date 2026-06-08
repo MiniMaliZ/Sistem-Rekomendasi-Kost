@@ -9,7 +9,7 @@ class HasilRekomendasi extends Model
 {
     protected $table = 'hasil_rekomendasi';
     protected $primaryKey = 'id_rekomendasi';
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = [
         'id_user',
@@ -19,7 +19,9 @@ class HasilRekomendasi extends Model
     ];
 
     protected $casts = [
+        'skor' => 'decimal:2',
         'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     public function user(): BelongsTo

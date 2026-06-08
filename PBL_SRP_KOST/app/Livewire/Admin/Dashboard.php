@@ -5,10 +5,8 @@ namespace App\Livewire\Admin;
 use Livewire\Component;
 use App\Models\Kost;
 use App\Models\User;
-use App\Models\Kriteria;
 use App\Models\HasilRekomendasi;
 use App\Models\Feedback;
-use Illuminate\Support\Facades\DB;
 
 class Dashboard extends Component
 {
@@ -32,36 +30,26 @@ class Dashboard extends Component
 
         // Kost by tipe for chart
         $this->kostByTipe = [
-            'Putra' => Kost::where('tipe_kos', 'putra')->count(),
-            'Putri' => Kost::where('tipe_kos', 'putri')->count(),
-            'Campur' => Kost::where('tipe_kos', 'campur')->count(),
+            'Putra' => Kost::where('tipe_kos', 'like', '%Putra%')->count(),
+            'Putri' => Kost::where('tipe_kos', 'like', '%Putri%')->count(),
+            'Campur' => Kost::where('tipe_kos', 'like', '%Campur%')->count(),
         ];
 
-        // Kost by kota (simplistic extraction based on last word after comma)
+        // Kost by Malang area, inferred from current Mamikos-style fields.
         $kosts = Kost::all();
-        $kotaCounts = [
-            'SBY' => 0, 'MLG' => 0, 'JAKSEL' => 0, 'BDG' => 0, 'YGY' => 0, 'BGR' => 0, 'BALI' => 0
+        $areaCounts = [
+            'Lowokwaru' => 0,
+            'Sukun' => 0,
+            'Blimbing' => 0,
+            'Klojen' => 0,
+            'Kedungkandang' => 0,
+            'Malang' => 0,
         ];
+
         foreach ($kosts as $k) {
-            $alamat = strtolower($k->alamat);
-            if (str_contains($alamat, 'bandung') || str_contains($alamat, 'bdg')) $kotaCounts['BDG']++;
-            elseif (str_contains($alamat, 'surabaya') || str_contains($alamat, 'sby')) $kotaCounts['SBY']++;
-            elseif (str_contains($alamat, 'malang') || str_contains($alamat, 'mlg')) $kotaCounts['MLG']++;
-            elseif (str_contains($alamat, 'jakarta') || str_contains($alamat, 'jaksel')) $kotaCounts['JAKSEL']++;
-            elseif (str_contains($alamat, 'yogya') || str_contains($alamat, 'ygy')) $kotaCounts['YGY']++;
-            elseif (str_contains($alamat, 'bogor') || str_contains($alamat, 'bgr')) $kotaCounts['BGR']++;
-            elseif (str_contains($alamat, 'bali')) $kotaCounts['BALI']++;
-            else {
-                // Try to infer from last comma
-                $parts = explode(',', $k->alamat);
-                $city = strtoupper(trim(end($parts)));
-                if(strlen($city) > 0 && strlen($city) < 15) {
-                    if(!isset($kotaCounts[$city])) $kotaCounts[$city] = 0;
-                    $kotaCounts[$city]++;
-                }
-            }
+            $areaCounts[$this->inferAreaFromKost($k)]++;
         }
-        $this->kostByKota = $kotaCounts;
+        $this->kostByKota = $areaCounts;
 
         // Kost by harga
         $hargaCounts = [
@@ -97,5 +85,21 @@ class Dashboard extends Component
                 'title' => 'Dashboard',
                 'breadcrumb' => ['Dashboard' => route('admin.dashboard')],
             ]);
+    }
+
+    private function inferAreaFromKost(Kost $kost): string
+    {
+        $text = strtolower(implode(' ', [
+            $kost->nama_kost,
+            $kost->tempat_terdekat,
+        ]));
+
+        foreach (['lowokwaru', 'sukun', 'blimbing', 'klojen', 'kedungkandang'] as $area) {
+            if (str_contains($text, $area)) {
+                return ucfirst($area);
+            }
+        }
+
+        return 'Malang';
     }
 }

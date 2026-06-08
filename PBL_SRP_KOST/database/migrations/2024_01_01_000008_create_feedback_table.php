@@ -12,9 +12,9 @@ return new class extends Migration
             $table->id('id_ulasan');
             $table->unsignedBigInteger('id_user');
             $table->unsignedBigInteger('id_kost');
-            $table->tinyInteger('rating');
-            $table->text('komentar')->nullable();
-            $table->timestamp('created_at')->useCurrent();
+            $table->integer('rating');
+            $table->text('komentar');
+            $table->timestamps();
 
             $table->foreign('id_user')->references('id_user')->on('user')->onDelete('cascade');
             $table->foreign('id_kost')->references('id_kost')->on('kost')->onDelete('cascade');

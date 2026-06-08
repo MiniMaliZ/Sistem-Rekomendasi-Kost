@@ -6,10 +6,12 @@ use App\Http\Controllers\Profile\ProfileController;
 use App\Http\Controllers\User\ListkostController;
 use App\Http\Controllers\User\FavoritController;
 use App\Http\Controllers\User\HistoryController;
+use App\Http\Controllers\User\HybridRecommendationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Admin\Dashboard;
+use App\Livewire\Admin\HybridRecommendation;
 use App\Livewire\Admin\KostIndex;
 use App\Livewire\Admin\KriteriaIndex;
 
@@ -99,6 +101,7 @@ Route::middleware('auth')->group(function () {
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', Dashboard::class)->name('dashboard');
         Route::get('/kost', KostIndex::class)->name('kost');
+        Route::get('/rekomendasi-hybrid', HybridRecommendation::class)->name('rekomendasi-hybrid');
     });
 
     // Preferensi — hanya user yang sudah login
@@ -114,6 +117,7 @@ Route::middleware('auth')->group(function () {
 // Dashboard utama
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('user.dashboard');
 Route::get('/dashboard/search', [DashboardController::class, 'search'])->name('user.search');
+Route::get('/rekomendasi-kost', [HybridRecommendationController::class, 'index'])->name('user.rekomendasi');
 
 // Halaman favorit — dapat diakses guest (controller yang menangani state guest vs auth)
 Route::get('/favorite', [FavoritController::class, 'index'])->name('user.favorit');

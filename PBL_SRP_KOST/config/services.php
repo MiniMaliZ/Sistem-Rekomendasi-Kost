@@ -31,4 +31,9 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'recommendation_api' => [
+        'url' => env('RECOMMENDATION_API_URL', 'http://127.0.0.1:8001'),
+        'timeout' => (int) env('RECOMMENDATION_API_TIMEOUT', 15),
+    ],
+
 ];

@@ -12,6 +12,7 @@ class UserPreferensiSeeder extends Seeder
      */
     public function run(): void
     {
+        $now = now();
         $data = [
             [
                 'id_kriteria' => 1, // Harga
@@ -38,6 +39,11 @@ class UserPreferensiSeeder extends Seeder
                 'bobot' => 0.05,
             ]
         ];
+
+        $data = array_map(fn (array $row): array => $row + [
+            'created_at' => $now,
+            'updated_at' => $now,
+        ], $data);
 
         DB::table('user_preferensi')->insert($data);
     }

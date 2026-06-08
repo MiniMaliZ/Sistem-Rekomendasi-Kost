@@ -39,6 +39,15 @@
             <a href="{{ route('admin.kost') }}" class="nav-item {{ request()->routeIs('admin.kost') ? 'active' : '' }}" title="Data Kost">
                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
             </a>
+            <a href="{{ route('admin.rekomendasi-hybrid') }}" class="nav-item {{ request()->routeIs('admin.rekomendasi-hybrid') ? 'active' : '' }}" title="Hybrid AHP-SAW">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 19V5"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 19h16"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 15l3-3 2 2 5-6"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M18 8h-3"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M18 8v3"></path>
+                </svg>
+            </a>
         </nav>
 
         {{-- Logout Block --}}

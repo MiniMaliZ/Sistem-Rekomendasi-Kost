@@ -33,12 +33,12 @@
     {{-- Charts Top Row --}}
     <div class="charts-grid-2">
         
-        {{-- Sebaran Kost per Kota --}}
+        {{-- Sebaran Kost per Area --}}
         <div class="chart-card">
             <div class="chart-header">
                 <div>
-                    <h2 class="chart-title">Sebaran Kost per Kota</h2>
-                    <p class="chart-subtitle">Distribusi kost berdasarkan kota</p>
+                    <h2 class="chart-title">Sebaran Kost per Area</h2>
+                    <p class="chart-subtitle">Distribusi kost berdasarkan area Malang</p>
                 </div>
                 <div class="chart-filter">
                     <span>Semua</span>

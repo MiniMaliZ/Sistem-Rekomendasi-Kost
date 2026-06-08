@@ -12,6 +12,7 @@ class KostKriteriaSeeder extends Seeder
      */
     public function run(): void
     {
+        $now = now();
         $data = [
 
             // =====================================================
@@ -185,6 +186,11 @@ class KostKriteriaSeeder extends Seeder
             ],
 
         ];
+
+        $data = array_map(fn (array $row): array => $row + [
+            'created_at' => $now,
+            'updated_at' => $now,
+        ], $data);
 
         DB::table('kost_kriteria')->insert($data);
     }

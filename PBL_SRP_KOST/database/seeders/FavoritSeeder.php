@@ -17,16 +17,19 @@ class FavoritSeeder extends Seeder
                 'id_user' => 2,
                 'id_kost' => 1,
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'id_user' => 2,
                 'id_kost' => 2,
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'id_user' => 2,
                 'id_kost' => 3,
                 'created_at' => now(),
+                'updated_at' => now(),
             ]
         ];
 

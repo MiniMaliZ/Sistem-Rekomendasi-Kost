@@ -19,6 +19,14 @@
                 </a>
             </li>
             <li>
+                <a href="{{ route('user.rekomendasi') }}"
+                    class="nav-item {{ request()->routeIs('user.rekomendasi') ? 'nav-item--active' : '' }}"
+                    aria-label="Rekomendasi Kost">
+                    <x-solar-star-linear
+                        class="nav-blade-icon {{ request()->routeIs('user.rekomendasi') ? 'nav-blade-icon--active' : '' }}" />
+                </a>
+            </li>
+            <li>
                 {{--
                     Guest maupun auth sama-sama diarahkan ke route('user.favorit').
                     Controller FavoritController@index sudah menangani state guest.

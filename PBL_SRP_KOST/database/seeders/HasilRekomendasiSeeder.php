@@ -19,6 +19,7 @@ class HasilRekomendasiSeeder extends Seeder
                 'skor' => 0.92,
                 'rangking' => 1,
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'id_user' => 2,
@@ -26,6 +27,7 @@ class HasilRekomendasiSeeder extends Seeder
                 'skor' => 0.89,
                 'rangking' => 2,
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'id_user' => 2,
@@ -33,6 +35,7 @@ class HasilRekomendasiSeeder extends Seeder
                 'skor' => 0.85,
                 'rangking' => 3,
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'id_user' => 2,
@@ -40,6 +43,7 @@ class HasilRekomendasiSeeder extends Seeder
                 'skor' => 0.80,
                 'rangking' => 4,
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'id_user' => 2,
@@ -47,6 +51,7 @@ class HasilRekomendasiSeeder extends Seeder
                 'skor' => 0.75,
                 'rangking' => 5,
                 'created_at' => now(),
+                'updated_at' => now(),
             ]
         ];
 
