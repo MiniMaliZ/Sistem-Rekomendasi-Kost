@@ -250,6 +250,8 @@ body {
     background-color: #fefcf8;
     overflow-y: auto;
     height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 /* ============================================================
@@ -329,23 +331,22 @@ body {
     width: 28px;
     height: 28px;
     display: block;
-    color: #696969; /* warna icon non-aktif */
+    color: #696969;
     flex-shrink: 0;
 }
 
 .nav-blade-icon--active {
     width: 32px;
     height: 32px;
-    color: #ffffff; /* icon aktif putih karena background gelap */
+    color: #ffffff;
 }
 
-/* Pastikan SVG dari Blade Icons mengikuti warna via currentColor */
 .nav-blade-icon svg,
 .nav-blade-icon--active svg {
     width: 100%;
     height: 100%;
-    fill: currentColor; /* untuk icon tipe filled */
-    stroke: currentColor; /* untuk icon tipe outline/linear */
+    fill: currentColor;
+    stroke: currentColor;
 }
 
 /* ============================================================
@@ -381,8 +382,8 @@ body {
     width: 100%;
     display: flex;
     justify-content: flex-start;
-    padding: 32px 45px 40px 0;
-    background-color: #FEFCF8;
+    padding: 32px 45px 28px 0;
+    background-color: #fefcf8;
 }
 
 .filter-container {
@@ -390,69 +391,282 @@ body {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
 }
 
-/* Tabs Styling */
-.filter-tabs {
+/* ── Filter Left: dropdown + chips + reset ──────────────── */
+
+.filter-left {
     display: flex;
     flex-direction: row;
-    align-items: flex-start;
-    gap: 40px;
-}
-
-.tab-active {
-    display: flex;
-    flex-direction: column;
     align-items: center;
+    flex-wrap: wrap;
     gap: 10px;
+}
+
+/* ============================================================
+   FILTER DROPDOWN — Jenis & Kecamatan
+   ============================================================ */
+
+.filter-dropdown-wrapper {
+    position: relative;
+}
+
+/* Tombol filter dropdown */
+.filter-dropdown-btn {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 16px;
+    background-color: #ffffff;
+    border: 1px solid #dadada;
+    border-radius: 9999px;
     cursor: pointer;
+    font-family: "Poppins", sans-serif;
+    outline: none;
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+    white-space: nowrap;
 }
 
-.tab-text-active {
-    color: #3f2419;
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 24px;
+.filter-dropdown-btn:hover {
+    background-color: #fdf8f5;
+    border-color: #b8a99e;
 }
 
-.tab-line {
-    width: 100%;
-    height: 3px;
+/* Saat dropdown terbuka */
+.filter-dropdown-btn--open {
+    border-color: #3f2419;
+    background-color: #fdf8f5;
+    box-shadow: 0 0 0 3px rgba(63, 36, 25, 0.08);
+}
+
+/* Saat nilai sudah dipilih (bukan "Semua") */
+.filter-dropdown-btn--filled {
     background-color: #3f2419;
-    border-radius: 2px;
+    border-color: #3f2419;
 }
 
-.tab-inactive {
+.filter-dropdown-btn--filled .filter-dropdown-label {
+    color: #ffffff;
+}
+
+.filter-dropdown-btn--filled .filter-dropdown-icon {
+    filter: brightness(0) invert(1);
+}
+
+.filter-dropdown-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1e1e1e;
+    transition: color 0.15s ease;
+}
+
+.filter-dropdown-icon-wrapper {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    transition: transform 0.2s ease;
+}
+
+.filter-dropdown-btn--open .filter-dropdown-icon-wrapper {
+    transform: rotate(180deg);
+}
+
+.filter-dropdown-icon {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: filter 0.15s ease;
+}
+
+/* Menu filter dropdown */
+.filter-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    background-color: #ffffff;
+    border: 1px solid #e8e0db;
+    border-radius: 14px;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.11);
+    z-index: 300;
+    min-width: 180px;
+    overflow: hidden;
+    padding: 6px 0;
+}
+
+.filter-dropdown-menu.hidden {
+    display: none;
+}
+
+/* Group label dalam dropdown filter (misal: "Kota Malang", "Kabupaten Malang") */
+.filter-option-group-label {
+    padding: 8px 18px 4px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #a08070;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    pointer-events: none;
+    user-select: none;
+}
+
+.filter-option {
+    display: block;
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 10px 18px;
+    text-align: left;
+    font-family: "Poppins", sans-serif;
+    font-size: 14px;
+    color: #1e1e1e;
     cursor: pointer;
+    transition: background-color 0.15s ease;
+    border-radius: 0;
 }
 
-.tab-text-inactive {
-    color: #757575;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 24px;
-    transition: color 0.2s ease;
-}
-
-.tab-inactive:hover .tab-text-inactive {
+.filter-option:hover {
+    background-color: #fdf8f5;
     color: #3f2419;
 }
 
-/* Sort Actions Styling */
+.filter-option--active {
+    color: #3f2419;
+    font-weight: 600;
+    background-color: #f5ece5;
+}
+
+/* ============================================================
+   ACTIVE FILTER CHIPS
+   ============================================================ */
+
+.active-filter-chips {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+}
+
+.active-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px 5px 14px;
+    background-color: #f0e8e3;
+    border: 1px solid #d9cbc3;
+    border-radius: 9999px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #3f2419;
+    white-space: nowrap;
+    animation: chip-in 0.18s ease;
+}
+
+@keyframes chip-in {
+    from {
+        opacity: 0;
+        transform: scale(0.88);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.active-chip-label {
+    line-height: 1;
+}
+
+.active-chip-remove {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    background: rgba(63, 36, 25, 0.12);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+    transition: background-color 0.15s ease;
+}
+
+.active-chip-remove:hover {
+    background-color: rgba(63, 36, 25, 0.25);
+}
+
+.active-chip-remove svg {
+    width: 10px;
+    height: 10px;
+    color: #3f2419;
+}
+
+/* ── Tombol Reset All ───────────────────────────────────── */
+
+.btn-reset-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 14px;
+    border-radius: 9999px;
+    border: 1px solid #e0d8d3;
+    background-color: #fdf8f5;
+    font-family: "Poppins", sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: #84644d;
+    cursor: pointer;
+    transition:
+        background-color 0.18s ease,
+        border-color 0.18s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.btn-reset-all svg {
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
+}
+
+.btn-reset-all:hover {
+    background-color: #f5ece5;
+    border-color: #c0a090;
+    color: #3f2419;
+}
+
+.btn-reset-all.hidden {
+    display: none;
+}
+
+/* ============================================================
+   SORT ACTIONS
+   ============================================================ */
+
 .filter-actions {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 20px;
+    gap: 12px;
+    position: relative;
+    flex-shrink: 0;
 }
 
 .sort-label {
     color: #000000;
     font-size: 15px;
     font-weight: 400;
+    white-space: nowrap;
 }
 
 .sort-dropdown {
@@ -461,7 +675,7 @@ body {
     justify-content: center;
     align-items: center;
     gap: 7px;
-    padding: 7px 15px;
+    padding: 8px 16px;
     background-color: #ffffff;
     border: 1px solid #dadada;
     border-radius: 20px;
@@ -498,6 +712,50 @@ body {
     display: block;
 }
 
+/* Sort dropdown menu */
+.sort-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background-color: #ffffff;
+    border: 1px solid #e8e0db;
+    border-radius: 14px;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.11);
+    z-index: 300;
+    min-width: 170px;
+    overflow: hidden;
+    padding: 6px 0;
+}
+
+.sort-menu.hidden {
+    display: none;
+}
+
+.sort-option {
+    display: block;
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 10px 18px;
+    text-align: left;
+    font-family: "Poppins", sans-serif;
+    font-size: 14px;
+    color: #1e1e1e;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.sort-option:hover {
+    background-color: #fdf8f5;
+    color: #3f2419;
+}
+
+.sort-option--active {
+    color: #3f2419;
+    font-weight: 600;
+    background-color: #f5ece5;
+}
+
 /* ============================================================
    LISTINGS SECTION
    ============================================================ */
@@ -506,6 +764,7 @@ body {
     padding: 0 45px 40px 0px;
     display: flex;
     justify-content: flex-start;
+    flex: 1 1 auto;
 }
 
 #section-listings .container {
@@ -568,6 +827,11 @@ body {
 .badge-putra {
     background-color: #d1edff;
     color: #3397d6;
+}
+
+.badge-campur {
+    background-color: #CFC4EC;
+    color: #5a388e;
 }
 
 .btn-favorite {
@@ -673,14 +937,19 @@ body {
 }
 
 /* ============================================================
-   PAGINATION SECTION
+   PAGINATION SECTION — sticky di dasar area scroll
    ============================================================ */
 
 #section-pagination {
+    flex-shrink: 0;
+    position: sticky;
+    bottom: 0;
+    background-color: #fefcf8;
+    padding: 20px 20px;
+    z-index: 50;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px 20px 40px 20px;
     width: 100%;
 }
 
@@ -767,6 +1036,136 @@ body {
     background-color: #f9f9f9;
 }
 
+/* ============================================================
+   EMPTY STATES
+   ============================================================ */
+
+.section-empty-state {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 420px;
+    padding: 40px 45px;
+}
+
+/* Untuk guest: geser empty state lebih ke atas agar tidak mengambang
+   di tengah area yang luas (tidak ada filter bar di atasnya) */
+.section-empty-state--guest {
+    align-items: flex-start;
+    padding-top: 60px;
+}
+
+.empty-state-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    max-width: 380px;
+    text-align: center;
+}
+
+.empty-state-illustration {
+    width: 120px;
+    height: 120px;
+}
+
+.empty-heart-svg {
+    width: 100%;
+    height: 100%;
+}
+
+.empty-state-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: #1e1e1e;
+    margin: 0;
+}
+
+.empty-state-desc {
+    font-size: 15px;
+    color: #696969;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* CTA Utama — tombol solid */
+.empty-cta-btn {
+    display: inline-block;
+    margin-top: 8px;
+    background-color: #3f2419;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 12px 32px;
+    border-radius: 9999px;
+    transition: opacity 0.2s ease;
+}
+
+.empty-cta-btn:hover {
+    opacity: 0.85;
+}
+
+/* Secondary Action — tombol outline, lebih menonjol dari sekedar link teks */
+.empty-browse-btn {
+    display: inline-block;
+    background-color: transparent;
+    color: #3f2419;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 11px 32px;
+    border-radius: 9999px;
+    border: 1.5px solid #3f2419;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.empty-browse-btn:hover {
+    background-color: #3f2419;
+    color: #ffffff;
+}
+
+/* ── NO RESULTS MSG ─────────────────────────────────────── */
+
+.no-results-msg {
+    text-align: center;
+    padding: 40px 20px;
+    color: #696969;
+    font-size: 15px;
+}
+
+.no-results-msg.hidden {
+    display: none;
+}
+
+/* ── SIGN-IN BUTTON (header, untuk guest) ───────────────── */
+
+.signin-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #3f2419;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 12px 24px;
+    border-radius: 9999px;
+    white-space: nowrap;
+    transition: opacity 0.2s ease;
+    flex-shrink: 0;
+}
+
+.signin-btn:hover {
+    opacity: 0.85;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
 @media (max-width: 480px) {
     .pagination-container {
         gap: 20px;
@@ -785,10 +1184,6 @@ body {
     }
 }
 
-/* ============================================================
-   RESPONSIVE
-   ============================================================ */
-
 @media (max-width: 1280px) {
     .listings-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -796,22 +1191,9 @@ body {
 }
 
 @media (max-width: 1024px) {
-    .filter-content {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .buttons-group {
-        width: 100%;
-        justify-content: flex-end;
-        padding-top: 10px;
-        border-top: 1px solid #eee;
-    }
-
     #section-filter-bar {
-        padding: 24px 24px 16px 0;
+        padding: 24px 24px 20px 0;
     }
-
     #section-listings {
         padding: 20px 24px 40px 0;
     }
@@ -823,62 +1205,42 @@ body {
         flex-direction: column;
         align-items: flex-start;
     }
-
     .header-left {
         gap: 16px;
     }
-
     .header-right {
         width: 100%;
     }
-
     .search-bar {
         width: 100%;
         flex: 1;
     }
-
     #section-sidebar {
         display: none;
     }
-
     .listings-grid {
         grid-template-columns: 1fr;
     }
-
-    .filter-card {
-        padding: 20px;
+    .section-empty-state {
+        padding: 32px 20px;
+        min-height: 340px;
     }
-
-    .filters-row {
-        flex-direction: column;
-        align-items: stretch;
-        width: 100%;
-        gap: 15px;
+    .section-empty-state--guest {
+        padding-top: 48px;
     }
-
-    .filter-item {
-        width: 100%;
-    }
-
-    .buttons-group {
-        flex-direction: column;
-        width: 100%;
-    }
-
-    .btn-reset,
-    .btn-search {
-        width: 100%;
-        justify-content: center;
-    }
-
     #section-filter-bar .filter-container {
         flex-direction: column;
         align-items: flex-start;
-        gap: 16px;
+        gap: 14px;
     }
-
-    .sort-container {
+    .filter-left {
         width: 100%;
-        justify-content: space-between;
+    }
+    .filter-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+    .filter-dropdown-menu {
+        min-width: 160px;
     }
 }
