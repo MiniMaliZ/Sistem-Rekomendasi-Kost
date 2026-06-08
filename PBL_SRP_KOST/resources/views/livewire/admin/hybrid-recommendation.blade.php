@@ -3,9 +3,13 @@
         <div>
             <p class="hybrid-eyebrow">Admin rekomendasi</p>
             <h2>Hybrid AHP-SAW</h2>
-            <p class="hybrid-copy">AHP menghitung bobot kriteria, SAW meranking alternatif kost dari database terbaru.</p>
+            <p class="hybrid-copy">Laravel memanggil subsistem FastAPI untuk menghitung AHP dan ranking SAW.</p>
         </div>
         <div class="hybrid-metrics">
+            <div class="hybrid-metric {{ $apiStatus === 'online' ? 'is-good' : 'is-warning' }}">
+                <span>{{ $apiStatus === 'online' ? 'ON' : 'OFF' }}</span>
+                <small>FastAPI</small>
+            </div>
             <div class="hybrid-metric">
                 <span>{{ $result['summary']['total_alternatives'] }}</span>
                 <small>Data kost</small>
@@ -21,14 +25,31 @@
         </div>
     </section>
 
+    @if($apiStatus !== 'online')
+        <section class="api-warning">
+            <x-solar-danger-circle-linear class="w-5 h-5" />
+            <div>
+                <strong>FastAPI rekomendasi belum aktif</strong>
+                <span>Jalankan FastAPI di {{ $recommendationApiUrl }}. Detail: {{ $apiError }}</span>
+            </div>
+        </section>
+    @endif
+
+    <form wire:submit.prevent="applyPreferences" class="hybrid-form">
     <section class="hybrid-workspace">
         <div class="hybrid-panel preference-panel">
             <div class="panel-heading">
                 <div class="panel-icon"><x-solar-filter-linear class="w-5 h-5" /></div>
                 <div>
                     <h3>Preferensi Kost</h3>
-                    <p>Anggaran, jarak, tipe, dan fasilitas.</p>
+                    <p>Isi preferensi terlebih dahulu, lalu terapkan rekomendasi.</p>
                 </div>
+            </div>
+
+            <div class="deferred-note {{ $hasPendingChanges ? 'is-dirty' : '' }}" wire:dirty.class="is-dirty">
+                <strong wire:dirty.remove>{{ $hasPendingChanges ? 'Preferensi draft belum diterapkan' : 'Mode submit aktif' }}</strong>
+                <strong wire:dirty>Preferensi berubah</strong>
+                <span>Klik Terapkan Rekomendasi untuk menghitung ulang hasil AHP-SAW.</span>
             </div>
 
             <div class="field-grid">
@@ -36,7 +57,7 @@
                     <span>Anggaran maksimal</span>
                     <div class="input-prefix">
                         <b>Rp</b>
-                        <input wire:model.live.debounce.300ms="budgetMax" type="number" min="0" step="50000">
+                        <input wire:model="draftBudgetMax" type="number" min="0" step="50000">
                     </div>
                 </label>
 
@@ -44,7 +65,7 @@
                     <span>Jarak kampus maksimal</span>
                     <div class="input-prefix">
                         <x-solar-map-point-linear class="w-4 h-4" />
-                        <input wire:model.live.debounce.300ms="maxDistance" type="number" min="0" step="0.1">
+                        <input wire:model="draftMaxDistance" type="number" min="0" step="0.1">
                         <b>km</b>
                     </div>
                 </label>
@@ -57,9 +78,10 @@
                 </div>
                 <div class="segmented-options">
                     @foreach(['' => 'Semua', 'Kos Putra' => 'Putra', 'Kos Putri' => 'Putri', 'Kos Campur' => 'Campur'] as $value => $label)
-                        <button type="button" wire:click="setTipeKos('{{ $value }}')" class="{{ $tipeKos === $value ? 'active' : '' }}">
-                            {{ $label }}
-                        </button>
+                        <label class="segmented-choice">
+                            <input type="radio" wire:model="draftTipeKos" value="{{ $value }}" @checked($draftTipeKos === $value)>
+                            <span>{{ $label }}</span>
+                        </label>
                     @endforeach
                 </div>
             </div>
@@ -71,20 +93,19 @@
                 </div>
                 <div class="facility-grid">
                     @foreach($facilityOptions as $key => $option)
-                        @php($isSelected = in_array($key, $selectedFacilities, true))
-                        <button type="button" wire:click="toggleFacility('{{ $key }}')" class="facility-choice {{ $isSelected ? 'selected' : '' }}">
+                        @php($isSelected = in_array($key, $draftSelectedFacilities, true))
+                        <label class="facility-choice">
+                            <input type="checkbox" wire:model="draftSelectedFacilities" value="{{ $key }}" @checked($isSelected)>
                             <span class="choice-dot">
-                                @if($isSelected)
-                                    <x-solar-check-circle-linear class="w-4 h-4" />
-                                @endif
+                                <x-solar-check-circle-linear class="w-4 h-4" />
                             </span>
                             <span>{{ $option['label'] }}</span>
-                        </button>
+                        </label>
                     @endforeach
                 </div>
 
                 <label class="toggle-row">
-                    <input wire:model.live="requireAllFacilities" type="checkbox">
+                    <input wire:model="draftRequireAllFacilities" type="checkbox">
                     <span>Wajib cocok semua fasilitas yang dipilih</span>
                 </label>
             </div>
@@ -92,13 +113,18 @@
             <div class="field-grid compact">
                 <label class="field-control">
                     <span>Jumlah hasil</span>
-                    <select wire:model.live="topN">
+                    <select wire:model="draftTopN">
                         <option value="5">Top 5</option>
                         <option value="10">Top 10</option>
                         <option value="20">Top 20</option>
                     </select>
                 </label>
-                <button type="button" wire:click="resetPreferences" class="ghost-action">Reset</button>
+                <button type="button" wire:click="resetPreferences" class="ghost-action">Reset Form</button>
+                <button type="submit" class="primary-action" wire:loading.attr="disabled" wire:target="applyPreferences">
+                    <x-solar-check-circle-linear class="w-4 h-4" />
+                    <span wire:loading.remove wire:target="applyPreferences">Terapkan Rekomendasi</span>
+                    <span wire:loading wire:target="applyPreferences">Menghitung...</span>
+                </button>
             </div>
         </div>
 
@@ -113,9 +139,10 @@
 
             <div class="segmented-options scenario-options">
                 @foreach($scenarios as $key => $label)
-                    <button type="button" wire:click="setScenario('{{ $key }}')" class="{{ $scenario === $key ? 'active' : '' }}">
-                        {{ $label }}
-                    </button>
+                    <label class="segmented-choice">
+                        <input type="radio" wire:model="draftScenario" value="{{ $key }}" @checked($draftScenario === $key)>
+                        <span>{{ $label }}</span>
+                    </label>
                 @endforeach
             </div>
 
@@ -158,6 +185,7 @@
             </div>
         </div>
     </section>
+    </form>
 
     <section class="hybrid-results">
         <div class="results-heading">
@@ -198,7 +226,7 @@
                                         <div class="kost-icon"><x-solar-buildings-linear class="w-5 h-5" /></div>
                                         <div>
                                             <strong>{{ $row['nama_kost'] }}</strong>
-                                            <span>{{ $row['tipe_kos'] }} - {{ $row['kost']->sepesifikasi_tipe_kamar ?? '-' }}</span>
+                                            <span>{{ $row['tipe_kos'] }} - {{ $row['spesifikasi_tipe_kamar'] ?? '-' }}</span>
                                         </div>
                                     </div>
                                 </td>
@@ -238,9 +266,14 @@
             gap: 1.25rem;
         }
 
+        .hybrid-form {
+            display: block;
+        }
+
         .hybrid-hero,
         .hybrid-panel,
-        .hybrid-results {
+        .hybrid-results,
+        .api-warning {
             background: #ffffff;
             border: 1px solid rgba(173, 156, 138, 0.2);
             border-radius: 1rem;
@@ -285,7 +318,7 @@
 
         .hybrid-metrics {
             display: grid;
-            grid-template-columns: repeat(3, minmax(100px, 1fr));
+            grid-template-columns: repeat(4, minmax(100px, 1fr));
             gap: 0.75rem;
         }
 
@@ -318,6 +351,57 @@
         .hybrid-metric.is-warning {
             background: #fff7ed;
             border-color: #fed7aa;
+        }
+
+        .api-warning {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 1rem 1.25rem;
+            background: #fff7ed;
+            border-color: #fed7aa;
+            color: #9a3412;
+        }
+
+        .api-warning strong,
+        .api-warning span {
+            display: block;
+        }
+
+        .api-warning span {
+            font-size: 0.78rem;
+            margin-top: 0.15rem;
+            color: #b45309;
+        }
+
+        .deferred-note {
+            border: 1px solid #f0ebe1;
+            border-radius: 0.75rem;
+            background: #fcfaf8;
+            color: #5d4d34;
+            margin-bottom: 1rem;
+            padding: 0.8rem 0.9rem;
+        }
+
+        .deferred-note.is-dirty {
+            background: #fff7ed;
+            border-color: #fed7aa;
+            color: #9a3412;
+        }
+
+        .deferred-note strong,
+        .deferred-note span {
+            display: block;
+        }
+
+        .deferred-note strong {
+            font-size: 0.78rem;
+            font-weight: 800;
+        }
+
+        .deferred-note span {
+            font-size: 0.74rem;
+            margin-top: 0.15rem;
         }
 
         .hybrid-workspace {
@@ -364,6 +448,7 @@
 
         .field-grid.compact {
             align-items: end;
+            grid-template-columns: minmax(150px, 1fr) auto auto;
             margin-top: 1rem;
         }
 
@@ -420,24 +505,52 @@
             grid-template-columns: repeat(3, 1fr);
         }
 
-        .segmented-options button,
-        .ghost-action {
+        .segmented-choice,
+        .ghost-action,
+        .primary-action {
             min-height: 40px;
             border: 1px solid #f0ebe1;
             border-radius: 0.65rem;
             background: #ffffff;
             color: #5d4d34;
             cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             font-family: 'Poppins', sans-serif;
             font-weight: 700;
+            gap: 0.4rem;
+            padding: 0 0.8rem;
             transition: 0.2s ease;
         }
 
-        .segmented-options button.active,
-        .segmented-options button:hover {
+        .segmented-choice {
+            position: relative;
+        }
+
+        .segmented-choice input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .segmented-choice:has(input:checked),
+        .segmented-choice:hover {
             border-color: #3f2419;
             background: #3f2419;
             color: #ffffff;
+        }
+
+        .primary-action {
+            background: #3f2419;
+            border-color: #3f2419;
+            color: #ffffff;
+            min-width: 13rem;
+        }
+
+        .primary-action:disabled {
+            cursor: wait;
+            opacity: 0.7;
         }
 
         .facility-grid {
@@ -460,10 +573,17 @@
             font-size: 0.76rem;
             font-weight: 600;
             padding: 0 0.75rem;
+            position: relative;
             text-align: left;
         }
 
-        .facility-choice.selected {
+        .facility-choice input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .facility-choice:has(input:checked) {
             border-color: #2f7d62;
             background: #f2fbf7;
             color: #1d5f49;
@@ -480,9 +600,17 @@
             flex-shrink: 0;
         }
 
-        .facility-choice.selected .choice-dot {
+        .choice-dot svg {
+            opacity: 0;
+        }
+
+        .facility-choice:has(input:checked) .choice-dot {
             border-color: #2f7d62;
             color: #2f7d62;
+        }
+
+        .facility-choice:has(input:checked) .choice-dot svg {
+            opacity: 1;
         }
 
         .toggle-row {
