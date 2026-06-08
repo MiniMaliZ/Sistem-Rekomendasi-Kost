@@ -223,7 +223,13 @@
                                 </td>
                                 <td>
                                     <div class="kost-cell">
-                                        <div class="kost-icon"><x-solar-buildings-linear class="w-5 h-5" /></div>
+                                        <div class="kost-photo">
+                                            @if($row['foto_bangunan_url'])
+                                                <img src="{{ $row['foto_bangunan_url'] }}" alt="Foto {{ $row['nama_kost'] }}" loading="lazy">
+                                            @else
+                                                <x-solar-buildings-linear class="w-5 h-5" />
+                                            @endif
+                                        </div>
                                         <div>
                                             <strong>{{ $row['nama_kost'] }}</strong>
                                             <span>{{ $row['tipe_kos'] }} - {{ $row['spesifikasi_tipe_kamar'] ?? '-' }}</span>
@@ -780,16 +786,25 @@
             margin-top: 0.15rem;
         }
 
-        .kost-icon {
-            width: 38px;
-            height: 38px;
+        .kost-photo {
+            width: 52px;
+            height: 42px;
             border-radius: 0.65rem;
             background: #f0ebe1;
             color: #ad9c8a;
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow: hidden;
             flex-shrink: 0;
+            border: 1px solid #efe7dc;
+        }
+
+        .kost-photo img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
         }
 
         .contribution-bars {

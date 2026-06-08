@@ -89,6 +89,7 @@ class HybridRecommendation extends Component
     {
         $service = app(HybridAhpSawService::class);
         $kosts = Kost::query()
+            ->with('fotoKost')
             ->orderBy('id_kost')
             ->get();
 
@@ -155,6 +156,9 @@ class HybridRecommendation extends Component
             $row['spesifikasi_tipe_kamar'] = $kost instanceof Kost
                 ? $kost->sepesifikasi_tipe_kamar
                 : ($row['spesifikasi_tipe_kamar'] ?? '-');
+            $row['foto_bangunan_url'] = $kost instanceof Kost && $kost->fotoKost?->foto_bangunan
+                ? $kost->fotoKost->foto_bangunan_url
+                : null;
             unset($row['kost']);
 
             return $row;

@@ -244,6 +244,7 @@ class KostIndex extends Component
         $sortDirection = $this->sortDirection === 'desc' ? 'desc' : 'asc';
 
         $kosts = Kost::query()
+            ->with('fotoKost')
             ->when($this->search, function ($q) {
                 $q->where(function ($query) {
                     $query->where('nama_kost', 'like', "%{$this->search}%")

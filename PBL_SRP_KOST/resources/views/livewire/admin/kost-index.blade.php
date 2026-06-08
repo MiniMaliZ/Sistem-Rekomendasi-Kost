@@ -94,14 +94,18 @@
                         <tr style="border-bottom:1px solid #fcfaf8; transition: background 0.2s;" onmouseover="this.style.background='#fdfcfb'" onmouseout="this.style.background='transparent'">
                             <td style="padding:0.875rem 1.25rem; font-size:0.85rem; color:#AD9C8A; font-weight: 500;">#{{ $kost->id_kost }}</td>
                             <td style="padding:0.875rem 1.25rem;">
+                                @php($fotoBangunanUrl = $kost->fotoKost?->foto_bangunan ? $kost->fotoKost->foto_bangunan_url : null)
                                 <div style="display:flex; align-items:center; gap:0.75rem;">
-                                    <div style="width:40px; height:40px; border-radius:0.5rem; overflow:hidden; background-color:#f0ebe1; flex-shrink:0; border: 1px solid #f0ebe1;">
-                                        <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:#AD9C8A;">
+                                    <div class="admin-kost-photo">
+                                        @if($fotoBangunanUrl)
+                                            <img src="{{ $fotoBangunanUrl }}" alt="Foto {{ $kost->nama_kost }}" loading="lazy">
+                                        @else
                                             <x-solar-buildings-linear class="w-6 h-6" />
-                                        </div>
+                                        @endif
                                     </div>
                                     <div style="display:flex; flex-direction:column; gap:0.125rem;">
                                         <p style="margin:0; font-size:0.875rem; font-weight:700; color:#3f2419;">{{ $kost->nama_kost }}</p>
+                                        <span style="font-size:0.7rem; color:#AD9C8A;">{{ $fotoBangunanUrl ? 'Foto bangunan tersedia' : 'Belum ada foto bangunan' }}</span>
                                     </div>
                                 </div>
                             </td>
@@ -113,16 +117,8 @@
                             </td>
                             <td style="padding:0.875rem 1.25rem;">
                                 <div style="display:flex; flex-direction:column; gap:0.375rem;">
-                                    @php
-                                        $tipeKosLower = strtolower($kost->tipe_kos);
-                                        $tipeConfig = match(true) { 
-                                            str_contains($tipeKosLower, 'putra') => ['bg' => '#eff6ff', 'text' => '#1e40af', 'icon' => 'solar-men-linear'], 
-                                            str_contains($tipeKosLower, 'putri') => ['bg' => '#fdf2f8', 'text' => '#9d174d', 'icon' => 'solar-women-linear'], 
-                                            str_contains($tipeKosLower, 'campur') => ['bg' => '#f0fdf4', 'text' => '#166534', 'icon' => 'solar-users-group-two-rounded-linear'],
-                                            default => ['bg' => '#f8fafc', 'text' => '#475569', 'icon' => 'solar-home-linear']
-                                        };
-                                    @endphp
-                                    <div style="display:inline-flex; align-items:center; gap:0.25rem; padding:0.125rem 0.5rem; border-radius:0.25rem; font-size:0.65rem; font-weight:700; background-color:{{ $tipeConfig['bg'] }}; color:{{ $tipeConfig['text'] }}; text-transform:uppercase; align-self: flex-start;">
+                                    @php($tipeKosLower = strtolower((string) $kost->tipe_kos))
+                                    <div style="display:inline-flex; align-items:center; gap:0.25rem; padding:0.125rem 0.5rem; border-radius:0.25rem; font-size:0.65rem; font-weight:700; background-color:{{ str_contains($tipeKosLower, 'putra') ? '#eff6ff' : (str_contains($tipeKosLower, 'putri') ? '#fdf2f8' : (str_contains($tipeKosLower, 'campur') ? '#f0fdf4' : '#f8fafc')) }}; color:{{ str_contains($tipeKosLower, 'putra') ? '#1e40af' : (str_contains($tipeKosLower, 'putri') ? '#9d174d' : (str_contains($tipeKosLower, 'campur') ? '#166534' : '#475569')) }}; text-transform:uppercase; align-self: flex-start;">
                                         @if(str_contains($tipeKosLower, 'putra')) <x-solar-men-linear class="w-3 h-3" />
                                         @elseif(str_contains($tipeKosLower, 'putri')) <x-solar-women-linear class="w-3 h-3" />
                                         @else <x-solar-users-group-two-rounded-linear class="w-3 h-3" /> @endif
@@ -207,6 +203,28 @@
         .sortable-table-header:hover .sort-indicator,
         .sortable-table-header.is-active .sort-indicator {
             color: #3f2419;
+        }
+
+        .admin-kost-photo {
+            width: 58px;
+            height: 44px;
+            border-radius: 0.65rem;
+            overflow: hidden;
+            background-color: #f0ebe1;
+            color: #AD9C8A;
+            flex-shrink: 0;
+            border: 1px solid #f0ebe1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(63, 36, 25, 0.06);
+        }
+
+        .admin-kost-photo img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
         }
 
         .btn-primary-gradient {
