@@ -1,0 +1,858 @@
+/* ============================================================
+   GLOBAL / BASE
+   ============================================================ */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+    background-color: #fefcf8;
+    color: #1e1e1e;
+    display: grid;
+    grid-template-columns: 143px 1fr;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+        "header header"
+        "sidebar main";
+}
+
+a {
+    text-decoration: none;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+}
+
+/* ============================================================
+   CSS VARIABLES
+   ============================================================ */
+
+:root {
+    --color-dark-text: #1e1e1e;
+    --color-gray-text: #696969;
+    --color-brand-brown: #3f2419;
+    --color-brand-dark: #3f2419;
+    --color-white: #ffffff;
+    --color-gray-50: #f9fafb;
+    --color-gray-100: #f3f4f6;
+    --shadow-soft: 0px 4px 10px 0px rgba(0, 0, 0, 0.1);
+    --shadow-nav: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* ============================================================
+   PAGE LAYOUT — CSS Grid (sama dengan user_home)
+   ============================================================ */
+
+.page-body {
+    display: contents;
+}
+
+/* ============================================================
+   HEADER SECTION
+   ============================================================ */
+
+#section-header {
+    grid-area: header;
+    width: 100%;
+    background-color: #fefcf8;
+    padding: 30px 45px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    z-index: 100;
+}
+
+/* ============================================================
+   HEADER LEFT — Logo + Greeting
+   ============================================================ */
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    flex-shrink: 0;
+}
+
+.logo-icon {
+    width: 48px;
+    height: auto;
+    flex-shrink: 0;
+}
+
+.greeting {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.greeting-title {
+    font-size: 32px;
+    line-height: 1.25;
+    font-weight: 600;
+    color: var(--color-dark-text);
+    letter-spacing: -0.025em;
+}
+
+.greeting-subtitle {
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--color-gray-text);
+}
+
+/* ============================================================
+   HEADER RIGHT — Search + Notif + Avatar
+   ============================================================ */
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    flex-shrink: 0;
+}
+
+/* ============================================================
+   SEARCH BAR
+   ============================================================ */
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--color-white);
+    border-radius: 9999px;
+    box-shadow: var(--shadow-soft);
+    padding-left: 20px;
+    padding-right: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    width: 412px;
+}
+
+.search-input {
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    color: var(--color-gray-text);
+    width: 100%;
+    font-family: "Poppins", sans-serif;
+}
+
+.search-input::placeholder {
+    color: var(--color-gray-text);
+}
+
+.search-button {
+    background-color: var(--color-brand-brown);
+    border: none;
+    cursor: pointer;
+    border-radius: 9999px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: opacity 0.2s ease;
+}
+
+.search-button:hover {
+    opacity: 0.9;
+}
+
+.search-icon {
+    width: 32px;
+    height: 32px;
+}
+
+/* ============================================================
+   USER AVATAR
+   ============================================================ */
+
+.user-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 9999px;
+    overflow: hidden;
+    flex-shrink: 0;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+}
+
+.user-avatar:hover {
+    border-color: #e5e7eb;
+}
+
+.user-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* ============================================================
+   SIGN-IN BUTTON — header, untuk guest
+   ============================================================ */
+
+.signin-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #3f2419;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 12px 24px;
+    border-radius: 9999px;
+    white-space: nowrap;
+    transition: opacity 0.2s ease;
+    flex-shrink: 0;
+}
+
+.signin-btn:hover {
+    opacity: 0.85;
+}
+
+/* ============================================================
+   SIDEBAR SECTION — identik dengan user_home
+   ============================================================ */
+
+#section-sidebar {
+    grid-area: sidebar;
+    width: 143px;
+    min-width: 143px;
+    background-color: #fefcf8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 24px;
+    padding-bottom: 24px;
+    height: 100%;
+    overflow-y: auto;
+}
+
+/* ============================================================
+   MAIN CONTENT AREA
+   ============================================================ */
+
+.main-content {
+    grid-area: main;
+    min-width: 0;
+    background-color: #fefcf8;
+    overflow-y: auto;
+    height: 100%;
+}
+
+/* ============================================================
+   NAV PILL — identik dengan user_home
+   ============================================================ */
+
+.nav-pill {
+    background-color: var(--color-white);
+    border-radius: 9999px;
+    box-shadow: var(--shadow-nav);
+    padding: 8px;
+}
+
+.nav-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+/* ============================================================
+   NAV ITEM — Inactive (default)
+   ============================================================ */
+
+.nav-item {
+    background-color: var(--color-white);
+    width: 50px;
+    height: 50px;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+.nav-item:hover {
+    background-color: var(--color-gray-100);
+}
+
+/* ============================================================
+   NAV ITEM — Active state
+   ============================================================ */
+
+.nav-item--active {
+    background-color: var(--color-brand-dark);
+    width: 54px;
+    height: 54px;
+    transition: transform 0.2s ease;
+}
+
+.nav-item--active:hover {
+    background-color: var(--color-brand-dark);
+    transform: scale(1.05);
+}
+
+/* ============================================================
+   BLADE ICONS — ukuran & warna
+   ============================================================ */
+
+.nav-blade-icon {
+    width: 28px;
+    height: 28px;
+    display: block;
+    color: #696969;
+    flex-shrink: 0;
+}
+
+.nav-blade-icon--active {
+    width: 32px;
+    height: 32px;
+    color: #ffffff;
+}
+
+.nav-blade-icon--logout {
+    width: 28px;
+    height: 28px;
+    color: #696969;
+}
+
+.nav-blade-icon svg,
+.nav-blade-icon--active svg {
+    width: 100%;
+    height: 100%;
+    fill: currentColor;
+    stroke: currentColor;
+}
+
+/* ============================================================
+   LOGOUT BUTTON — identik dengan user_home
+   ============================================================ */
+
+.logout-button {
+    background-color: var(--color-white);
+    border: none;
+    cursor: pointer;
+    border-radius: 9999px;
+    box-shadow: var(--shadow-nav);
+    width: 65px;
+    height: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition:
+        transform 0.2s ease,
+        background-color 0.2s ease;
+}
+
+.logout-button:hover {
+    transform: scale(1.05);
+    background-color: var(--color-gray-100);
+}
+
+/* ============================================================
+   FILTER CHIPS — Horizontal filter buttons
+   ============================================================ */
+
+#section-filters {
+    display: flex;
+    justify-content: flex-start;
+    padding: 24px 30px 40px 0px;
+    width: 100%;
+}
+
+.filters-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.filters-container::-webkit-scrollbar {
+    display: none;
+}
+
+.filter-chip {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 24px;
+    border-radius: 100px;
+    font-family: "Poppins", sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+.filter-chip.active {
+    background-color: #3f2419;
+    color: #ffffff;
+    border: 1px solid #3f2419;
+}
+
+.filter-chip:not(.active) {
+    background-color: transparent;
+    color: #1e1e1e;
+    border: 1px solid #dadada;
+}
+
+.filter-chip:not(.active):hover {
+    background-color: #f9f9f9;
+    border-color: #cccccc;
+}
+
+/* ============================================================
+   PROPERTY CARDS SECTION
+   ============================================================ */
+
+#section-property-card {
+    padding: 0 30px 30px 0px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.property-card {
+    width: 100%;
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.1);
+    padding: 10px 30px 10px 10px;
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+    cursor: pointer;
+}
+
+.property-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0px 12px 28px 0px rgba(0, 0, 0, 0.15);
+}
+
+.property-card__inner {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.property-card__main {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    flex: 1 1 auto;
+}
+
+.property-card__image-wrapper {
+    position: relative;
+    width: 238px;
+    height: 160px;
+    border-radius: 20px;
+    overflow: hidden;
+    flex-shrink: 0;
+    background-color: #d9d9d9;
+}
+
+.property-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.property-card__badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #ffeded;
+    color: #ff5151;
+    padding: 5px 15px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 31px;
+    z-index: 1;
+}
+
+.property-card__info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1 1 min-content;
+    min-width: 280px;
+}
+
+.property-card__info-top {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.property-card__title-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.property-card__title-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.property-card__title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 500;
+    color: #1e1e1e;
+    line-height: 1.2;
+}
+
+.property-card__seen {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.property-card__dot {
+    width: 5px;
+    height: 5px;
+    display: block;
+}
+
+.property-card__seen-text {
+    font-size: 12px;
+    color: #757575;
+}
+
+.property-card__location {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+}
+
+.property-card__location-icon {
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.property-card__location-icon img {
+    width: 100%;
+    height: 100%;
+}
+
+.property-card__location-text {
+    font-size: 14px;
+    color: #8f8f8f;
+}
+
+.property-card__price {
+    font-size: 18px;
+    font-weight: 500;
+    color: #1e1e1e;
+}
+
+.property-card__price-period {
+    font-size: 12px;
+    font-weight: 400;
+    color: #757575;
+}
+
+.property-card__amenities {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.property-card__amenity {
+    border: 1px solid #dadada;
+    padding: 5px 15px;
+    border-radius: 50px;
+    font-size: 14px;
+    color: #1e1e1e;
+    height: 31px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.property-card__rating {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+    flex-shrink: 0;
+}
+
+.property-card__rating-icon {
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.property-card__rating-icon img {
+    width: 100%;
+    height: 100%;
+}
+
+.property-card__rating-text {
+    font-size: 14px;
+    color: #1e1e1e;
+    font-weight: 400;
+}
+
+.property-card__actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    flex-shrink: 0;
+}
+
+.property-card__btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 25px;
+    border: 1px solid #dadada;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    transition: background-color 0.2s ease;
+}
+
+.property-card__btn:hover {
+    background-color: #f5f5f5;
+}
+
+.property-card__btn img {
+    max-width: 22px;
+    max-height: 22px;
+    object-fit: contain;
+}
+
+/* ============================================================
+   EMPTY STATES
+   ============================================================ */
+
+.section-empty-state {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 420px;
+    padding: 40px 45px;
+}
+
+/* Untuk guest: geser empty state lebih ke atas agar tidak mengambang
+   di tengah area yang luas (tidak ada filter bar di atasnya) */
+.section-empty-state--guest {
+    align-items: flex-start;
+    padding-top: 60px;
+}
+
+.empty-state-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    max-width: 380px;
+    text-align: center;
+}
+
+.empty-state-illustration {
+    width: 120px;
+    height: 120px;
+}
+
+.empty-heart-svg {
+    width: 100%;
+    height: 100%;
+}
+
+.empty-state-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: #1e1e1e;
+    margin: 0;
+}
+
+.empty-state-desc {
+    font-size: 15px;
+    color: #696969;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* CTA Utama — tombol solid */
+.empty-cta-btn {
+    display: inline-block;
+    margin-top: 8px;
+    background-color: #3f2419;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 12px 32px;
+    border-radius: 9999px;
+    transition: opacity 0.2s ease;
+}
+
+.empty-cta-btn:hover {
+    opacity: 0.85;
+}
+
+/* Secondary Action — tombol outline */
+.empty-browse-btn {
+    display: inline-block;
+    background-color: transparent;
+    color: #3f2419;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 11px 32px;
+    border-radius: 9999px;
+    border: 1.5px solid #3f2419;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.empty-browse-btn:hover {
+    background-color: #3f2419;
+    color: #ffffff;
+}
+
+/* ── NO RESULTS MSG ─────────────────────────────────────── */
+.no-results-msg {
+    text-align: center;
+    padding: 40px 20px;
+    color: #696969;
+    font-size: 15px;
+}
+
+.no-results-msg.hidden {
+    display: none;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1024px) {
+    .property-card {
+        padding: 15px;
+    }
+    .property-card__inner {
+        flex-wrap: wrap;
+    }
+    .property-card__main {
+        flex: 1 1 100%;
+    }
+    .property-card__rating {
+        margin-left: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    #section-header {
+        padding: 16px 20px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .header-left {
+        gap: 16px;
+    }
+
+    .header-right {
+        width: 100%;
+    }
+
+    .search-bar {
+        width: 100%;
+        flex: 1;
+    }
+
+    #section-sidebar {
+        display: none;
+    }
+
+    .property-card__inner {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-template-areas:
+            "main main"
+            "rating actions";
+        gap: 15px;
+    }
+    .property-card__main {
+        grid-area: main;
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .property-card__image-wrapper {
+        width: 100%;
+        height: 200px;
+    }
+    .property-card__info {
+        min-width: auto;
+    }
+    .property-card__rating {
+        grid-area: rating;
+        justify-content: flex-start;
+        margin-left: 0;
+    }
+    .property-card__actions {
+        grid-area: actions;
+        justify-content: flex-end;
+    }
+}

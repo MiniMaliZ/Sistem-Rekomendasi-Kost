@@ -59,6 +59,11 @@ class Kost extends Model
         return $this->hasMany(Feedback::class, 'id_kost', 'id_kost');
     }
 
+    public function fotoKost()
+    {
+    return $this->hasOne(FotoKost::class, 'id_kost', 'id_kost');
+    }
+
     public function getTipeKosLabelAttribute(): string
     {
         $tipeKos = strtolower((string) $this->tipe_kos);
