@@ -49,7 +49,7 @@
                     <li><a href="{{ route('user.favorit') }}" class="nav-item" aria-label="Favorit">
                             <x-solar-heart-linear class="nav-blade-icon" />
                         </a></li>
-                    <li><a href="{{ route('user.riwayat') }}" class="nav-item" aria-label="Riwayat">
+                    <li><a href="{{ route('user.history') }}" class="nav-item" aria-label="Riwayat">
                             <x-clarity-history-line class="nav-blade-icon" />
                         </a></li>
                 </ul>

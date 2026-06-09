@@ -6,7 +6,7 @@
       id, nama, tipe, lokasi, harga_format, rating,
       fasilitas_tags, foto, is_favorit
 --}}
-
+<a href="{{ route('user.kost.show', $kost['id']) }}" class="kost-card-link">
 <div class="kost-card">
     <div class="kost-card-img-wrap">
         <img src="{{ $kost['foto'] }}" alt="{{ $kost['nama'] }}" class="card-photo" loading="lazy">
@@ -45,3 +45,4 @@
         </div>
     </div>
 </div>
+</a>
