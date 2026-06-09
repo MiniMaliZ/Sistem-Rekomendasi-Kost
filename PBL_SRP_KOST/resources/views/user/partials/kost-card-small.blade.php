@@ -5,7 +5,7 @@
     $kost adalah array dengan key:
       nama, lokasi, harga_format, rating, ulasan, foto
 --}}
-
+<a href="{{ route('user.kost.show', $kost['id']) }}" class="kost-card-link">
 <div class="kost-card-small">
     <img src="{{ $kost['foto'] }}"  alt="{{ $kost['nama'] }}" class="kost-card-small-img" loading="lazy">
     <div class="kost-card-small-body">
@@ -31,3 +31,4 @@
         </div>
     </div>
 </div>
+</a>

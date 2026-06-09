@@ -8,7 +8,7 @@ use App\Models\Favorit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use illuminate\support\Facades\DB;
-use Illuminate\support\Colection;
+use Illuminate\support\Collection;
 
 class ListkostController extends Controller
 {
@@ -28,7 +28,7 @@ class ListkostController extends Controller
         $user = Auth::user();
         
         // Initialize query
-        $query = Kost::with('fotoKost');;
+        $query = Kost::with('fotoKost', 'feedback');;
 
         // SEARCH - Filter by name, location, or other searchable fields
         if ($request->filled('search')) {
@@ -68,7 +68,9 @@ class ListkostController extends Controller
                     $query->where(function ($q) use ($facility) {
                         $q->where('fasilitas_kamar', 'like', "%{$facility}%")
                           ->orWhere('fasilitas_kamar_mandi', 'like', "%{$facility}%")
-                          ->orWhere('fasilitas_umum', 'like', "%{$facility}%");
+                          ->orWhere('fasilitas_umum', 'like', "%{$facility}%")
+                          ->orWhere('fasilitas_parkir', 'like', "%{$facility}%");
+
                     });
                 }
             }
@@ -98,29 +100,19 @@ class ListkostController extends Controller
         }
 
         // PAGINATION
-        $perPage = $request->input('per_page', 6); // Default 6 items per page
+        $perPage = $request->input('per_page', 18); // Default 6 items per page
         $kosts = $query->paginate($perPage);
 
-        $kosts->getCollection()->transform(function ($kost) {
-        $kost->lokasi = $this->getKecamatan($kost->nama_kost) . ', Malang';
+        $favoriteKostIds = [];
 
-        $kost->harga_format = 'Rp. ' . number_format($kost->harga, 0, ',', '.');
-
-        return $kost;
-        });
-
-        // Get user's favorite kost IDs
-        $favoriteKostIds = collect();
         if ($user) {
             $favoriteKostIds = Favorit::where('id_user', $user->id_user)
                 ->pluck('id_kost')
                 ->toArray();
         }
 
-        // Attach favorite status to each kost
         $kosts->getCollection()->transform(function ($kost) use ($favoriteKostIds) {
-            $kost->is_favorite = collect($favoriteKostIds)->contains($kost->id_kost);
-            return $kost;
+            return $this->prepareKost($kost, $favoriteKostIds);
         });
 
         // Get filter options for dropdown/filter UI
@@ -149,26 +141,107 @@ class ListkostController extends Controller
             ],
         ]);
     }
-    private function getKecamatan(string $namaKost): string
-    {
-    $kecamatanList = [
-        'Lowokwaru',
-        'Blimbing',
-        'Klojen',
-        'Sukun',
-        'Kedungkandang',
-        'Karang Ploso',
-        'Dau',
-    ];
 
-    foreach ($kecamatanList as $kec) {
-        if (stripos($namaKost, $kec) !== false) {
-            return $kec;
+    private function formatHarga(float $harga): string
+    {
+        return 'Rp. ' . number_format($harga, 0, ',', '.');
+    }
+    
+    private function fasilitasTags(array $fasilitas): array
+    {
+        $visible = array_slice($fasilitas, 0, 3);
+        $extra   = count($fasilitas) - 3;
+        if ($extra > 0) {
+            $visible[] = "{$extra}+";
+        }
+        return $visible;
+    }
+
+    private function parseFasilitas(Kost $kost): array
+    {
+        $cols = [
+            $kost->fasilitas_umum,
+            $kost->fasilitas_kamar,
+            $kost->fasilitas_kamar_mandi,
+            $kost->fasilitas_parkir,
+        ];
+
+        $all = [];
+        foreach ($cols as $col) {
+            if (!empty($col)) {
+                foreach (explode(',', $col) as $item) {
+                    $trimmed = trim($item);
+                    if ($trimmed !== '') {
+                        $all[] = $trimmed;
+                    }
+                }
+            }
+        }
+
+        return array_values(array_unique($all));
+    }
+
+private function prepareKost(Kost $kost, array $favoritIds): array
+    {
+        $fasilitas = $this->parseFasilitas($kost);
+
+        return [
+            'id'             => $kost->id_kost,
+            'nama'           => $kost->nama_kost,
+            'tipe'           => strtoupper(str_replace('Kos ', '', $kost->tipe_kos)),
+            'kota'           => 'Malang',
+            'provinsi'       => 'Jawa Timur',
+            'harga'          => (float) $kost->harga,
+            'harga_format'   => $this->formatHarga((float) $kost->harga),
+            'rating'         => $this->getRating($kost),
+            'ulasan'         => $kost->feedback->count(),
+            'foto'           => $kost->fotoKost?->foto_bangunan_url ?? asset('images/no-image.jpg'),
+            'lokasi'         => $this->getLokasi($kost->nama_kost),
+            'fasilitas'      => $fasilitas,
+            'fasilitas_tags' => $this->fasilitasTags($fasilitas),
+            'is_baru'        => false,
+            'is_favorit'     => in_array($kost->id_kost, $favoritIds),
+        ];
+    }
+    
+    
+
+    private function kecamatanMap(): array
+    {
+    return [
+        'Lowokwaru'     => 'kota',
+        'Blimbing'      => 'kota',
+        'Klojen'        => 'kota',
+        'Sukun'         => 'kota',
+        'Kedungkandang' => 'kota',
+        'Karang Ploso'  => 'kab',
+        'Dau'           => 'kab',
+    ];
+    }
+
+private function getLokasi(string $namaKost): string
+{
+    foreach ($this->kecamatanMap() as $kecamatan => $jenis) {
+        if (stripos($namaKost, $kecamatan) !== false) {
+            $wilayah = $jenis === 'kota'
+                ? 'Kota Malang'
+                : 'Kab. Malang';
+
+            return "{$kecamatan}, {$wilayah}";
         }
     }
 
     return 'Malang';
-    }            
+}
+
+    private function getRating(Kost $kost): float
+    {
+        if ($kost->feedback->isEmpty()) {
+            return 0.0;
+        }
+
+        return round($kost->feedback->avg('rating'), 1);
+    }
     /**
      * Filter helper to validate and handle harga_range parameter
      */

@@ -8,6 +8,8 @@
     <title>KostApp - Daftar Kost</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" />
     <link rel="stylesheet" href="{{ asset('css/user/listkost.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/user/sidebar.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/user/search.css') }}">
 </head>
 
 <body>
@@ -114,6 +116,7 @@
                                                         Rp. {{ number_format(request('harga_min', 0), 0, ',', '.') }} -
                                                         Rp.
                                                         {{ number_format(request('harga_max', 999999999), 0, ',', '.') }}
+                                                        
                                                     @else
                                                         Semua Harga
                                                     @endif
@@ -129,7 +132,7 @@
                                                 <label class="filter-option">
                                                     <input type="radio" name="harga_range"
                                                         value="{{ $range['min'] }}-{{ $range['max'] }}"
-                                                        @if (request('harga_range') === $range['min'] . '-' . $range['max']) checked @endif>
+                                                        @if (request('harga_range') === $range ['min'] . '-' . $range['max']) checked @endif>
                                                     <span>{{ $label }}</span>
                                                 </label>
                                             @endforeach
@@ -229,82 +232,26 @@
             <!-- ────────────────────────────────────────────────────────
                  LISTINGS GRID (kost cards)
                  ──────────────────────────────────────────────────────── -->
-            <section id="section-listings">
-                <div class="container">
-                    @if ($kosts->count() > 0)
-                        <div class="listings-grid">
-                            @foreach ($kosts as $kost)
-                                <div class="card" data-kost-id="{{ $kost->id_kost }}">
-                                    <div class="card-image-wrapper">
-                                        <img src="{{ $kost->fotoKost?->foto_bangunan_url ?? asset('images/no-image.jpg') }}" alt="{{ $kost->nama_kost }} "class="card-image" />
-                                            
-                                        <div class="badge badge-{{ $kost->tipe_kos }}">
-                                            {{ strtoupper($kost->tipe_kos) }}
-                                        </div>
-                                        <button class="btn-favorite fav-btn" data-kost-id="{{ $kost->id_kost }}"
-                                            data-is-favorit="{{ $kost->is_favorite ? 'true' : 'false' }}"
-                                            aria-label="Favorite">
-                                            <img src="{{ $kost->is_favorite ? asset('images/heart_filled.svg') : asset('images/heart_outline.svg') }}"
-                                                alt="" />
-                                        </button>
-                                    </div>
-                                    <div class="card-content">
-                                        <div class="card-header">
-                                            <h3 class="card-title">{{ $kost->nama_kost }}</h3>
-                                            <div class="card-rating">
-                                                <img src="{{ asset('images/star.svg') }}" alt="Star" />
-                                                <span>4.9</span>
-                                            </div>
-                                        </div>
-                                        <div class="card-location">
-                                            <img src="{{ asset('images/loc.svg') }}" alt="Location" />
-                                            <span>{{ $kost->lokasi ?? 'Malang, Jawa Timur' }}</span>
-                                        </div>
-                                        <div class="card-price">
-                                            <strong>{{ $kost->harga_formatted }}</strong>
-                                            <span class="price-period">/bulan</span>
-                                        </div>
-                                        <div class="card-amenities">
-                                            @php
-                                                $amenities = [];
-                                                if (!empty($kost->fasilitas_kamar)) {
-                                                    $amenities = array_slice(
-                                                        explode(',', $kost->fasilitas_kamar),
-                                                        0,
-                                                        3,
-                                                    );
-                                                }
-                                                if (count($amenities) < 3 && !empty($kost->fasilitas_umum)) {
-                                                    $amenities = array_merge(
-                                                        $amenities,
-                                                        array_slice(
-                                                            explode(',', $kost->fasilitas_umum),
-                                                            0,
-                                                            3 - count($amenities),
-                                                        ),
-                                                    );
-                                                }
-                                            @endphp
-                                            @foreach (array_slice($amenities, 0, 3) as $amenity)
-                                                <span class="amenity-tag">{{ trim($amenity) }}</span>
-                                            @endforeach
-                                            @if (count($amenities) > 3)
-                                                <span class="amenity-tag">{{ count($amenities) - 3 }}+</span>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    @else
-                        <div class="empty-state">
-                            <p>Tidak ada kost yang ditemukan. Coba ubah filter pencarian Anda.</p>
-                        </div>
-                    @endif
-                </div>
-            </section>
+          <section id="section-listings">
+    <div class="container">
+        @if ($kosts->count() > 0)
 
-            <!-- ────────────────────────────────────────────────────────
+            <div class="results-grid">
+                @foreach ($kosts as $kost)
+                    @include('user.partials.kost-card', [
+                        'kost' => $kost
+                    ])
+                @endforeach
+            </div>
+
+        @else
+            <div class="empty-state">
+                <p>Tidak ada kost yang ditemukan. Coba ubah filter pencarian Anda.</p>
+            </div>
+        @endif
+    </div>
+</section>
+                        <!-- ────────────────────────────────────────────────────────
                  PAGINATION
                  ──────────────────────────────────────────────────────── -->
             @if ($kosts->hasPages())
@@ -322,17 +269,35 @@
                             </a>
                         @endif
 
-                        {{-- Page Numbers --}}
+                        {{-- Page Numbers (maksimal 5 nomor) --}}
+                        @php
+                            $current = $kosts->currentPage();
+                            $last = $kosts->lastPage();
+
+                            $start = max(1, $current - 2);
+                            $end = min($last, $start + 4);
+
+                            if (($end - $start) < 4) {
+                                $start = max(1, $end - 4);
+                            }
+                        @endphp
+
                         <ul class="page-numbers">
-                            @foreach ($kosts->getUrlRange(1, $kosts->lastPage()) as $page => $url)
-                                @if ($page == $kosts->currentPage())
-                                    <li><button class="page-number active"
-                                            aria-current="page">{{ $page }}</button></li>
+                            @for ($page = $start; $page <= $end; $page++)
+                                @if ($page == $current)
+                                    <li>
+                                        <button class="page-number active" aria-current="page">
+                                            {{ $page }}
+                                        </button>
+                                    </li>
                                 @else
-                                    <li><a href="{{ $url }}" class="page-number">{{ $page }}</a>
+                                    <li>
+                                        <a href="{{ $kosts->url($page) }}" class="page-number">
+                                            {{ $page }}
+                                        </a>
                                     </li>
                                 @endif
-                            @endforeach
+                            @endfor
                         </ul>
 
                         {{-- Next Button --}}
