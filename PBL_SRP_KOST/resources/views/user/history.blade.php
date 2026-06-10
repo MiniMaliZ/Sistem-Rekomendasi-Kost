@@ -265,14 +265,14 @@
                                 'X-CSRF-TOKEN': '{{ csrf_token() }}',
                             },
                             body: JSON.stringify({
-                                id_kost: kostId
+                                kost_id: kostId
                             }),
                         });
                         const data = await res.json();
                         const img = this.querySelector('img');
-                        img.src = data.status === 'added' ?
-                            '{{ asset('images/favorite_active.svg') }}' :
-                            '{{ asset('images/favorite.svg') }}';
+                        img.src = data.is_favorit ?
+                            '{{ asset('images/heart_filled.svg') }}' :
+                            '{{ asset('images/heart_outline.svg') }}';
                     } catch (err) {
                         console.error('Toggle favorit gagal:', err);
                     }

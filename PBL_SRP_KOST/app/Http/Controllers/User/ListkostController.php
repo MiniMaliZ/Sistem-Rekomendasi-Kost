@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\Kost;
 use App\Models\Favorit;
+use App\Models\Riwayat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use illuminate\support\Facades\DB;
@@ -284,6 +285,24 @@ private function getLokasi(string $namaKost): string
 
         // Get authenticated user
         $user = Auth::user();
+
+        if ($user) {
+
+            $riwayat = Riwayat::where('id_user', $user->id_user)
+                ->where('id_kost', $kost->id_kost)
+                ->first();
+
+            if ($riwayat) {
+                $riwayat->touch();
+            } else {
+                Riwayat::create([
+                    'id_user' => $user->id_user,
+                    'id_kost' => $kost->id_kost,
+                    'aksi'    => 'lihat',
+                ]);
+            }
+        }
+    
 
         // Check if current kost is in user's favorites
         $isFavorite = false;
