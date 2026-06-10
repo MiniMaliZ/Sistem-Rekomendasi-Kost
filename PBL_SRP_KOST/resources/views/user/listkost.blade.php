@@ -319,6 +319,21 @@
     </div><!-- end .page-body -->
 
     <!-- ============================================================
+         MODAL — LOGIN REQUIRED (Favorit)
+         ============================================================ -->
+    <div id="modal-login-favorit" class="modal-overlay" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="modal-favorit-title">
+        <div class="modal-box">
+            <div class="modal-icon">
+                <img src="{{ asset('images/heart_outline.svg') }}" alt="Favorit" class="modal-heart-icon">
+            </div>
+            <h2 class="modal-title" id="modal-favorit-title">Simpan Kost Favoritmu</h2>
+            <p class="modal-desc">Kamu perlu sign in terlebih dahulu untuk menyimpan kost ke daftar favorit.</p>
+            <a href="{{ route('login') }}" class="modal-btn-primary">Sign In Sekarang</a>
+            <button type="button" class="modal-btn-secondary" id="modal-favorit-close">Nanti Saja</button>
+        </div>
+    </div>
+
+    <!-- ============================================================
          CSRF Token & JavaScript
          ============================================================ -->
     <script>
@@ -349,13 +364,42 @@
             }
         });
 
-        // ── [B] Toggle Favorit (AJAX) ──────────────────────────────────
+        // ── [B] Toggle Favorit (AJAX) — cek login terlebih dahulu ────
+        const isLoggedIn = {{ auth()->check() ? 'true' : 'false' }};
+        const modalFavorit = document.getElementById('modal-login-favorit');
+        const modalClose   = document.getElementById('modal-favorit-close');
+
+        // Tutup modal saat klik "Nanti Saja"
+        modalClose.addEventListener('click', function() {
+            modalFavorit.style.display = 'none';
+        });
+
+        // Tutup modal saat klik overlay (di luar modal-box)
+        modalFavorit.addEventListener('click', function(e) {
+            if (e.target === modalFavorit) {
+                modalFavorit.style.display = 'none';
+            }
+        });
+
+        // Tutup modal dengan tombol Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && modalFavorit.style.display !== 'none') {
+                modalFavorit.style.display = 'none';
+            }
+        });
+
         document.body.addEventListener('click', function(e) {
             const btn = e.target.closest('.fav-btn');
             if (!btn) return;
 
             e.preventDefault();
             e.stopPropagation();
+
+            // Jika belum login, tampilkan modal
+            if (!isLoggedIn) {
+                modalFavorit.style.display = 'flex';
+                return;
+            }
 
             const kostId = parseInt(btn.dataset.kostId);
             const imgEl = btn.querySelector('img');
