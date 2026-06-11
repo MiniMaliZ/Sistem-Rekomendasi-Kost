@@ -45,7 +45,7 @@
 
                     <div class="recommendation-grid">
                         <label class="recommendation-field">
-                            <span>Anggaran maksimal</span>
+                            <span>Anggaran maksimal / bulan</span>
                             <div class="recommendation-input">
                                 <b>Rp</b>
                                 <input type="number" name="budget_max" min="0" step="50000" value="{{ $form['budget_max'] }}">
@@ -53,7 +53,7 @@
                         </label>
 
                         <label class="recommendation-field">
-                            <span>Jarak maksimal</span>
+                            <span>Jarak kampus maksimal dari kos</span>
                             <div class="recommendation-input">
                                 <input type="number" name="max_distance" min="0" step="0.1" value="{{ $form['max_distance'] }}">
                                 <b>km</b>

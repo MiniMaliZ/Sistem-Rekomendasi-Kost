@@ -54,7 +54,7 @@
 
             <div class="field-grid">
                 <label class="field-control">
-                    <span>Anggaran maksimal</span>
+                    <span>Anggaran maksimal / bulan</span>
                     <div class="input-prefix">
                         <b>Rp</b>
                         <input wire:model="draftBudgetMax" type="number" min="0" step="50000">
@@ -62,7 +62,7 @@
                 </label>
 
                 <label class="field-control">
-                    <span>Jarak kampus maksimal</span>
+                    <span>Jarak kampus maksimal dari kos</span>
                     <div class="input-prefix">
                         <x-solar-map-point-linear class="w-4 h-4" />
                         <input wire:model="draftMaxDistance" type="number" min="0" step="0.1">

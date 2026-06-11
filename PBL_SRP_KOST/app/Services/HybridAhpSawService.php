@@ -27,7 +27,6 @@ class HybridAhpSawService
             ['key' => 'jarak_kampus', 'name' => 'Jarak Kampus', 'type' => 'cost'],
             ['key' => 'luas_kamar', 'name' => 'Luas Kamar', 'type' => 'benefit'],
             ['key' => 'kecocokan_fasilitas', 'name' => 'Kecocokan Fasilitas', 'type' => 'benefit'],
-            ['key' => 'keamanan_cctv', 'name' => 'CCTV', 'type' => 'benefit'],
             ['key' => 'listrik_termasuk', 'name' => 'Listrik Termasuk', 'type' => 'benefit'],
         ];
     }
@@ -51,7 +50,6 @@ class HybridAhpSawService
             'parkir_mobil' => ['label' => 'Parkir mobil', 'keywords' => ['parkir mobil']],
             'dapur' => ['label' => 'Dapur', 'keywords' => ['dapur']],
             'laundry' => ['label' => 'Laundry / mesin cuci', 'keywords' => ['laundry', 'mesin cuci']],
-            'cctv' => ['label' => 'CCTV', 'keywords' => ['cctv']],
             'kulkas' => ['label' => 'Kulkas', 'keywords' => ['kulkas']],
             'kasur' => ['label' => 'Kasur', 'keywords' => ['kasur']],
             'lemari' => ['label' => 'Lemari', 'keywords' => ['lemari', 'storage']],
@@ -231,28 +229,25 @@ class HybridAhpSawService
     {
         return match ($scenario) {
             'hemat' => [
-                [1, 3, 5, 5, 7, 9],
-                [1 / 3, 1, 3, 2, 5, 7],
-                [1 / 5, 1 / 3, 1, 1 / 2, 2, 3],
-                [1 / 5, 1 / 2, 2, 1, 3, 4],
-                [1 / 7, 1 / 5, 1 / 2, 1 / 3, 1, 3],
-                [1 / 9, 1 / 7, 1 / 3, 1 / 4, 1 / 3, 1],
+                [1, 3, 5, 5, 9],
+                [1 / 3, 1, 3, 2, 7],
+                [1 / 5, 1 / 3, 1, 1 / 2, 3],
+                [1 / 5, 1 / 2, 2, 1, 4],
+                [1 / 9, 1 / 7, 1 / 3, 1 / 4, 1],
             ],
             'fasilitas' => [
-                [1, 1 / 3, 2, 1 / 2, 3, 5],
-                [3, 1, 4, 2, 5, 7],
-                [1 / 2, 1 / 4, 1, 1 / 3, 2, 3],
-                [2, 1 / 2, 3, 1, 4, 5],
-                [1 / 3, 1 / 5, 1 / 2, 1 / 4, 1, 3],
-                [1 / 5, 1 / 7, 1 / 3, 1 / 5, 1 / 3, 1],
+                [1, 1 / 2, 2, 1 / 3, 3],
+                [2, 1, 3, 1 / 2, 5],
+                [1 / 2, 1 / 3, 1, 1 / 4, 2],
+                [3, 2, 4, 1, 7],
+                [1 / 3, 1 / 5, 1 / 2, 1 / 7, 1],
             ],
             default => [
-                [1, 1, 3, 2, 5, 7],
-                [1, 1, 3, 2, 5, 7],
-                [1 / 3, 1 / 3, 1, 1 / 2, 2, 4],
-                [1 / 2, 1 / 2, 2, 1, 3, 5],
-                [1 / 5, 1 / 5, 1 / 2, 1 / 3, 1, 3],
-                [1 / 7, 1 / 7, 1 / 4, 1 / 5, 1 / 3, 1],
+                [1, 1, 3, 2, 7],
+                [1, 1, 3, 2, 7],
+                [1 / 3, 1 / 3, 1, 1 / 2, 4],
+                [1 / 2, 1 / 2, 2, 1, 5],
+                [1 / 7, 1 / 7, 1 / 4, 1 / 5, 1],
             ],
         };
     }
@@ -276,7 +271,6 @@ class HybridAhpSawService
             'kecocokan_fasilitas' => $selectedCount > 0
                 ? count($matchedFacilities) / $selectedCount
                 : max(count($allFacilityMatches), 0),
-            'keamanan_cctv' => $this->textContains($this->searchableText($kost), ['cctv']) ? 1.0 : 0.0,
             'listrik_termasuk' => $this->includesElectricity($kost->sepesifikasi_tipe_kamar ?? '') ? 1.0 : 0.0,
             'total_facilities' => count($allFacilityMatches),
             'matched_facilities' => $matchedFacilities,
